@@ -1,0 +1,18 @@
+{
+  "exclude": [
+    "node_modules",
+    "dist",
+    "googleapis"
+  ],
+  "tasks": {
+    "dev": "deno run --watch main.ts",
+    "build": "deno run -A main.ts",
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1"
+  },
+  "lock": false,
+  "ignore": [
+    "main.ts"
+  ]
+}

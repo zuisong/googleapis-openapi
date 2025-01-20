@@ -1,0 +1,46 @@
+name: Update Daily
+
+permissions:
+  contents: write
+  packages: write
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *" # Runs every day at midnight UTC
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: git config --global core.autocrlf false
+
+      - uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+
+      # - name: Run test
+      #   run: deno task test-cov
+
+      - name: Run build
+        run: deno task build
+
+      # - name: Coveralls
+      #   uses: coverallsapp/github-action@v2
+      #   with:
+      #     files: coverage/lcov.info
+      #     fail-on-error: false
+
+      - uses: EndBug/add-and-commit@v9
+        with:
+          add: "."
+          push: true
+          default_author: github_actions
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
+          message: "🚨 Commit Build Artifact from GitHub Actions"
