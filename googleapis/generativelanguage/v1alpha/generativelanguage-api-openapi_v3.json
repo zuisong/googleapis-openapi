@@ -7,7 +7,7 @@
       "name": "Google",
       "url": "https://google.com"
     },
-    "version": "v1beta",
+    "version": "v1alpha",
     "license": {
       "name": "Creative Commons Attribution 3.0",
       "url": "http://creativecommons.org/licenses/by/3.0/"
@@ -2200,6 +2200,10 @@
             "format": "float",
             "type": "number"
           },
+          "thinkingConfig": {
+            "$ref": "#/components/schemas/ThinkingConfig",
+            "description": "Optional. Config for thinking features. An error will be returned if this field is set for models that don't support thinking."
+          },
           "topK": {
             "description": "Optional. The maximum number of tokens to consider when sampling. Gemini models use Top-p (nucleus) sampling or a combination of Top-k and nucleus sampling. Top-k sampling considers the set of `top_k` most probable tokens. Models running with nucleus sampling don't allow top_k setting. Note: The default value varies by `Model` and is specified by the`Model.top_p` attribute returned from the `getModel` function. An empty `top_k` attribute indicates that the model doesn't apply top-k sampling and doesn't allow setting `top_k` on requests.",
             "format": "int32",
@@ -2894,6 +2898,10 @@
           "text": {
             "description": "Inline text.",
             "type": "string"
+          },
+          "thought": {
+            "description": "Optional. Indicates if the part is thought from the model.",
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -3532,6 +3540,16 @@
         },
         "type": "object"
       },
+      "ThinkingConfig": {
+        "description": "Config for thinking features.",
+        "properties": {
+          "includeThoughts": {
+            "description": "Indicates whether to include thoughts in the response. If true, thoughts are returned only when available.",
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
       "Tool": {
         "description": "Tool details that the model may use to generate response. A `Tool` is a piece of code that enables the system to interact with external systems to perform an action, or set of actions, outside of knowledge and scope of the model.",
         "properties": {
@@ -3687,6 +3705,23 @@
         },
         "type": "object"
       },
+      "TuningContent": {
+        "description": "The structured datatype containing multi-part content of an example message. This is a subset of the Content proto used during model inference with limited type support. A `Content` includes a `role` field designating the producer of the `Content` and a `parts` field containing multi-part data that contains the content of the message turn.",
+        "properties": {
+          "parts": {
+            "description": "Ordered `Parts` that constitute a single message. Parts may have different MIME types.",
+            "items": {
+              "$ref": "#/components/schemas/TuningPart"
+            },
+            "type": "array"
+          },
+          "role": {
+            "description": "Optional. The producer of the content. Must be either 'user' or 'model'. Useful to set for multi-turn conversations, otherwise can be left blank or unset.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "TuningExample": {
         "description": "A single example for tuning.",
         "properties": {
@@ -3710,6 +3745,40 @@
               "$ref": "#/components/schemas/TuningExample"
             },
             "type": "array"
+          },
+          "multiturnExamples": {
+            "description": "Content examples. For multiturn conversations.",
+            "items": {
+              "$ref": "#/components/schemas/TuningMultiturnExample"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "TuningMultiturnExample": {
+        "description": "A tuning example with multiturn input.",
+        "properties": {
+          "contents": {
+            "description": "Each Content represents a turn in the conversation.",
+            "items": {
+              "$ref": "#/components/schemas/TuningContent"
+            },
+            "type": "array"
+          },
+          "systemInstruction": {
+            "$ref": "#/components/schemas/TuningContent",
+            "description": "Optional. Developer set system instructions. Currently, text only."
+          }
+        },
+        "type": "object"
+      },
+      "TuningPart": {
+        "description": "A datatype containing data that is part of a multi-part `TuningContent` message. This is a subset of the Part used for model inference, with limited type support. A `Part` consists of data which has an associated datatype. A `Part` can only contain one of the accepted types in `Part.data`.",
+        "properties": {
+          "text": {
+            "description": "Inline text.",
+            "type": "string"
           }
         },
         "type": "object"
@@ -3956,7 +4025,7 @@
     }
   },
   "paths": {
-    "/v1beta/cachedContents": {
+    "/v1alpha/cachedContents": {
       "post": {
         "description": "Creates CachedContent resource.",
         "operationId": "generativelanguage.cachedContents.create",
@@ -4058,7 +4127,7 @@
         }
       ]
     },
-    "/v1beta/chat/completions": {
+    "/v1alpha/chat/completions": {
       "post": {
         "description": "Generates a set of responses from the model given a chat history input.",
         "operationId": "generativelanguage.chat.completions",
@@ -4123,7 +4192,7 @@
         }
       ]
     },
-    "/v1beta/corpora": {
+    "/v1alpha/corpora": {
       "post": {
         "description": "Creates an empty `Corpus`.",
         "operationId": "generativelanguage.corpora.create",
@@ -4225,7 +4294,7 @@
         }
       ]
     },
-    "/v1beta/coscientist/instances": {
+    "/v1alpha/coscientist/instances": {
       "get": {
         "description": "",
         "operationId": "generativelanguage.coscientist.instances",
@@ -4299,7 +4368,7 @@
         }
       ]
     },
-    "/v1beta/embeddings:generate": {
+    "/v1alpha/embeddings:generate": {
       "post": {
         "description": "Generates embeddings from the model given an input.",
         "operationId": "generativelanguage.embeddings.generate",
@@ -4364,7 +4433,7 @@
         }
       ]
     },
-    "/v1beta/files": {
+    "/v1alpha/files": {
       "get": {
         "description": "Lists the metadata for `File`s owned by the requesting project.",
         "operationId": "generativelanguage.files.list",
@@ -4466,7 +4535,7 @@
         }
       ]
     },
-    "/v1beta/generatedFiles": {
+    "/v1alpha/generatedFiles": {
       "get": {
         "description": "Lists the generated files owned by the requesting project.",
         "operationId": "generativelanguage.generatedFiles.list",
@@ -4540,7 +4609,7 @@
         }
       ]
     },
-    "/v1beta/images:generate": {
+    "/v1alpha/images:generate": {
       "post": {
         "description": "Generates an image from the model given an input.",
         "operationId": "generativelanguage.images.generate",
@@ -4605,7 +4674,7 @@
         }
       ]
     },
-    "/v1beta/listModels/{listModelsId}": {
+    "/v1alpha/listModels/{listModelsId}": {
       "get": {
         "description": "Gets a model instance.",
         "operationId": "generativelanguage.listModels.sdkGetModel",
@@ -4679,7 +4748,7 @@
         }
       ]
     },
-    "/v1beta/models": {
+    "/v1alpha/models": {
       "get": {
         "description": "Lists the [`Model`s](https://ai.google.dev/gemini-api/docs/models/gemini) available through the Gemini API.",
         "operationId": "generativelanguage.models.list",
@@ -4753,7 +4822,7 @@
         }
       ]
     },
-    "/v1beta/openai/embeddings": {
+    "/v1alpha/openai/embeddings": {
       "post": {
         "description": "Generates embeddings from the model given an input.",
         "operationId": "generativelanguage.openai.embeddings",
@@ -4818,7 +4887,7 @@
         }
       ]
     },
-    "/v1beta/openai/images": {
+    "/v1alpha/openai/images": {
       "post": {
         "description": "Generates an image from the model given an input.",
         "operationId": "generativelanguage.openai.images",
@@ -4883,7 +4952,7 @@
         }
       ]
     },
-    "/v1beta/openai/models": {
+    "/v1alpha/openai/models": {
       "get": {
         "description": "Lists the currently available models.",
         "operationId": "generativelanguage.openai.models",
@@ -4939,7 +5008,7 @@
         }
       ]
     },
-    "/v1beta/openai/chat/completions": {
+    "/v1alpha/openai/chat/completions": {
       "post": {
         "description": "Generates a set of responses from the model given a chat history input.",
         "operationId": "generativelanguage.openai.chat.completions",
@@ -5004,7 +5073,7 @@
         }
       ]
     },
-    "/v1beta/openai/models/{modelsId}": {
+    "/v1alpha/openai/models/{modelsId}": {
       "get": {
         "description": "Gets a model instance.",
         "operationId": "generativelanguage.openai.models.sdkGetModel",
@@ -5078,7 +5147,7 @@
         }
       ]
     },
-    "/v1beta/tunedModels": {
+    "/v1alpha/tunedModels": {
       "post": {
         "description": "Creates a tuned model. Check intermediate tuning progress (if any) through the [google.longrunning.Operations] service. Access status and results through the Operations service. Example: GET /v1/tunedModels/az2mb0bpw6i/operations/000-111-222",
         "operationId": "generativelanguage.tunedModels.create",
@@ -5198,7 +5267,7 @@
         }
       ]
     },
-    "/v1beta:chatCompletions": {
+    "/v1alpha:chatCompletions": {
       "post": {
         "description": "Generates a set of responses from the model given a chat history input.",
         "operationId": "generativelanguage.chatCompletions",
@@ -5224,7 +5293,7 @@
           }
         },
         "tags": [
-          "v1beta"
+          "v1alpha"
         ]
       },
       "parameters": [
@@ -5263,7 +5332,7 @@
         }
       ]
     },
-    "/v1beta/embeddings": {
+    "/v1alpha/embeddings": {
       "post": {
         "description": "Generates embeddings from the model given an input.",
         "operationId": "generativelanguage.embeddings",
@@ -5289,7 +5358,7 @@
           }
         },
         "tags": [
-          "v1beta"
+          "v1alpha"
         ]
       },
       "parameters": [
@@ -5328,7 +5397,7 @@
         }
       ]
     },
-    "/v1beta/listModels": {
+    "/v1alpha/listModels": {
       "get": {
         "description": "Lists the currently available models.",
         "operationId": "generativelanguage.listModels",
@@ -5345,7 +5414,7 @@
           }
         },
         "tags": [
-          "v1beta"
+          "v1alpha"
         ]
       },
       "parameters": [
@@ -5384,7 +5453,7 @@
         }
       ]
     },
-    "/v1beta/{name}": {
+    "/v1alpha/{name}": {
       "delete": {
         "description": "Deletes the permission.",
         "operationId": "generativelanguage.tunedModels.permissions.delete",
@@ -5536,7 +5605,7 @@
         }
       ]
     },
-    "/v1beta/{name}:query": {
+    "/v1alpha/{name}:query": {
       "post": {
         "description": "Performs semantic search over a `Document`.",
         "operationId": "generativelanguage.corpora.documents.query",
@@ -5612,7 +5681,7 @@
         }
       ]
     },
-    "/v1beta/{parent}/documents": {
+    "/v1alpha/{parent}/documents": {
       "post": {
         "description": "Creates an empty `Document`.",
         "operationId": "generativelanguage.corpora.documents.create",
@@ -5734,7 +5803,7 @@
         }
       ]
     },
-    "/v1beta/{parent}/chunks:batchCreate": {
+    "/v1alpha/{parent}/chunks:batchCreate": {
       "post": {
         "description": "Batch create `Chunk`s.",
         "operationId": "generativelanguage.corpora.documents.chunks.batchCreate",
@@ -5810,7 +5879,7 @@
         }
       ]
     },
-    "/v1beta/{parent}/chunks:batchDelete": {
+    "/v1alpha/{parent}/chunks:batchDelete": {
       "post": {
         "description": "Batch delete `Chunk`s.",
         "operationId": "generativelanguage.corpora.documents.chunks.batchDelete",
@@ -5886,7 +5955,7 @@
         }
       ]
     },
-    "/v1beta/{parent}/chunks:batchUpdate": {
+    "/v1alpha/{parent}/chunks:batchUpdate": {
       "post": {
         "description": "Batch update `Chunk`s.",
         "operationId": "generativelanguage.corpora.documents.chunks.batchUpdate",
@@ -5962,7 +6031,7 @@
         }
       ]
     },
-    "/v1beta/{parent}/chunks": {
+    "/v1alpha/{parent}/chunks": {
       "post": {
         "description": "Creates a `Chunk`.",
         "operationId": "generativelanguage.corpora.documents.chunks.create",
@@ -6084,7 +6153,7 @@
         }
       ]
     },
-    "/v1beta/{parent}/permissions": {
+    "/v1alpha/{parent}/permissions": {
       "post": {
         "description": "Create a permission to a specific resource.",
         "operationId": "generativelanguage.tunedModels.permissions.create",
@@ -6206,7 +6275,7 @@
         }
       ]
     },
-    "/v1beta/coscientist/instances/{instanceId}/ideas": {
+    "/v1alpha/coscientist/instances/{instanceId}/ideas": {
       "get": {
         "description": "List ideas in an instance.",
         "operationId": "generativelanguage.coscientist.instances.ideas",
@@ -6281,7 +6350,7 @@
         }
       ]
     },
-    "/v1beta/coscientist/instances/{instanceId}/ideas:get": {
+    "/v1alpha/coscientist/instances/{instanceId}/ideas:get": {
       "post": {
         "description": "Gets full information about an idea.",
         "operationId": "generativelanguage.coscientist.instances.ideas.get",
@@ -6357,7 +6426,7 @@
         }
       ]
     },
-    "/v1beta/{model}:batchEmbedContents": {
+    "/v1alpha/{model}:batchEmbedContents": {
       "post": {
         "description": "Generates multiple embedding vectors from the input `Content` which consists of a batch of strings represented as `EmbedContentRequest` objects.",
         "operationId": "generativelanguage.models.batchEmbedContents",
@@ -6433,7 +6502,7 @@
         }
       ]
     },
-    "/v1beta/{model}:batchEmbedText": {
+    "/v1alpha/{model}:batchEmbedText": {
       "post": {
         "description": "Generates multiple embeddings from the model given input text in a synchronous call.",
         "operationId": "generativelanguage.models.batchEmbedText",
@@ -6509,7 +6578,7 @@
         }
       ]
     },
-    "/v1beta/{model}:countMessageTokens": {
+    "/v1alpha/{model}:countMessageTokens": {
       "post": {
         "description": "Runs a model's tokenizer on a string and returns the token count.",
         "operationId": "generativelanguage.models.countMessageTokens",
@@ -6585,7 +6654,7 @@
         }
       ]
     },
-    "/v1beta/{model}:countTextTokens": {
+    "/v1alpha/{model}:countTextTokens": {
       "post": {
         "description": "Runs a model's tokenizer on a text and returns the token count.",
         "operationId": "generativelanguage.models.countTextTokens",
@@ -6661,7 +6730,7 @@
         }
       ]
     },
-    "/v1beta/{model}:countTokens": {
+    "/v1alpha/{model}:countTokens": {
       "post": {
         "description": "Runs a model's tokenizer on input `Content` and returns the token count. Refer to the [tokens guide](https://ai.google.dev/gemini-api/docs/tokens) to learn more about tokens.",
         "operationId": "generativelanguage.models.countTokens",
@@ -6737,7 +6806,7 @@
         }
       ]
     },
-    "/v1beta/{model}:embedContent": {
+    "/v1alpha/{model}:embedContent": {
       "post": {
         "description": "Generates a text embedding vector from the input `Content` using the specified [Gemini Embedding model](https://ai.google.dev/gemini-api/docs/models/gemini#text-embedding).",
         "operationId": "generativelanguage.models.embedContent",
@@ -6813,7 +6882,7 @@
         }
       ]
     },
-    "/v1beta/{model}:embedText": {
+    "/v1alpha/{model}:embedText": {
       "post": {
         "description": "Generates an embedding from the model given an input message.",
         "operationId": "generativelanguage.models.embedText",
@@ -6889,7 +6958,7 @@
         }
       ]
     },
-    "/v1beta/{model}:generateAnswer": {
+    "/v1alpha/{model}:generateAnswer": {
       "post": {
         "description": "Generates a grounded answer from the model given an input `GenerateAnswerRequest`.",
         "operationId": "generativelanguage.models.generateAnswer",
@@ -6965,7 +7034,7 @@
         }
       ]
     },
-    "/v1beta/{model}:generateContent": {
+    "/v1alpha/{model}:generateContent": {
       "post": {
         "description": "Generates a model response given an input `GenerateContentRequest`. Refer to the [text generation guide](https://ai.google.dev/gemini-api/docs/text-generation) for detailed usage information. Input capabilities differ between models, including tuned models. Refer to the [model guide](https://ai.google.dev/gemini-api/docs/models/gemini) and [tuning guide](https://ai.google.dev/gemini-api/docs/model-tuning) for details.",
         "operationId": "generativelanguage.tunedModels.generateContent",
@@ -7041,7 +7110,7 @@
         }
       ]
     },
-    "/v1beta/{model}:generateMessage": {
+    "/v1alpha/{model}:generateMessage": {
       "post": {
         "description": "Generates a response from the model given an input `MessagePrompt`.",
         "operationId": "generativelanguage.models.generateMessage",
@@ -7117,7 +7186,7 @@
         }
       ]
     },
-    "/v1beta/{model}:generateText": {
+    "/v1alpha/{model}:generateText": {
       "post": {
         "description": "Generates a response from the model given an input message.",
         "operationId": "generativelanguage.tunedModels.generateText",
@@ -7193,7 +7262,7 @@
         }
       ]
     },
-    "/v1beta/{model}:predict": {
+    "/v1alpha/{model}:predict": {
       "post": {
         "description": "Performs a prediction request.",
         "operationId": "generativelanguage.models.predict",
@@ -7269,7 +7338,7 @@
         }
       ]
     },
-    "/v1beta/{model}:predictLongRunning": {
+    "/v1alpha/{model}:predictLongRunning": {
       "post": {
         "description": "Same as Predict but returns an LRO.",
         "operationId": "generativelanguage.models.predictLongRunning",
@@ -7345,7 +7414,7 @@
         }
       ]
     },
-    "/v1beta/{model}:streamGenerateContent": {
+    "/v1alpha/{model}:streamGenerateContent": {
       "post": {
         "description": "Generates a [streamed response](https://ai.google.dev/gemini-api/docs/text-generation?lang=python#generate-a-text-stream) from the model given an input `GenerateContentRequest`.",
         "operationId": "generativelanguage.tunedModels.streamGenerateContent",
@@ -7421,7 +7490,7 @@
         }
       ]
     },
-    "/v1beta/{name}/operations": {
+    "/v1alpha/{name}/operations": {
       "get": {
         "description": "Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`.",
         "operationId": "generativelanguage.tunedModels.operations.list",
@@ -7512,7 +7581,7 @@
         }
       ]
     },
-    "/v1beta/{name}:transferOwnership": {
+    "/v1alpha/{name}:transferOwnership": {
       "post": {
         "description": "Transfers ownership of the tuned model. This is the only way to change ownership of the tuned model. The current owner will be downgraded to writer role.",
         "operationId": "generativelanguage.tunedModels.transferOwnership",
@@ -7630,7 +7699,7 @@
       "name": "tunedModels"
     },
     {
-      "name": "v1beta"
+      "name": "v1alpha"
     }
   ],
   "externalDocs": {
