@@ -233,6 +233,86 @@
         "properties": {},
         "type": "object"
       },
+      "BrainstormerExportedIdea": {
+        "description": "Info about an exported idea.",
+        "properties": {
+          "attributes": {
+            "description": "Attributes of the idea.",
+            "items": {
+              "$ref": "#/components/schemas/BrainstormerAttribute"
+            },
+            "type": "array"
+          },
+          "category": {
+            "description": "Category of the idea.",
+            "type": "string"
+          },
+          "eloRating": {
+            "description": "Elo rating of the idea.",
+            "format": "float",
+            "type": "number"
+          },
+          "id": {
+            "description": "ID of the idea.",
+            "format": "int64",
+            "type": "string"
+          },
+          "observations": {
+            "description": "Observations that the idea is related to.",
+            "type": "string"
+          },
+          "possibleIssues": {
+            "description": "Possible issues with the idea.",
+            "type": "string"
+          },
+          "relevantContacts": {
+            "description": "Relevant contacts for the idea.",
+            "type": "string"
+          },
+          "review": {
+            "description": "Review of the idea.",
+            "type": "string"
+          },
+          "reviewReferences": {
+            "description": "References to the review.",
+            "items": {
+              "$ref": "#/components/schemas/BrainstormerReference"
+            },
+            "type": "array"
+          },
+          "reviewsSummary": {
+            "description": "Summary of the reviews.",
+            "type": "string"
+          },
+          "summary": {
+            "description": "Summary of the idea.",
+            "type": "string"
+          },
+          "text": {
+            "description": "Text of the idea.",
+            "type": "string"
+          },
+          "title": {
+            "description": "Title of the idea.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "BrainstormerExportInstanceResponse": {
+        "description": "Export instance response.",
+        "properties": {
+          "ideas": {
+            "description": "Output only. Ideas in the instance.",
+            "items": {
+              "$ref": "#/components/schemas/BrainstormerExportedIdea"
+            },
+            "readOnly": true,
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "BrainstormerGetIdeasRequest": {
         "description": "Get ideas request.",
         "properties": {
@@ -261,6 +341,36 @@
           "instanceId": {
             "description": "Output only. ID of the instance.",
             "format": "int64",
+            "readOnly": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "BrainstormerGetResearchStatusResponse": {
+        "description": "Get research status response.",
+        "properties": {
+          "ideasCount": {
+            "description": "Output only. Number of ideas.",
+            "format": "int64",
+            "readOnly": true,
+            "type": "string"
+          },
+          "progress": {
+            "description": "Output only. Progress of the research.",
+            "format": "float",
+            "readOnly": true,
+            "type": "number"
+          },
+          "state": {
+            "description": "Output only. State of the instance.",
+            "enum": [
+              "INSTANCE_STATE_DEFAULT",
+              "INSTANCE_STATE_STARTING",
+              "INSTANCE_STATE_IN_PROGRESS",
+              "INSTANCE_STATE_COMPLETED",
+              "INSTANCE_STATE_FAILED"
+            ],
             "readOnly": true,
             "type": "string"
           }
@@ -661,6 +771,58 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "BrainstormerResetRequest": {
+        "description": "Reset the state and delete all instances.",
+        "properties": {},
+        "type": "object"
+      },
+      "BrainstormerResetResponse": {
+        "description": "Reset response.",
+        "properties": {},
+        "type": "object"
+      },
+      "BrainstormerStartResearchRequest": {
+        "description": "Start research request.",
+        "properties": {
+          "researchGoal": {
+            "description": "Required. Research goal.",
+            "type": "string"
+          },
+          "researchType": {
+            "description": "Required. Research type.",
+            "enum": [
+              "RESEARCH_TYPE_UNKNOWN",
+              "RESEARCH_TYPE_TIER1",
+              "RESEARCH_TYPE_TIER2",
+              "RESEARCH_TYPE_TIER3"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "BrainstormerStartResearchResponse": {
+        "description": "Start research response.",
+        "properties": {
+          "instanceId": {
+            "description": "Output only. ID of the instance",
+            "format": "int64",
+            "readOnly": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "BrainstormerStopResearchRequest": {
+        "description": "Stop research request.",
+        "properties": {},
+        "type": "object"
+      },
+      "BrainstormerStopResearchResponse": {
+        "description": "Stop research response.",
+        "properties": {},
         "type": "object"
       },
       "CachedContent": {
@@ -1240,6 +1402,14 @@
             "description": "Number of tokens in the cached part of the prompt (the cached content).",
             "format": "int32",
             "type": "integer"
+          },
+          "promptTokensDetails": {
+            "description": "Output only. List of modalities that were processed in the request input.",
+            "items": {
+              "$ref": "#/components/schemas/ModalityTokenCount"
+            },
+            "readOnly": true,
+            "type": "array"
           },
           "totalTokens": {
             "description": "The number of tokens that the `Model` tokenizes the `prompt` into. Always non-negative.",
@@ -2184,6 +2354,11 @@
             "$ref": "#/components/schemas/Schema",
             "description": "Optional. Output schema of the generated candidate text. Schemas must be a subset of the [OpenAPI schema](https://spec.openapis.org/oas/v3.0.3#schema) and can be objects, primitives or arrays. If set, a compatible `response_mime_type` must also be set. Compatible MIME types: `application/json`: Schema for JSON response. Refer to the [JSON text generation guide](https://ai.google.dev/gemini-api/docs/json-mode) for more details."
           },
+          "seed": {
+            "description": "Optional. Seed used in decoding. If not set, the request uses a randomly generated seed.",
+            "format": "int32",
+            "type": "integer"
+          },
           "speechConfig": {
             "$ref": "#/components/schemas/SpeechConfig",
             "description": "Optional. The speech generation config."
@@ -2769,6 +2944,29 @@
           "key": {
             "description": "Required. The key of the metadata to filter on.",
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ModalityTokenCount": {
+        "description": "Represents token counting info for a single modality.",
+        "properties": {
+          "modality": {
+            "description": "The modality associated with this token count.",
+            "enum": [
+              "MODALITY_UNSPECIFIED",
+              "TEXT",
+              "IMAGE",
+              "VIDEO",
+              "AUDIO",
+              "DOCUMENT"
+            ],
+            "type": "string"
+          },
+          "tokenCount": {
+            "description": "Number of tokens.",
+            "format": "int32",
+            "type": "integer"
           }
         },
         "type": "object"
@@ -3870,15 +4068,39 @@
             "format": "int32",
             "type": "integer"
           },
+          "cacheTokensDetails": {
+            "description": "Output only. List of modalities of the cached content in the request input.",
+            "items": {
+              "$ref": "#/components/schemas/ModalityTokenCount"
+            },
+            "readOnly": true,
+            "type": "array"
+          },
           "candidatesTokenCount": {
             "description": "Total number of tokens across all the generated response candidates.",
             "format": "int32",
             "type": "integer"
           },
+          "candidatesTokensDetails": {
+            "description": "Output only. List of modalities that were returned in the response.",
+            "items": {
+              "$ref": "#/components/schemas/ModalityTokenCount"
+            },
+            "readOnly": true,
+            "type": "array"
+          },
           "promptTokenCount": {
             "description": "Number of tokens in the prompt. When `cached_content` is set, this is still the total effective prompt size meaning this includes the number of tokens in the cached content.",
             "format": "int32",
             "type": "integer"
+          },
+          "promptTokensDetails": {
+            "description": "Output only. List of modalities that were processed in the request input.",
+            "items": {
+              "$ref": "#/components/schemas/ModalityTokenCount"
+            },
+            "readOnly": true,
+            "type": "array"
           },
           "totalTokenCount": {
             "description": "Total token count for the generation request (prompt + response candidates).",
@@ -4296,7 +4518,7 @@
     },
     "/v1alpha/coscientist/instances": {
       "get": {
-        "description": "",
+        "description": "List instances.",
         "operationId": "generativelanguage.coscientist.instances",
         "responses": {
           "200": {
@@ -4328,6 +4550,136 @@
             }
           }
         ],
+        "tags": [
+          "coscientist"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/_.xgafv"
+        },
+        {
+          "$ref": "#/components/parameters/access_token"
+        },
+        {
+          "$ref": "#/components/parameters/alt"
+        },
+        {
+          "$ref": "#/components/parameters/callback"
+        },
+        {
+          "$ref": "#/components/parameters/fields"
+        },
+        {
+          "$ref": "#/components/parameters/key"
+        },
+        {
+          "$ref": "#/components/parameters/oauth_token"
+        },
+        {
+          "$ref": "#/components/parameters/prettyPrint"
+        },
+        {
+          "$ref": "#/components/parameters/quotaUser"
+        },
+        {
+          "$ref": "#/components/parameters/upload_protocol"
+        },
+        {
+          "$ref": "#/components/parameters/uploadType"
+        }
+      ]
+    },
+    "/v1alpha/coscientist:reset": {
+      "post": {
+        "description": "Reset state by closing all instances.",
+        "operationId": "generativelanguage.coscientist.reset",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BrainstormerResetResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BrainstormerResetRequest"
+              }
+            }
+          }
+        },
+        "tags": [
+          "coscientist"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/_.xgafv"
+        },
+        {
+          "$ref": "#/components/parameters/access_token"
+        },
+        {
+          "$ref": "#/components/parameters/alt"
+        },
+        {
+          "$ref": "#/components/parameters/callback"
+        },
+        {
+          "$ref": "#/components/parameters/fields"
+        },
+        {
+          "$ref": "#/components/parameters/key"
+        },
+        {
+          "$ref": "#/components/parameters/oauth_token"
+        },
+        {
+          "$ref": "#/components/parameters/prettyPrint"
+        },
+        {
+          "$ref": "#/components/parameters/quotaUser"
+        },
+        {
+          "$ref": "#/components/parameters/upload_protocol"
+        },
+        {
+          "$ref": "#/components/parameters/uploadType"
+        }
+      ]
+    },
+    "/v1alpha/coscientist:startResearch": {
+      "post": {
+        "description": "Start a new research.",
+        "operationId": "generativelanguage.coscientist.startResearch",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BrainstormerStartResearchResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BrainstormerStartResearchRequest"
+              }
+            }
+          }
+        },
         "tags": [
           "coscientist"
         ]
@@ -6275,6 +6627,81 @@
         }
       ]
     },
+    "/v1alpha/coscientist/instances/{instanceId}:export": {
+      "get": {
+        "description": "Export instance.",
+        "operationId": "generativelanguage.coscientist.instances.export",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BrainstormerExportInstanceResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "instanceId",
+            "in": "path",
+            "description": "Required. ID of the instance.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ideasCount",
+            "in": "query",
+            "description": "Required. Number of ideas to export.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "coscientist"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/_.xgafv"
+        },
+        {
+          "$ref": "#/components/parameters/access_token"
+        },
+        {
+          "$ref": "#/components/parameters/alt"
+        },
+        {
+          "$ref": "#/components/parameters/callback"
+        },
+        {
+          "$ref": "#/components/parameters/fields"
+        },
+        {
+          "$ref": "#/components/parameters/key"
+        },
+        {
+          "$ref": "#/components/parameters/oauth_token"
+        },
+        {
+          "$ref": "#/components/parameters/prettyPrint"
+        },
+        {
+          "$ref": "#/components/parameters/quotaUser"
+        },
+        {
+          "$ref": "#/components/parameters/upload_protocol"
+        },
+        {
+          "$ref": "#/components/parameters/uploadType"
+        }
+      ]
+    },
     "/v1alpha/coscientist/instances/{instanceId}/ideas": {
       "get": {
         "description": "List ideas in an instance.",
@@ -6307,6 +6734,149 @@
             "description": "Maximum number of ideas to return. A value of -1 means no limit.",
             "schema": {
               "type": "integer"
+            }
+          }
+        ],
+        "tags": [
+          "coscientist"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/_.xgafv"
+        },
+        {
+          "$ref": "#/components/parameters/access_token"
+        },
+        {
+          "$ref": "#/components/parameters/alt"
+        },
+        {
+          "$ref": "#/components/parameters/callback"
+        },
+        {
+          "$ref": "#/components/parameters/fields"
+        },
+        {
+          "$ref": "#/components/parameters/key"
+        },
+        {
+          "$ref": "#/components/parameters/oauth_token"
+        },
+        {
+          "$ref": "#/components/parameters/prettyPrint"
+        },
+        {
+          "$ref": "#/components/parameters/quotaUser"
+        },
+        {
+          "$ref": "#/components/parameters/upload_protocol"
+        },
+        {
+          "$ref": "#/components/parameters/uploadType"
+        }
+      ]
+    },
+    "/v1alpha/coscientist/instances/{instanceId}:researchStatus": {
+      "get": {
+        "description": "Get the progress status of the research.",
+        "operationId": "generativelanguage.coscientist.instances.researchStatus",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BrainstormerGetResearchStatusResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "instanceId",
+            "in": "path",
+            "description": "Required. ID of the instance.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "coscientist"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/_.xgafv"
+        },
+        {
+          "$ref": "#/components/parameters/access_token"
+        },
+        {
+          "$ref": "#/components/parameters/alt"
+        },
+        {
+          "$ref": "#/components/parameters/callback"
+        },
+        {
+          "$ref": "#/components/parameters/fields"
+        },
+        {
+          "$ref": "#/components/parameters/key"
+        },
+        {
+          "$ref": "#/components/parameters/oauth_token"
+        },
+        {
+          "$ref": "#/components/parameters/prettyPrint"
+        },
+        {
+          "$ref": "#/components/parameters/quotaUser"
+        },
+        {
+          "$ref": "#/components/parameters/upload_protocol"
+        },
+        {
+          "$ref": "#/components/parameters/uploadType"
+        }
+      ]
+    },
+    "/v1alpha/coscientist/instances/{instanceId}:stopResearch": {
+      "post": {
+        "description": "Stop a research.",
+        "operationId": "generativelanguage.coscientist.instances.stopResearch",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BrainstormerStopResearchResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BrainstormerStopResearchRequest"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "instanceId",
+            "in": "path",
+            "description": "Required. ID of the instance.",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
         ],
