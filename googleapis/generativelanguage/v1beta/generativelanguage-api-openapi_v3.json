@@ -1412,6 +1412,16 @@
             "format": "int32",
             "type": "integer"
           },
+          "mediaResolution": {
+            "description": "Optional. If specified, the media resolution specified will be used.",
+            "enum": [
+              "MEDIA_RESOLUTION_UNSPECIFIED",
+              "MEDIA_RESOLUTION_LOW",
+              "MEDIA_RESOLUTION_MEDIUM",
+              "MEDIA_RESOLUTION_HIGH"
+            ],
+            "type": "string"
+          },
           "presencePenalty": {
             "description": "Optional. Presence penalty applied to the next token's logprobs if the token has already been seen in the response. This penalty is binary on/off and not dependant on the number of times the token is used (after the first). Use frequency_penalty for a penalty that increases with each use. A positive penalty will discourage the use of tokens that have already been used in the response, increasing the vocabulary. A negative penalty will encourage the use of tokens that have already been used in the response, decreasing the vocabulary.",
             "format": "float",
