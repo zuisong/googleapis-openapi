@@ -2943,6 +2943,20 @@
             "readOnly": true,
             "type": "array"
           },
+          "toolUsePromptTokenCount": {
+            "description": "Output only. Number of tokens present in tool-use prompt(s).",
+            "format": "int32",
+            "readOnly": true,
+            "type": "integer"
+          },
+          "toolUsePromptTokensDetails": {
+            "description": "Output only. List of modalities that were processed for tool-use request inputs.",
+            "items": {
+              "$ref": "#/components/schemas/ModalityTokenCount"
+            },
+            "readOnly": true,
+            "type": "array"
+          },
           "totalTokenCount": {
             "description": "Total token count for the generation request (prompt + response candidates).",
             "format": "int32",
