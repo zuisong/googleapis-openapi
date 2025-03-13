@@ -2399,6 +2399,13 @@
       "Schema": {
         "description": "The `Schema` object allows the definition of input and output data types. These types can be objects, but also primitives and arrays. Represents a select subset of an [OpenAPI 3.0 schema object](https://spec.openapis.org/oas/v3.0.3#schema).",
         "properties": {
+          "anyOf": {
+            "description": "Optional. The value should be validated against any (one or more) of the subschemas in the list.",
+            "items": {
+              "$ref": "#/components/schemas/Schema"
+            },
+            "type": "array"
+          },
           "description": {
             "description": "Optional. A brief description of the parameter. This could contain examples of use. Parameter description may be formatted as Markdown.",
             "type": "string"
@@ -2418,10 +2425,20 @@
             "$ref": "#/components/schemas/Schema",
             "description": "Optional. Schema of the elements of Type.ARRAY."
           },
+          "maximum": {
+            "description": "Optional. Maximum value of the Type.INTEGER and Type.NUMBER",
+            "format": "double",
+            "type": "number"
+          },
           "maxItems": {
             "description": "Optional. Maximum number of the elements for Type.ARRAY.",
             "format": "int64",
             "type": "string"
+          },
+          "minimum": {
+            "description": "Optional. SCHEMA FIELDS FOR TYPE INTEGER and NUMBER Minimum value of the Type.INTEGER and Type.NUMBER",
+            "format": "double",
+            "type": "number"
           },
           "minItems": {
             "description": "Optional. Minimum number of the elements for Type.ARRAY.",
