@@ -621,6 +621,14 @@
             "format": "int32",
             "type": "integer"
           },
+          "cacheTokensDetails": {
+            "description": "Output only. List of modalities that were processed in the cached content.",
+            "items": {
+              "$ref": "#/components/schemas/ModalityTokenCount"
+            },
+            "readOnly": true,
+            "type": "array"
+          },
           "promptTokensDetails": {
             "description": "Output only. List of modalities that were processed in the request input.",
             "items": {
