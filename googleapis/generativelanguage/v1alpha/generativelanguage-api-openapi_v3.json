@@ -2486,6 +2486,10 @@
             },
             "type": "array"
           },
+          "title": {
+            "description": "Optional. The title of the schema.",
+            "type": "string"
+          },
           "type": {
             "description": "Required. Data type.",
             "enum": [
