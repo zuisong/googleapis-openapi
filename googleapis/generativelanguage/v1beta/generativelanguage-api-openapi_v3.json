@@ -1482,6 +1482,10 @@
             "format": "float",
             "type": "number"
           },
+          "thinkingConfig": {
+            "$ref": "#/components/schemas/ThinkingConfig",
+            "description": "Optional. Config for thinking features. An error will be returned if this field is set for models that don't support thinking."
+          },
           "topK": {
             "description": "Optional. The maximum number of tokens to consider when sampling. Gemini models use Top-p (nucleus) sampling or a combination of Top-k and nucleus sampling. Top-k sampling considers the set of `top_k` most probable tokens. Models running with nucleus sampling don't allow top_k setting. Note: The default value varies by `Model` and is specified by the`Model.top_p` attribute returned from the `getModel` function. An empty `top_k` attribute indicates that the model doesn't apply top-k sampling and doesn't allow setting `top_k` on requests.",
             "format": "int32",
@@ -2667,6 +2671,16 @@
           "text": {
             "description": "Required. The prompt text.",
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ThinkingConfig": {
+        "description": "Config for thinking features.",
+        "properties": {
+          "includeThoughts": {
+            "description": "Indicates whether to include thoughts in the response. If true, thoughts are returned only when available.",
+            "type": "boolean"
           }
         },
         "type": "object"
