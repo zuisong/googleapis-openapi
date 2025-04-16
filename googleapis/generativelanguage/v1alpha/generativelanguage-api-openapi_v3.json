@@ -1044,7 +1044,8 @@
               "MODE_UNSPECIFIED",
               "AUTO",
               "ANY",
-              "NONE"
+              "NONE",
+              "VALIDATED"
             ],
             "type": "string"
           }
