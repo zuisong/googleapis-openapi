@@ -2690,6 +2690,11 @@
           "includeThoughts": {
             "description": "Indicates whether to include thoughts in the response. If true, thoughts are returned only when available.",
             "type": "boolean"
+          },
+          "thinkingBudget": {
+            "description": "The number of thoughts tokens that the model should generate.",
+            "format": "int32",
+            "type": "integer"
           }
         },
         "type": "object"
