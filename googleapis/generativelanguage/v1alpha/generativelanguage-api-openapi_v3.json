@@ -328,6 +328,11 @@
             "format": "int32",
             "readOnly": true,
             "type": "integer"
+          },
+          "urlRetrievalMetadata": {
+            "$ref": "#/components/schemas/UrlRetrievalMetadata",
+            "description": "Output only. Metadata related to url context retrieval tool.",
+            "readOnly": true
           }
         },
         "type": "object"
@@ -3007,6 +3012,29 @@
             "description": "Required. The list of fields to update. Currently, this only supports updating `custom_metadata` and `data`.",
             "format": "google-fieldmask",
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "UrlRetrievalContext": {
+        "description": "Context of the a single url retrieval.",
+        "properties": {
+          "retrievedUrl": {
+            "description": "Retrieved url by the tool.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "UrlRetrievalMetadata": {
+        "description": "Metadata related to url context retrieval tool.",
+        "properties": {
+          "urlRetrievalContexts": {
+            "description": "List of url retrieval contexts.",
+            "items": {
+              "$ref": "#/components/schemas/UrlRetrievalContext"
+            },
+            "type": "array"
           }
         },
         "type": "object"
