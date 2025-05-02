@@ -2439,6 +2439,9 @@
             },
             "type": "array"
           },
+          "example": {
+            "description": "Optional. Example of the object. Will only populated when the object is the root."
+          },
           "format": {
             "description": "Optional. The format of the data. This is used only for primitive datatypes. Supported formats: for NUMBER type: float, double for INTEGER type: int32, int64 for STRING type: enum, date-time",
             "type": "string"
@@ -2457,6 +2460,16 @@
             "format": "int64",
             "type": "string"
           },
+          "maxLength": {
+            "description": "Optional. Maximum length of the Type.STRING",
+            "format": "int64",
+            "type": "string"
+          },
+          "maxProperties": {
+            "description": "Optional. Maximum number of the properties for Type.OBJECT.",
+            "format": "int64",
+            "type": "string"
+          },
           "minimum": {
             "description": "Optional. SCHEMA FIELDS FOR TYPE INTEGER and NUMBER Minimum value of the Type.INTEGER and Type.NUMBER",
             "format": "double",
@@ -2467,9 +2480,23 @@
             "format": "int64",
             "type": "string"
           },
+          "minLength": {
+            "description": "Optional. SCHEMA FIELDS FOR TYPE STRING Minimum length of the Type.STRING",
+            "format": "int64",
+            "type": "string"
+          },
+          "minProperties": {
+            "description": "Optional. Minimum number of the properties for Type.OBJECT.",
+            "format": "int64",
+            "type": "string"
+          },
           "nullable": {
             "description": "Optional. Indicates if the value may be null.",
             "type": "boolean"
+          },
+          "pattern": {
+            "description": "Optional. Pattern of the Type.STRING to restrict a string to a regular expression.",
+            "type": "string"
           },
           "properties": {
             "additionalProperties": {
