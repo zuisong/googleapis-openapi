@@ -991,7 +991,7 @@
             "type": "string"
           },
           "videoMetadata": {
-            "$ref": "#/components/schemas/VideoMetadata",
+            "$ref": "#/components/schemas/VideoFileMetadata",
             "description": "Output only. Metadata for a video.",
             "readOnly": true
           }
@@ -3085,7 +3085,7 @@
         },
         "type": "object"
       },
-      "VideoMetadata": {
+      "VideoFileMetadata": {
         "description": "Metadata for a video `File`.",
         "properties": {
           "videoDuration": {
