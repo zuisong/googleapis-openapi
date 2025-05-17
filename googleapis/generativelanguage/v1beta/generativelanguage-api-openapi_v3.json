@@ -330,6 +330,11 @@
             "readOnly": true,
             "type": "integer"
           },
+          "urlContextMetadata": {
+            "$ref": "#/components/schemas/UrlContextMetadata",
+            "description": "Output only. Metadata related to url context retrieval tool.",
+            "readOnly": true
+          },
           "urlRetrievalMetadata": {
             "$ref": "#/components/schemas/UrlRetrievalMetadata",
             "description": "Output only. Metadata related to url context retrieval tool.",
@@ -1508,7 +1513,12 @@
       },
       "GoogleSearch": {
         "description": "GoogleSearch tool type. Tool to support Google Search in Model. Powered by Google.",
-        "properties": {},
+        "properties": {
+          "timeRangeFilter": {
+            "$ref": "#/components/schemas/Interval",
+            "description": "Optional. Filter search results to a specific time range. If customers set a start time, they must set an end time (and vice versa)."
+          }
+        },
         "type": "object"
       },
       "GoogleSearchRetrieval": {
@@ -1695,6 +1705,22 @@
               "$ref": "#/components/schemas/SafetyRating"
             },
             "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "Interval": {
+        "description": "Represents a time interval, encoded as a Timestamp start (inclusive) and a Timestamp end (exclusive). The start must be less than or equal to the end. When the start equals the end, the interval is empty (matches no time). When both start and end are unspecified, the interval matches any time.",
+        "properties": {
+          "endTime": {
+            "description": "Optional. Exclusive end of the interval. If specified, a Timestamp matching this interval will have to be before the end.",
+            "format": "google-datetime",
+            "type": "string"
+          },
+          "startTime": {
+            "description": "Optional. Inclusive start of the interval. If specified, a Timestamp matching this interval will have to be the same or after the start.",
+            "format": "google-datetime",
+            "type": "string"
           }
         },
         "type": "object"
@@ -2753,6 +2779,10 @@
           "googleSearchRetrieval": {
             "$ref": "#/components/schemas/GoogleSearchRetrieval",
             "description": "Optional. Retrieval tool that is powered by Google search."
+          },
+          "urlContext": {
+            "$ref": "#/components/schemas/UrlContext",
+            "description": "Optional. Tool to support URL context retrieval."
           }
         },
         "type": "object"
@@ -2988,6 +3018,43 @@
           "updateMask": {
             "description": "Required. The list of fields to update. Currently, this only supports updating `custom_metadata` and `data`.",
             "format": "google-fieldmask",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "UrlContext": {
+        "description": "Tool to support URL context retrieval.",
+        "properties": {},
+        "type": "object"
+      },
+      "UrlContextMetadata": {
+        "description": "Metadata related to url context retrieval tool.",
+        "properties": {
+          "urlMetadata": {
+            "description": "List of url context.",
+            "items": {
+              "$ref": "#/components/schemas/UrlMetadata"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "UrlMetadata": {
+        "description": "Context of the a single url retrieval.",
+        "properties": {
+          "retrievedUrl": {
+            "description": "Retrieved url by the tool.",
+            "type": "string"
+          },
+          "urlRetrievalStatus": {
+            "description": "Status of the url retrieval.",
+            "enum": [
+              "URL_RETRIEVAL_STATUS_UNSPECIFIED",
+              "URL_RETRIEVAL_STATUS_SUCCESS",
+              "URL_RETRIEVAL_STATUS_ERROR"
+            ],
             "type": "string"
           }
         },
