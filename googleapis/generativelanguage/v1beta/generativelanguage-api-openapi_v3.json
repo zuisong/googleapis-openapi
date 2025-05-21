@@ -1066,6 +1066,15 @@
       "FunctionDeclaration": {
         "description": "Structured representation of a function declaration as defined by the [OpenAPI 3.03 specification](https://spec.openapis.org/oas/v3.0.3). Included in this declaration are the function name and parameters. This FunctionDeclaration is a representation of a block of code that can be used as a `Tool` by the model and executed by the client.",
         "properties": {
+          "behavior": {
+            "description": "Optional. Specifies the function Behavior. Currently only supported by the BidiGenerateContent method.",
+            "enum": [
+              "UNSPECIFIED",
+              "BLOCKING",
+              "NON_BLOCKING"
+            ],
+            "type": "string"
+          },
           "description": {
             "description": "Required. A brief description of the function.",
             "type": "string"
@@ -1102,6 +1111,20 @@
             },
             "description": "Required. The function response in JSON object format.",
             "type": "object"
+          },
+          "scheduling": {
+            "description": "Optional. Specifies how the response should be scheduled in the conversation. Only applicable to NON_BLOCKING function calls, is ignored otherwise. Defaults to WHEN_IDLE.",
+            "enum": [
+              "SCHEDULING_UNSPECIFIED",
+              "SILENT",
+              "WHEN_IDLE",
+              "INTERRUPT"
+            ],
+            "type": "string"
+          },
+          "willContinue": {
+            "description": "Optional. Signals that function call continues, and more responses will be returned, turning the function call into a generator. Is only applicable to NON_BLOCKING function calls, is ignored otherwise. If set to false, future responses will not be considered. It is allowed to return empty `response` with `will_continue=False` to signal that the function call is finished. This may still trigger the model generation. To avoid triggering the generation and finish the function call, additionally set `scheduling` to `SILENT`.",
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -2081,6 +2104,19 @@
         },
         "type": "object"
       },
+      "MultiSpeakerVoiceConfig": {
+        "description": "The configuration for the multi-speaker setup.",
+        "properties": {
+          "speakerVoiceConfigs": {
+            "description": "Required. All the enabled speaker voices.",
+            "items": {
+              "$ref": "#/components/schemas/SpeakerVoiceConfig"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "Operation": {
         "description": "This resource represents a long-running operation that is the result of a network API call.",
         "properties": {
@@ -2147,6 +2183,10 @@
           "thought": {
             "description": "Optional. Indicates if the part is thought from the model.",
             "type": "boolean"
+          },
+          "videoMetadata": {
+            "$ref": "#/components/schemas/VideoMetadata",
+            "description": "Optional. Video metadata. The metadata should only be specified while the video data is presented in inline_data or file_data."
           }
         },
         "type": "object"
@@ -2658,12 +2698,30 @@
         },
         "type": "object"
       },
+      "SpeakerVoiceConfig": {
+        "description": "The configuration for a single speaker in a multi speaker setup.",
+        "properties": {
+          "speaker": {
+            "description": "Required. The name of the speaker to use. Should be the same as in the prompt.",
+            "type": "string"
+          },
+          "voiceConfig": {
+            "$ref": "#/components/schemas/VoiceConfig",
+            "description": "Required. The configuration for the voice to use."
+          }
+        },
+        "type": "object"
+      },
       "SpeechConfig": {
         "description": "The speech generation config.",
         "properties": {
           "languageCode": {
             "description": "Optional. Language code (in BCP 47 format, e.g. \"en-US\") for speech synthesis. Valid values are: de-DE, en-AU, en-GB, en-IN, en-US, es-US, fr-FR, hi-IN, pt-BR, ar-XA, es-ES, fr-CA, id-ID, it-IT, ja-JP, tr-TR, vi-VN, bn-IN, gu-IN, kn-IN, ml-IN, mr-IN, ta-IN, te-IN, nl-NL, ko-KR, cmn-CN, pl-PL, ru-RU, and th-TH.",
             "type": "string"
+          },
+          "multiSpeakerVoiceConfig": {
+            "$ref": "#/components/schemas/MultiSpeakerVoiceConfig",
+            "description": "Optional. The configuration for the multi-speaker setup. It is mutually exclusive with the voice_config field."
           },
           "voiceConfig": {
             "$ref": "#/components/schemas/VoiceConfig",
@@ -3158,6 +3216,27 @@
         "properties": {
           "videoDuration": {
             "description": "Duration of the video.",
+            "format": "google-duration",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "VideoMetadata": {
+        "description": "Metadata describes the input video content.",
+        "properties": {
+          "endOffset": {
+            "description": "Optional. The end offset of the video.",
+            "format": "google-duration",
+            "type": "string"
+          },
+          "fps": {
+            "description": "Optional. The frame rate of the video sent to the model. If not specified, the default value will be 1.0. The fps range is (0.0, 24.0].",
+            "format": "double",
+            "type": "number"
+          },
+          "startOffset": {
+            "description": "Optional. The start offset of the video.",
             "format": "google-duration",
             "type": "string"
           }
