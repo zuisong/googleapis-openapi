@@ -1407,6 +1407,11 @@
             "$ref": "#/components/schemas/PromptFeedback",
             "description": "Returns the prompt's feedback related to the content filters."
           },
+          "responseId": {
+            "description": "Output only. response_id is used to identify each response.",
+            "readOnly": true,
+            "type": "string"
+          },
           "usageMetadata": {
             "$ref": "#/components/schemas/UsageMetadata",
             "description": "Output only. Metadata on the generation requests' token usage.",
@@ -4274,6 +4279,60 @@
       ]
     },
     "/v1alpha/{name}": {
+      "get": {
+        "description": "Gets information about a specific Permission.",
+        "operationId": "generativelanguage.tunedModels.permissions.get",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Permission"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Required. The resource name of the permission. Formats: `tunedModels/{tuned_model}/permissions/{permission}` `corpora/{corpus}/permissions/{permission}`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The standard list filter.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "The standard list page size.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pageToken",
+            "in": "query",
+            "description": "The standard list page token.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "tunedModels"
+        ]
+      },
       "delete": {
         "description": "Deletes the permission.",
         "operationId": "generativelanguage.tunedModels.permissions.delete",
@@ -4305,36 +4364,6 @@
             "description": "Optional. If set to true, any `Chunk`s and objects related to this `Document` will also be deleted. If false (the default), a `FAILED_PRECONDITION` error will be returned if `Document` contains any `Chunk`s.",
             "schema": {
               "type": "boolean"
-            }
-          }
-        ],
-        "tags": [
-          "tunedModels"
-        ]
-      },
-      "get": {
-        "description": "Gets information about a specific Permission.",
-        "operationId": "generativelanguage.tunedModels.permissions.get",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Permission"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "description": "Required. The resource name of the permission. Formats: `tunedModels/{tuned_model}/permissions/{permission}` `corpora/{corpus}/permissions/{permission}`",
-            "required": true,
-            "schema": {
-              "type": "string"
             }
           }
         ],
@@ -6330,6 +6359,9 @@
   "tags": [
     {
       "name": "auth_tokens"
+    },
+    {
+      "name": "batches"
     },
     {
       "name": "cachedContents"
