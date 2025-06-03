@@ -461,11 +461,6 @@
             "$ref": "#/components/schemas/UrlContextMetadata",
             "description": "Output only. Metadata related to url context retrieval tool.",
             "readOnly": true
-          },
-          "urlRetrievalMetadata": {
-            "$ref": "#/components/schemas/UrlRetrievalMetadata",
-            "description": "Output only. Metadata related to url context retrieval tool.",
-            "readOnly": true
           }
         },
         "type": "object"
@@ -3389,29 +3384,6 @@
               "URL_RETRIEVAL_STATUS_ERROR"
             ],
             "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "UrlRetrievalContext": {
-        "description": "Context of the a single url retrieval.",
-        "properties": {
-          "retrievedUrl": {
-            "description": "Retrieved url by the tool.",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "UrlRetrievalMetadata": {
-        "description": "Metadata related to url context retrieval tool.",
-        "properties": {
-          "urlRetrievalContexts": {
-            "description": "List of url retrieval contexts.",
-            "items": {
-              "$ref": "#/components/schemas/UrlRetrievalContext"
-            },
-            "type": "array"
           }
         },
         "type": "object"
