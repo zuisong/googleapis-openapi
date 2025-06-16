@@ -1337,7 +1337,7 @@
         "type": "object"
       },
       "GenerateContentRequest": {
-        "description": "Request to generate a completion from the model. NEXT ID: 13",
+        "description": "Request to generate a completion from the model. NEXT ID: 14",
         "properties": {
           "cachedContent": {
             "description": "Optional. The name of the content [cached](https://ai.google.dev/gemini-api/docs/caching) to use as context to serve the prediction. Format: `cachedContents/{cachedContent}`",
