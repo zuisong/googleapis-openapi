@@ -2096,6 +2096,10 @@
             "format": "float",
             "type": "number"
           },
+          "thinking": {
+            "description": "Whether the model supports thinking.",
+            "type": "boolean"
+          },
           "topK": {
             "description": "For Top-k sampling. Top-k sampling considers the set of `top_k` most probable tokens. This value specifies default to be used by the backend while making the call to the model. If empty, indicates the model doesn't use top-k sampling, and `top_k` isn't allowed as a generation parameter.",
             "format": "int32",
