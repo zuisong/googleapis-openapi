@@ -288,7 +288,8 @@
               "PROHIBITED_CONTENT",
               "SPII",
               "MALFORMED_FUNCTION_CALL",
-              "IMAGE_SAFETY"
+              "IMAGE_SAFETY",
+              "UNEXPECTED_TOOL_CALL"
             ],
             "readOnly": true,
             "type": "string"
