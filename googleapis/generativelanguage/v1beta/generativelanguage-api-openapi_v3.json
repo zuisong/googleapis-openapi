@@ -2400,6 +2400,10 @@
             "description": "`Chunk` relevance to the query.",
             "format": "float",
             "type": "number"
+          },
+          "document": {
+            "$ref": "#/components/schemas/Document",
+            "description": "`Document` associated with the chunk."
           }
         },
         "type": "object"
