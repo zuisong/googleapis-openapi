@@ -135,6 +135,46 @@
         },
         "type": "object"
       },
+      "BatchGenerateContentRequest": {
+        "description": "Request for a BatchGenerateContent operation.",
+        "properties": {
+          "batch": {
+            "$ref": "#/components/schemas/GenerateContentBatch",
+            "description": "Required. The batch to create."
+          }
+        },
+        "type": "object"
+      },
+      "BatchStats": {
+        "description": "Stats about the batch.",
+        "properties": {
+          "failedRequestCount": {
+            "description": "Output only. The number of requests that failed to be processed.",
+            "format": "int64",
+            "readOnly": true,
+            "type": "string"
+          },
+          "pendingRequestCount": {
+            "description": "Output only. The number of requests that are still pending processing.",
+            "format": "int64",
+            "readOnly": true,
+            "type": "string"
+          },
+          "requestCount": {
+            "description": "Output only. The number of requests in the batch.",
+            "format": "int64",
+            "readOnly": true,
+            "type": "string"
+          },
+          "successfulRequestCount": {
+            "description": "Output only. The number of requests that were successfully processed.",
+            "format": "int64",
+            "readOnly": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "BatchUpdateChunksRequest": {
         "description": "Request to batch update `Chunk`s.",
         "properties": {
@@ -1195,8 +1235,90 @@
         },
         "type": "object"
       },
+      "GenerateContentBatch": {
+        "description": "A resource representing a batch of GenerateContent requests.",
+        "properties": {
+          "batchStats": {
+            "$ref": "#/components/schemas/BatchStats",
+            "description": "Output only. Stats about the batch.",
+            "readOnly": true
+          },
+          "createTime": {
+            "description": "Output only. The time at which the batch was created.",
+            "format": "google-datetime",
+            "readOnly": true,
+            "type": "string"
+          },
+          "displayName": {
+            "description": "Required. The user-defined name of this batch.",
+            "type": "string"
+          },
+          "endTime": {
+            "description": "Output only. The time at which the batch processing completed.",
+            "format": "google-datetime",
+            "readOnly": true,
+            "type": "string"
+          },
+          "inputConfig": {
+            "$ref": "#/components/schemas/InputConfig",
+            "description": "Required. Input configuration of the instances on which batch processing are performed."
+          },
+          "name": {
+            "description": "Output only. Identifier. Resource name of the batch. Format: `batches/{batch_id}`.",
+            "readOnly": true,
+            "type": "string"
+          },
+          "output": {
+            "$ref": "#/components/schemas/GenerateContentBatchOutput",
+            "description": "Output only. The output of the batch request.",
+            "readOnly": true
+          },
+          "priority": {
+            "description": "Optional. The priority of the batch. Batches with a higher priority value will be processed before batches with a lower priority value. Negative values are allowed. Default is 0.",
+            "format": "int64",
+            "type": "string"
+          },
+          "state": {
+            "description": "Output only. The state of the batch.",
+            "enum": [
+              "BATCH_STATE_UNSPECIFIED",
+              "BATCH_STATE_PENDING",
+              "BATCH_STATE_RUNNING",
+              "BATCH_STATE_SUCCEEDED",
+              "BATCH_STATE_FAILED",
+              "BATCH_STATE_CANCELLED",
+              "BATCH_STATE_EXPIRED"
+            ],
+            "readOnly": true,
+            "type": "string"
+          },
+          "updateTime": {
+            "description": "Output only. The time at which the batch was last updated.",
+            "format": "google-datetime",
+            "readOnly": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "GenerateContentBatchOutput": {
+        "description": "The output of a batch request. This is returned in the BatchGenerateContentResponse or the GenerateContentBatch.output field.",
+        "properties": {
+          "inlinedResponses": {
+            "$ref": "#/components/schemas/InlinedResponses",
+            "description": "Output only. The responses to the requests in the batch. Returned when the batch was built using inlined requests. The responses will be in the same order as the input requests.",
+            "readOnly": true
+          },
+          "responsesFile": {
+            "description": "Output only. The file ID of the file containing the responses. The file will be a JSONL file with a single response per line. The responses will be GenerateContentResponse messages formatted as JSON. The responses will be written in the same order as the input requests.",
+            "readOnly": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "GenerateContentRequest": {
-        "description": "Request to generate a completion from the model. NEXT ID: 14",
+        "description": "Request to generate a completion from the model.",
         "properties": {
           "cachedContent": {
             "description": "Optional. The name of the content [cached](https://ai.google.dev/gemini-api/docs/caching) to use as context to serve the prediction. Format: `cachedContents/{cachedContent}`",
@@ -1716,6 +1838,88 @@
             "description": "Optional. Immutable. The learning rate multiplier is used to calculate a final learning_rate based on the default (recommended) value. Actual learning rate := learning_rate_multiplier * default learning rate Default learning rate is dependent on base model and dataset size. If not set, a default of 1.0 will be used.",
             "format": "float",
             "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "InlinedRequest": {
+        "description": "The request to be processed in the batch.",
+        "properties": {
+          "metadata": {
+            "additionalProperties": {
+              "description": "Properties of the object."
+            },
+            "description": "Optional. The metadata to be associated with the request.",
+            "type": "object"
+          },
+          "request": {
+            "$ref": "#/components/schemas/GenerateContentRequest",
+            "description": "Required. The request to be processed in the batch."
+          }
+        },
+        "type": "object"
+      },
+      "InlinedRequests": {
+        "description": "The requests to be processed in the batch if provided as part of the batch creation request.",
+        "properties": {
+          "requests": {
+            "description": "Required. The requests to be processed in the batch.",
+            "items": {
+              "$ref": "#/components/schemas/InlinedRequest"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "InlinedResponse": {
+        "description": "The response to a single request in the batch.",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/Status",
+            "description": "Output only. The error encountered while processing the request.",
+            "readOnly": true
+          },
+          "metadata": {
+            "additionalProperties": {
+              "description": "Properties of the object."
+            },
+            "description": "Output only. The metadata associated with the request.",
+            "readOnly": true,
+            "type": "object"
+          },
+          "response": {
+            "$ref": "#/components/schemas/GenerateContentResponse",
+            "description": "Output only. The response to the request.",
+            "readOnly": true
+          }
+        },
+        "type": "object"
+      },
+      "InlinedResponses": {
+        "description": "The responses to the requests in the batch.",
+        "properties": {
+          "inlinedResponses": {
+            "description": "Output only. The responses to the requests in the batch.",
+            "items": {
+              "$ref": "#/components/schemas/InlinedResponse"
+            },
+            "readOnly": true,
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "InputConfig": {
+        "description": "Configures the input to the batch request.",
+        "properties": {
+          "fileName": {
+            "description": "The name of the `File` containing the input requests.",
+            "type": "string"
+          },
+          "requests": {
+            "$ref": "#/components/schemas/InlinedRequests",
+            "description": "The requests to be processed in the batch."
           }
         },
         "type": "object"
@@ -5122,6 +5326,82 @@
         ],
         "tags": [
           "models"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/_.xgafv"
+        },
+        {
+          "$ref": "#/components/parameters/access_token"
+        },
+        {
+          "$ref": "#/components/parameters/alt"
+        },
+        {
+          "$ref": "#/components/parameters/callback"
+        },
+        {
+          "$ref": "#/components/parameters/fields"
+        },
+        {
+          "$ref": "#/components/parameters/key"
+        },
+        {
+          "$ref": "#/components/parameters/oauth_token"
+        },
+        {
+          "$ref": "#/components/parameters/prettyPrint"
+        },
+        {
+          "$ref": "#/components/parameters/quotaUser"
+        },
+        {
+          "$ref": "#/components/parameters/upload_protocol"
+        },
+        {
+          "$ref": "#/components/parameters/uploadType"
+        }
+      ]
+    },
+    "/v1beta/{model}:batchGenerateContent": {
+      "post": {
+        "description": "Enqueues a batch of GenerateContent requests for batch processing.",
+        "operationId": "generativelanguage.tunedModels.batchGenerateContent",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Operation"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchGenerateContentRequest"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "model",
+            "in": "path",
+            "description": "Required. The name of the `Model` to use for generating the completion. Format: `models/{model}`.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "tunedModels"
         ]
       },
       "parameters": [
