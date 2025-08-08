@@ -21,6 +21,16 @@
   ],
   "components": {
     "schemas": {
+      "AsyncBatchEmbedContentRequest": {
+        "description": "Request for an `AsyncBatchEmbedContent` operation.",
+        "properties": {
+          "batch": {
+            "$ref": "#/components/schemas/EmbedContentBatch",
+            "description": "Required. The batch to create."
+          }
+        },
+        "type": "object"
+      },
       "AttributionSourceId": {
         "description": "Identifier for the source contributing to this attribution.",
         "properties": {
@@ -214,7 +224,7 @@
         "type": "object"
       },
       "BatchGenerateContentRequest": {
-        "description": "Request for a BatchGenerateContent operation.",
+        "description": "Request for a `BatchGenerateContent` operation.",
         "properties": {
           "batch": {
             "$ref": "#/components/schemas/GenerateContentBatch",
@@ -288,7 +298,7 @@
           },
           "generationConfig": {
             "$ref": "#/components/schemas/GenerationConfig",
-            "description": "Optional. Generation config. The following fields are not supported: - `response_logprobs` - `response_mime_type` - `logprobs` - `response_schema` - `stop_sequence` - `routing_config` - `audio_timestamp`"
+            "description": "Optional. Generation config. The following fields are not supported: - `response_logprobs` - `response_mime_type` - `logprobs` - `response_schema` - `response_json_schema` - `stop_sequence` - `routing_config` - `audio_timestamp`"
           },
           "inputAudioTranscription": {
             "$ref": "#/components/schemas/AudioTranscriptionConfig",
@@ -456,7 +466,8 @@
               "SPII",
               "MALFORMED_FUNCTION_CALL",
               "IMAGE_SAFETY",
-              "UNEXPECTED_TOOL_CALL"
+              "UNEXPECTED_TOOL_CALL",
+              "TOO_MANY_TOOL_CALLS"
             ],
             "readOnly": true,
             "type": "string"
@@ -968,6 +979,118 @@
         },
         "type": "object"
       },
+      "EmbedContentBatch": {
+        "description": "A resource representing a batch of `EmbedContent` requests.",
+        "properties": {
+          "batchStats": {
+            "$ref": "#/components/schemas/EmbedContentBatchStats",
+            "description": "Output only. Stats about the batch.",
+            "readOnly": true
+          },
+          "createTime": {
+            "description": "Output only. The time at which the batch was created.",
+            "format": "google-datetime",
+            "readOnly": true,
+            "type": "string"
+          },
+          "displayName": {
+            "description": "Required. The user-defined name of this batch.",
+            "type": "string"
+          },
+          "endTime": {
+            "description": "Output only. The time at which the batch processing completed.",
+            "format": "google-datetime",
+            "readOnly": true,
+            "type": "string"
+          },
+          "inputConfig": {
+            "$ref": "#/components/schemas/InputEmbedContentConfig",
+            "description": "Required. Input configuration of the instances on which batch processing are performed."
+          },
+          "name": {
+            "description": "Output only. Identifier. Resource name of the batch. Format: `batches/{batch_id}`.",
+            "readOnly": true,
+            "type": "string"
+          },
+          "output": {
+            "$ref": "#/components/schemas/EmbedContentBatchOutput",
+            "description": "Output only. The output of the batch request.",
+            "readOnly": true
+          },
+          "priority": {
+            "description": "Optional. The priority of the batch. Batches with a higher priority value will be processed before batches with a lower priority value. Negative values are allowed. Default is 0.",
+            "format": "int64",
+            "type": "string"
+          },
+          "state": {
+            "description": "Output only. The state of the batch.",
+            "enum": [
+              "BATCH_STATE_UNSPECIFIED",
+              "BATCH_STATE_PENDING",
+              "BATCH_STATE_RUNNING",
+              "BATCH_STATE_SUCCEEDED",
+              "BATCH_STATE_FAILED",
+              "BATCH_STATE_CANCELLED",
+              "BATCH_STATE_EXPIRED"
+            ],
+            "readOnly": true,
+            "type": "string"
+          },
+          "updateTime": {
+            "description": "Output only. The time at which the batch was last updated.",
+            "format": "google-datetime",
+            "readOnly": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "EmbedContentBatchOutput": {
+        "description": "The output of a batch request. This is returned in the `AsyncBatchEmbedContentResponse` or the `EmbedContentBatch.output` field.",
+        "properties": {
+          "inlinedResponses": {
+            "$ref": "#/components/schemas/InlinedEmbedContentResponses",
+            "description": "Output only. The responses to the requests in the batch. Returned when the batch was built using inlined requests. The responses will be in the same order as the input requests.",
+            "readOnly": true
+          },
+          "responsesFile": {
+            "description": "Output only. The file ID of the file containing the responses. The file will be a JSONL file with a single response per line. The responses will be `EmbedContentResponse` messages formatted as JSON. The responses will be written in the same order as the input requests.",
+            "readOnly": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "EmbedContentBatchStats": {
+        "description": "Stats about the batch.",
+        "properties": {
+          "failedRequestCount": {
+            "description": "Output only. The number of requests that failed to be processed.",
+            "format": "int64",
+            "readOnly": true,
+            "type": "string"
+          },
+          "pendingRequestCount": {
+            "description": "Output only. The number of requests that are still pending processing.",
+            "format": "int64",
+            "readOnly": true,
+            "type": "string"
+          },
+          "requestCount": {
+            "description": "Output only. The number of requests in the batch.",
+            "format": "int64",
+            "readOnly": true,
+            "type": "string"
+          },
+          "successfulRequestCount": {
+            "description": "Output only. The number of requests that were successfully processed.",
+            "format": "int64",
+            "readOnly": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "EmbedContentRequest": {
         "description": "Request containing the `Content` for the model to embed.",
         "properties": {
@@ -1221,7 +1344,7 @@
         "description": "Configuration for specifying function calling behavior.",
         "properties": {
           "allowedFunctionNames": {
-            "description": "Optional. A set of function names that, when provided, limits the functions the model will call. This should only be set when the Mode is ANY. Function names should match [FunctionDeclaration.name]. With mode set to ANY, model will predict a function call from the set of function names provided.",
+            "description": "Optional. A set of function names that, when provided, limits the functions the model will call. This should only be set when the Mode is ANY or VALIDATED. Function names should match [FunctionDeclaration.name]. When set, model will predict a function call from only allowed function names.",
             "items": {
               "type": "string"
             },
@@ -1378,7 +1501,7 @@
         "type": "object"
       },
       "GenerateContentBatch": {
-        "description": "A resource representing a batch of GenerateContent requests.",
+        "description": "A resource representing a batch of `GenerateContent` requests.",
         "properties": {
           "batchStats": {
             "$ref": "#/components/schemas/BatchStats",
@@ -1444,7 +1567,7 @@
         "type": "object"
       },
       "GenerateContentBatchOutput": {
-        "description": "The output of a batch request. This is returned in the BatchGenerateContentResponse or the GenerateContentBatch.output field.",
+        "description": "The output of a batch request. This is returned in the `BatchGenerateContentResponse` or the `GenerateContentBatch.output` field.",
         "properties": {
           "inlinedResponses": {
             "$ref": "#/components/schemas/InlinedResponses",
@@ -1452,7 +1575,7 @@
             "readOnly": true
           },
           "responsesFile": {
-            "description": "Output only. The file ID of the file containing the responses. The file will be a JSONL file with a single response per line. The responses will be GenerateContentResponse messages formatted as JSON. The responses will be written in the same order as the input requests.",
+            "description": "Output only. The file ID of the file containing the responses. The file will be a JSONL file with a single response per line. The responses will be `GenerateContentResponse` messages formatted as JSON. The responses will be written in the same order as the input requests.",
             "readOnly": true,
             "type": "string"
           }
@@ -1988,6 +2111,74 @@
         },
         "type": "object"
       },
+      "InlinedEmbedContentRequest": {
+        "description": "The request to be processed in the batch.",
+        "properties": {
+          "metadata": {
+            "additionalProperties": {
+              "description": "Properties of the object."
+            },
+            "description": "Optional. The metadata to be associated with the request.",
+            "type": "object"
+          },
+          "request": {
+            "$ref": "#/components/schemas/EmbedContentRequest",
+            "description": "Required. The request to be processed in the batch."
+          }
+        },
+        "type": "object"
+      },
+      "InlinedEmbedContentRequests": {
+        "description": "The requests to be processed in the batch if provided as part of the batch creation request.",
+        "properties": {
+          "requests": {
+            "description": "Required. The requests to be processed in the batch.",
+            "items": {
+              "$ref": "#/components/schemas/InlinedEmbedContentRequest"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "InlinedEmbedContentResponse": {
+        "description": "The response to a single request in the batch.",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/Status",
+            "description": "Output only. The error encountered while processing the request.",
+            "readOnly": true
+          },
+          "metadata": {
+            "additionalProperties": {
+              "description": "Properties of the object."
+            },
+            "description": "Output only. The metadata associated with the request.",
+            "readOnly": true,
+            "type": "object"
+          },
+          "response": {
+            "$ref": "#/components/schemas/EmbedContentResponse",
+            "description": "Output only. The response to the request.",
+            "readOnly": true
+          }
+        },
+        "type": "object"
+      },
+      "InlinedEmbedContentResponses": {
+        "description": "The responses to the requests in the batch.",
+        "properties": {
+          "inlinedResponses": {
+            "description": "Output only. The responses to the requests in the batch.",
+            "items": {
+              "$ref": "#/components/schemas/InlinedEmbedContentResponse"
+            },
+            "readOnly": true,
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "InlinedRequest": {
         "description": "The request to be processed in the batch.",
         "properties": {
@@ -2065,6 +2256,20 @@
           },
           "requests": {
             "$ref": "#/components/schemas/InlinedRequests",
+            "description": "The requests to be processed in the batch."
+          }
+        },
+        "type": "object"
+      },
+      "InputEmbedContentConfig": {
+        "description": "Configures the input to the batch request.",
+        "properties": {
+          "fileName": {
+            "description": "The name of the `File` containing the input requests.",
+            "type": "string"
+          },
+          "requests": {
+            "$ref": "#/components/schemas/InlinedEmbedContentRequests",
             "description": "The requests to be processed in the batch."
           }
         },
@@ -2844,6 +3049,20 @@
               "HARM_CATEGORY_DANGEROUS_CONTENT",
               "HARM_CATEGORY_CIVIC_INTEGRITY"
             ],
+            "enumDeprecated": [
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
             "type": "string"
           },
           "probability": {
@@ -2878,6 +3097,20 @@
               "HARM_CATEGORY_SEXUALLY_EXPLICIT",
               "HARM_CATEGORY_DANGEROUS_CONTENT",
               "HARM_CATEGORY_CIVIC_INTEGRITY"
+            ],
+            "enumDeprecated": [
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
             ],
             "type": "string"
           },
@@ -5533,6 +5766,82 @@
         }
       ]
     },
+    "/v1alpha/{model}:asyncBatchEmbedContent": {
+      "post": {
+        "description": "Enqueues a batch of `EmbedContent` requests for batch processing. We have a `BatchEmbedContents` handler in `GenerativeService`, but it was synchronized. So we name this one to be `Async` to avoid confusion.",
+        "operationId": "generativelanguage.tunedModels.asyncBatchEmbedContent",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Operation"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AsyncBatchEmbedContentRequest"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "model",
+            "in": "path",
+            "description": "Required. The name of the `Model` to use for generating the completion. Format: `models/{model}`.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "tunedModels"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/_.xgafv"
+        },
+        {
+          "$ref": "#/components/parameters/access_token"
+        },
+        {
+          "$ref": "#/components/parameters/alt"
+        },
+        {
+          "$ref": "#/components/parameters/callback"
+        },
+        {
+          "$ref": "#/components/parameters/fields"
+        },
+        {
+          "$ref": "#/components/parameters/key"
+        },
+        {
+          "$ref": "#/components/parameters/oauth_token"
+        },
+        {
+          "$ref": "#/components/parameters/prettyPrint"
+        },
+        {
+          "$ref": "#/components/parameters/quotaUser"
+        },
+        {
+          "$ref": "#/components/parameters/upload_protocol"
+        },
+        {
+          "$ref": "#/components/parameters/uploadType"
+        }
+      ]
+    },
     "/v1alpha/{model}:batchEmbedContents": {
       "post": {
         "description": "Generates multiple embedding vectors from the input `Content` which consists of a batch of strings represented as `EmbedContentRequest` objects.",
@@ -5687,7 +5996,7 @@
     },
     "/v1alpha/{model}:batchGenerateContent": {
       "post": {
-        "description": "Enqueues a batch of GenerateContent requests for batch processing.",
+        "description": "Enqueues a batch of `GenerateContent` requests for batch processing.",
         "operationId": "generativelanguage.tunedModels.batchGenerateContent",
         "responses": {
           "200": {
