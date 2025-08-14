@@ -3571,7 +3571,9 @@
             "enum": [
               "URL_RETRIEVAL_STATUS_UNSPECIFIED",
               "URL_RETRIEVAL_STATUS_SUCCESS",
-              "URL_RETRIEVAL_STATUS_ERROR"
+              "URL_RETRIEVAL_STATUS_ERROR",
+              "URL_RETRIEVAL_STATUS_PAYWALL",
+              "URL_RETRIEVAL_STATUS_UNSAFE"
             ],
             "type": "string"
           }
