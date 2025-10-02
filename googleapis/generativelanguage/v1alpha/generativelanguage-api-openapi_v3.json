@@ -1300,7 +1300,8 @@
             "enum": [
               "SOURCE_UNSPECIFIED",
               "UPLOADED",
-              "GENERATED"
+              "GENERATED",
+              "REGISTERED"
             ],
             "type": "string"
           },
@@ -2564,6 +2565,11 @@
               "$ref": "#/components/schemas/LogprobsResultCandidate"
             },
             "type": "array"
+          },
+          "logProbabilitySum": {
+            "description": "Sum of log probabilities for all tokens.",
+            "format": "float",
+            "type": "number"
           },
           "topCandidates": {
             "description": "Length = total number of decoding steps.",
