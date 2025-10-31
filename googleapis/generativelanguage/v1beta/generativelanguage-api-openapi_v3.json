@@ -1166,8 +1166,7 @@
             "description": "Required. Programming language of the `code`.",
             "enum": [
               "LANGUAGE_UNSPECIFIED",
-              "PYTHON",
-              "BASH"
+              "PYTHON"
             ],
             "type": "string"
           }
