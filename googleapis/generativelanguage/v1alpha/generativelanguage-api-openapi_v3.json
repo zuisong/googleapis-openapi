@@ -5542,7 +5542,7 @@
           {
             "name": "force",
             "in": "query",
-            "description": "Optional. If set to true, any `Chunk`s and objects related to this `Document` will also be deleted. If false (the default), a `FAILED_PRECONDITION` error will be returned if `Document` contains any `Chunk`s.",
+            "description": "Optional. If set to true, any `Document`s and objects related to this `RagStore` will also be deleted. If false (the default), a `FAILED_PRECONDITION` error will be returned if `RagStore` contains any `Document`s.",
             "schema": {
               "type": "boolean"
             }
@@ -5868,7 +5868,7 @@
     "/v1alpha/{name}:query": {
       "post": {
         "description": "Performs semantic search over a `Document`.",
-        "operationId": "generativelanguage.ragStores.documents.query",
+        "operationId": "generativelanguage.fileSearchStores.documents.query",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -5902,7 +5902,7 @@
           }
         ],
         "tags": [
-          "ragStores"
+          "fileSearchStores"
         ]
       },
       "parameters": [
@@ -6596,6 +6596,128 @@
             "in": "path",
             "description": "Required. Immutable. The name of the `FileSearchStore` to import the file into. Example: `fileSearchStores/my-file-search-store-123`",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "fileSearchStores"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/_.xgafv"
+        },
+        {
+          "$ref": "#/components/parameters/access_token"
+        },
+        {
+          "$ref": "#/components/parameters/alt"
+        },
+        {
+          "$ref": "#/components/parameters/callback"
+        },
+        {
+          "$ref": "#/components/parameters/fields"
+        },
+        {
+          "$ref": "#/components/parameters/key"
+        },
+        {
+          "$ref": "#/components/parameters/oauth_token"
+        },
+        {
+          "$ref": "#/components/parameters/prettyPrint"
+        },
+        {
+          "$ref": "#/components/parameters/quotaUser"
+        },
+        {
+          "$ref": "#/components/parameters/upload_protocol"
+        },
+        {
+          "$ref": "#/components/parameters/uploadType"
+        }
+      ]
+    },
+    "/v1alpha/{parent}/documents": {
+      "post": {
+        "description": "Creates an empty `Document`.",
+        "operationId": "generativelanguage.fileSearchStores.documents.create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Document"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Document"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent",
+            "in": "path",
+            "description": "Required. The name of the `RagStore` where this `Document` will be created. Example: `ragStores/my-rag-store-123`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "fileSearchStores"
+        ]
+      },
+      "get": {
+        "description": "Lists all `Document`s in a `Corpus`.",
+        "operationId": "generativelanguage.fileSearchStores.documents.list",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListDocumentsResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent",
+            "in": "path",
+            "description": "Required. The name of the `RagStore` containing `Document`s. Example: `ragStores/my-rag-store-123`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Optional. The maximum number of `Document`s to return (per page). The service may return fewer `Document`s. If unspecified, at most 10 `Document`s will be returned. The maximum size limit is 20 `Document`s per page.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pageToken",
+            "in": "query",
+            "description": "Optional. A page token, received from a previous `ListDocuments` call. Provide the `next_page_token` returned in the response as an argument to the next request to retrieve the next page. When paginating, all other parameters provided to `ListDocuments` must match the call that provided the page token.",
             "schema": {
               "type": "string"
             }
@@ -7842,128 +7964,6 @@
         ],
         "tags": [
           "tunedModels"
-        ]
-      },
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/_.xgafv"
-        },
-        {
-          "$ref": "#/components/parameters/access_token"
-        },
-        {
-          "$ref": "#/components/parameters/alt"
-        },
-        {
-          "$ref": "#/components/parameters/callback"
-        },
-        {
-          "$ref": "#/components/parameters/fields"
-        },
-        {
-          "$ref": "#/components/parameters/key"
-        },
-        {
-          "$ref": "#/components/parameters/oauth_token"
-        },
-        {
-          "$ref": "#/components/parameters/prettyPrint"
-        },
-        {
-          "$ref": "#/components/parameters/quotaUser"
-        },
-        {
-          "$ref": "#/components/parameters/upload_protocol"
-        },
-        {
-          "$ref": "#/components/parameters/uploadType"
-        }
-      ]
-    },
-    "/v1alpha/{parent}/documents": {
-      "post": {
-        "description": "Creates an empty `Document`.",
-        "operationId": "generativelanguage.ragStores.documents.create",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Document"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Document"
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parent",
-            "in": "path",
-            "description": "Required. The name of the `RagStore` where this `Document` will be created. Example: `ragStores/my-rag-store-123`",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "tags": [
-          "ragStores"
-        ]
-      },
-      "get": {
-        "description": "Lists all `Document`s in a `Corpus`.",
-        "operationId": "generativelanguage.ragStores.documents.list",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListDocumentsResponse"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parent",
-            "in": "path",
-            "description": "Required. The name of the `RagStore` containing `Document`s. Example: `ragStores/my-rag-store-123`",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "pageSize",
-            "in": "query",
-            "description": "Optional. The maximum number of `Document`s to return (per page). The service may return fewer `Document`s. If unspecified, at most 10 `Document`s will be returned. The maximum size limit is 20 `Document`s per page.",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "pageToken",
-            "in": "query",
-            "description": "Optional. A page token, received from a previous `ListDocuments` call. Provide the `next_page_token` returned in the response as an argument to the next request to retrieve the next page. When paginating, all other parameters provided to `ListDocuments` must match the call that provided the page token.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "tags": [
-          "ragStores"
         ]
       },
       "parameters": [
