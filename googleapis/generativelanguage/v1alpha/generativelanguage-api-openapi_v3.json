@@ -1021,7 +1021,7 @@
             "type": "string"
           },
           "name": {
-            "description": "Immutable. Identifier. The `Document` resource name. The ID (name excluding the \"ragStores/*/documents/\" prefix) can contain up to 40 characters that are lowercase alphanumeric or dashes (-). The ID cannot start or end with a dash. If the name is empty on create, a unique name will be derived from `display_name` along with a 12 character random suffix. Example: `ragStores/{corpus_id}/documents/my-awesome-doc-123a456b789c`",
+            "description": "Immutable. Identifier. The `Document` resource name. The ID (name excluding the \"fileSearchStores/*/documents/\" prefix) can contain up to 40 characters that are lowercase alphanumeric or dashes (-). The ID cannot start or end with a dash. If the name is empty on create, a unique name will be derived from `display_name` along with a 12 character random suffix. Example: `fileSearchStores/{file_search_store_id}/documents/my-awesome-doc-123a456b789c`",
             "type": "string"
           },
           "sizeBytes": {
@@ -2775,23 +2775,6 @@
         },
         "type": "object"
       },
-      "ListRagStoresResponse": {
-        "description": "Response from `ListRagStores` containing a paginated list of `RagStores`. The results are sorted by ascending `rag_store.create_time`.",
-        "properties": {
-          "nextPageToken": {
-            "description": "A token, which can be sent as `page_token` to retrieve the next page. If this field is omitted, there are no more pages.",
-            "type": "string"
-          },
-          "ragStores": {
-            "description": "The returned rag_stores.",
-            "items": {
-              "$ref": "#/components/schemas/RagStore"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
       "ListTunedModelsResponse": {
         "description": "Response from `ListTunedModels` containing a paginated list of Models.",
         "properties": {
@@ -3331,57 +3314,6 @@
         },
         "type": "object"
       },
-      "RagStore": {
-        "description": "A `RagStore` is a collection of `Document`s.",
-        "properties": {
-          "activeDocumentsCount": {
-            "description": "Output only. The number of documents in the Ragstore that are active and ready for retrieval.",
-            "format": "int64",
-            "readOnly": true,
-            "type": "string"
-          },
-          "createTime": {
-            "description": "Output only. The Timestamp of when the `RagStore` was created.",
-            "format": "google-datetime",
-            "readOnly": true,
-            "type": "string"
-          },
-          "displayName": {
-            "description": "Optional. The human-readable display name for the `RagStore`. The display name must be no more than 512 characters in length, including spaces. Example: \"Docs on Semantic Retriever\"",
-            "type": "string"
-          },
-          "failedDocumentsCount": {
-            "description": "Output only. The number of documents in the Ragstore that have failed processing.",
-            "format": "int64",
-            "readOnly": true,
-            "type": "string"
-          },
-          "name": {
-            "description": "Output only. Immutable. Identifier. The `RagStore` resource name. It is an ID (name excluding the \"ragStores/\" prefix) that can contain up to 40 characters that are lowercase alphanumeric or dashes (-). It is output only. The unique name will be derived from `display_name` along with a 12 character random suffix. Example: `ragStores/my-awesome-rag-store-123a456b789c` If `display_name` is not provided, the name will be randomly generated.",
-            "readOnly": true,
-            "type": "string"
-          },
-          "pendingDocumentsCount": {
-            "description": "Output only. The number of documents in the Ragstore that are being processed.",
-            "format": "int64",
-            "readOnly": true,
-            "type": "string"
-          },
-          "sizeBytes": {
-            "description": "Output only. The size of raw bytes ingested into the Ragstore. This is the total size of all the documents in the Ragstore.",
-            "format": "int64",
-            "readOnly": true,
-            "type": "string"
-          },
-          "updateTime": {
-            "description": "Output only. The Timestamp of when the `RagStore` was last updated.",
-            "format": "google-datetime",
-            "readOnly": true,
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "RealtimeInputConfig": {
         "description": "Configures the realtime input behavior in `BidiGenerateContent`.",
         "properties": {
@@ -3457,8 +3389,8 @@
       "RetrievedContext": {
         "description": "Chunk from context retrieved by the file search tool.",
         "properties": {
-          "ragStore": {
-            "description": "Optional. Name of the `RagStore` containing the document. Example: `ragStores/123`",
+          "fileSearchStore": {
+            "description": "Optional. Name of the `FileSearchStore` containing the document. Example: `fileSearchStores/123`",
             "type": "string"
           },
           "text": {
@@ -3956,7 +3888,7 @@
             "type": "boolean"
           },
           "thinkingBudget": {
-            "description": "Only one of the thinking_budget or thinking_level fields in this message may be set at a time. For backward compatibility, the validation will be done in application logic. The number of thoughts tokens that the model should generate.",
+            "description": "The number of thoughts tokens that the model should generate.",
             "format": "int32",
             "type": "integer"
           }
@@ -5224,108 +5156,6 @@
         }
       ]
     },
-    "/v1alpha/ragStores": {
-      "post": {
-        "description": "Creates an empty `RagStore`.",
-        "operationId": "generativelanguage.ragStores.create",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RagStore"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RagStore"
-              }
-            }
-          }
-        },
-        "tags": [
-          "ragStores"
-        ]
-      },
-      "get": {
-        "description": "Lists all `RagStores` owned by the user.",
-        "operationId": "generativelanguage.ragStores.list",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListRagStoresResponse"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "pageSize",
-            "in": "query",
-            "description": "Optional. The maximum number of `RagStores` to return (per page). The service may return fewer `RagStores`. If unspecified, at most 10 `RagStores` will be returned. The maximum size limit is 20 `RagStores` per page.",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "pageToken",
-            "in": "query",
-            "description": "Optional. A page token, received from a previous `ListRagStores` call. Provide the `next_page_token` returned in the response as an argument to the next request to retrieve the next page. When paginating, all other parameters provided to `ListRagStores` must match the call that provided the page token.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "tags": [
-          "ragStores"
-        ]
-      },
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/_.xgafv"
-        },
-        {
-          "$ref": "#/components/parameters/access_token"
-        },
-        {
-          "$ref": "#/components/parameters/alt"
-        },
-        {
-          "$ref": "#/components/parameters/callback"
-        },
-        {
-          "$ref": "#/components/parameters/fields"
-        },
-        {
-          "$ref": "#/components/parameters/key"
-        },
-        {
-          "$ref": "#/components/parameters/oauth_token"
-        },
-        {
-          "$ref": "#/components/parameters/prettyPrint"
-        },
-        {
-          "$ref": "#/components/parameters/quotaUser"
-        },
-        {
-          "$ref": "#/components/parameters/upload_protocol"
-        },
-        {
-          "$ref": "#/components/parameters/uploadType"
-        }
-      ]
-    },
     "/v1alpha/tunedModels": {
       "post": {
         "description": "Creates a tuned model. Check intermediate tuning progress (if any) through the [google.longrunning.Operations] service. Access status and results through the Operations service. Example: GET /v1/tunedModels/az2mb0bpw6i/operations/000-111-222",
@@ -5542,7 +5372,7 @@
           {
             "name": "force",
             "in": "query",
-            "description": "Optional. If set to true, any `Document`s and objects related to this `RagStore` will also be deleted. If false (the default), a `FAILED_PRECONDITION` error will be returned if `RagStore` contains any `Document`s.",
+            "description": "Optional. If set to true, any `Chunk`s and objects related to this `Document` will also be deleted. If false (the default), a `FAILED_PRECONDITION` error will be returned if `Document` contains any `Chunk`s.",
             "schema": {
               "type": "boolean"
             }
@@ -5894,7 +5724,7 @@
           {
             "name": "name",
             "in": "path",
-            "description": "Required. The name of the `Document` to query. Example: `ragStores/my-rag-store-123/documents/the-doc-abc`",
+            "description": "Required. The name of the `Document` to query. Example: `fileSearchStores/my-file-search-store-123/documents/the-doc-abc`",
             "required": true,
             "schema": {
               "type": "string"
@@ -6642,45 +6472,6 @@
       ]
     },
     "/v1alpha/{parent}/documents": {
-      "post": {
-        "description": "Creates an empty `Document`.",
-        "operationId": "generativelanguage.fileSearchStores.documents.create",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Document"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Document"
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parent",
-            "in": "path",
-            "description": "Required. The name of the `RagStore` where this `Document` will be created. Example: `ragStores/my-rag-store-123`",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "tags": [
-          "fileSearchStores"
-        ]
-      },
       "get": {
         "description": "Lists all `Document`s in a `Corpus`.",
         "operationId": "generativelanguage.fileSearchStores.documents.list",
@@ -6700,7 +6491,7 @@
           {
             "name": "parent",
             "in": "path",
-            "description": "Required. The name of the `RagStore` containing `Document`s. Example: `ragStores/my-rag-store-123`",
+            "description": "Required. The name of the `FileSearchStore` containing `Document`s. Example: `fileSearchStores/my-file-search-store-123`",
             "required": true,
             "schema": {
               "type": "string"
@@ -8109,9 +7900,6 @@
     },
     {
       "name": "models"
-    },
-    {
-      "name": "ragStores"
     },
     {
       "name": "tunedModels"
