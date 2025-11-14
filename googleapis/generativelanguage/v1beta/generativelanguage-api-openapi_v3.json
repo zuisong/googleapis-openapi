@@ -349,7 +349,8 @@
               "NO_IMAGE",
               "IMAGE_RECITATION",
               "UNEXPECTED_TOOL_CALL",
-              "TOO_MANY_TOOL_CALLS"
+              "TOO_MANY_TOOL_CALLS",
+              "MISSING_THOUGHT_SIGNATURE"
             ],
             "readOnly": true,
             "type": "string"
@@ -779,7 +780,6 @@
         "type": "object"
       },
       "CustomLongRunningOperation": {
-        "description": "This is a copy of google.longrunning.Operation. We need to copy it because for interacting with scotty, we need to add a scotty specific field that can't be added in the top level Operation proto.",
         "properties": {
           "done": {
             "description": "If the value is `false`, it means the operation is still in progress. If `true`, the operation is completed, and either `error` or `response` is available.",
@@ -2603,7 +2603,7 @@
             "type": "array"
           },
           "unreachable": {
-            "description": "Unordered list. Unreachable resources. Populated when the request sets `ListOperationsRequest.return_partial_success` and reads across collections e.g. when attempting to list all resources across all supported locations.",
+            "description": "Unordered list. Unreachable resources. Populated when the request sets `ListOperationsRequest.return_partial_success` and reads across collections. For example, when attempting to list all resources across all supported locations.",
             "items": {
               "type": "string"
             },
@@ -5113,7 +5113,7 @@
           {
             "name": "returnPartialSuccess",
             "in": "query",
-            "description": "When set to `true`, operations that are reachable are returned as normal, and those that are unreachable are returned in the [ListOperationsResponse.unreachable] field. This can only be `true` when reading across collections e.g. when `parent` is set to `\"projects/example/locations/-\"`. This field is not by default supported and will result in an `UNIMPLEMENTED` error if set unless explicitly documented otherwise in service or product specific documentation.",
+            "description": "When set to `true`, operations that are reachable are returned as normal, and those that are unreachable are returned in the ListOperationsResponse.unreachable field. This can only be `true` when reading across collections. For example, when `parent` is set to `\"projects/example/locations/-\"`. This field is not supported by default and will result in an `UNIMPLEMENTED` error if set unless explicitly documented otherwise in service or product specific documentation.",
             "schema": {
               "type": "boolean"
             }
@@ -7426,7 +7426,7 @@
           {
             "name": "returnPartialSuccess",
             "in": "query",
-            "description": "When set to `true`, operations that are reachable are returned as normal, and those that are unreachable are returned in the [ListOperationsResponse.unreachable] field. This can only be `true` when reading across collections e.g. when `parent` is set to `\"projects/example/locations/-\"`. This field is not by default supported and will result in an `UNIMPLEMENTED` error if set unless explicitly documented otherwise in service or product specific documentation.",
+            "description": "When set to `true`, operations that are reachable are returned as normal, and those that are unreachable are returned in the ListOperationsResponse.unreachable field. This can only be `true` when reading across collections. For example, when `parent` is set to `\"projects/example/locations/-\"`. This field is not supported by default and will result in an `UNIMPLEMENTED` error if set unless explicitly documented otherwise in service or product specific documentation.",
             "schema": {
               "type": "boolean"
             }
