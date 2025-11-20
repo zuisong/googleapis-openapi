@@ -123,45 +123,6 @@
         },
         "type": "object"
       },
-      "BatchCreateChunksRequest": {
-        "description": "Request to batch create `Chunk`s.",
-        "properties": {
-          "requests": {
-            "description": "Required. The request messages specifying the `Chunk`s to create. A maximum of 100 `Chunk`s can be created in a batch.",
-            "items": {
-              "$ref": "#/components/schemas/CreateChunkRequest"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "BatchCreateChunksResponse": {
-        "description": "Response from `BatchCreateChunks` containing a list of created `Chunk`s.",
-        "properties": {
-          "chunks": {
-            "description": "`Chunk`s created.",
-            "items": {
-              "$ref": "#/components/schemas/Chunk"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "BatchDeleteChunksRequest": {
-        "description": "Request to batch delete `Chunk`s.",
-        "properties": {
-          "requests": {
-            "description": "Required. The request messages specifying the `Chunk`s to delete.",
-            "items": {
-              "$ref": "#/components/schemas/DeleteChunkRequest"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
       "BatchEmbedContentsRequest": {
         "description": "Batch request to get embeddings from the model for a list of prompts.",
         "properties": {
@@ -259,32 +220,6 @@
             "format": "int64",
             "readOnly": true,
             "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "BatchUpdateChunksRequest": {
-        "description": "Request to batch update `Chunk`s.",
-        "properties": {
-          "requests": {
-            "description": "Required. The request messages specifying the `Chunk`s to update. A maximum of 100 `Chunk`s can be updated in a batch.",
-            "items": {
-              "$ref": "#/components/schemas/UpdateChunkRequest"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "BatchUpdateChunksResponse": {
-        "description": "Response from `BatchUpdateChunks` containing a list of updated `Chunk`s.",
-        "properties": {
-          "chunks": {
-            "description": "`Chunk`s updated.",
-            "items": {
-              "$ref": "#/components/schemas/Chunk"
-            },
-            "type": "array"
           }
         },
         "type": "object"
@@ -523,60 +458,6 @@
             "$ref": "#/components/schemas/UrlContextMetadata",
             "description": "Output only. Metadata related to url context retrieval tool.",
             "readOnly": true
-          }
-        },
-        "type": "object"
-      },
-      "Chunk": {
-        "description": "A `Chunk` is a subpart of a `Document` that is treated as an independent unit for the purposes of vector representation and storage.",
-        "properties": {
-          "createTime": {
-            "description": "Output only. The Timestamp of when the `Chunk` was created.",
-            "format": "google-datetime",
-            "readOnly": true,
-            "type": "string"
-          },
-          "customMetadata": {
-            "description": "Optional. User provided custom metadata stored as key-value pairs. The maximum number of `CustomMetadata` per chunk is 20.",
-            "items": {
-              "$ref": "#/components/schemas/CustomMetadata"
-            },
-            "type": "array"
-          },
-          "data": {
-            "$ref": "#/components/schemas/ChunkData",
-            "description": "Required. The content for the `Chunk`, such as the text string. The maximum number of tokens per chunk is 2043."
-          },
-          "name": {
-            "description": "Immutable. Identifier. The `Chunk` resource name. The ID (name excluding the \"corpora/*/documents/*/chunks/\" prefix) can contain up to 40 characters that are lowercase alphanumeric or dashes (-). The ID cannot start or end with a dash. If the name is empty on create, a random 12-character unique ID will be generated. Example: `corpora/{corpus_id}/documents/{document_id}/chunks/123a456b789c`",
-            "type": "string"
-          },
-          "state": {
-            "description": "Output only. Current state of the `Chunk`.",
-            "enum": [
-              "STATE_UNSPECIFIED",
-              "STATE_PENDING_PROCESSING",
-              "STATE_ACTIVE",
-              "STATE_FAILED"
-            ],
-            "readOnly": true,
-            "type": "string"
-          },
-          "updateTime": {
-            "description": "Output only. The Timestamp of when the `Chunk` was last updated.",
-            "format": "google-datetime",
-            "readOnly": true,
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "ChunkData": {
-        "description": "Extracted data that represents the `Chunk` content.",
-        "properties": {
-          "stringValue": {
-            "description": "The `Chunk` content as a string. The maximum number of tokens per chunk is 2043.",
-            "type": "string"
           }
         },
         "type": "object"
@@ -887,20 +768,6 @@
         },
         "type": "object"
       },
-      "CreateChunkRequest": {
-        "description": "Request to create a `Chunk`.",
-        "properties": {
-          "chunk": {
-            "$ref": "#/components/schemas/Chunk",
-            "description": "Required. The `Chunk` to create."
-          },
-          "parent": {
-            "description": "Required. The name of the `Document` where this `Chunk` will be created. Example: `corpora/my-corpus-123/documents/the-doc-abc`",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "CreateFileRequest": {
         "description": "Request for `CreateFile`.",
         "properties": {
@@ -981,16 +848,6 @@
           "examples": {
             "$ref": "#/components/schemas/TuningExamples",
             "description": "Optional. Inline examples with simple input/output text."
-          }
-        },
-        "type": "object"
-      },
-      "DeleteChunkRequest": {
-        "description": "Request to delete a `Chunk`.",
-        "properties": {
-          "name": {
-            "description": "Required. The resource name of the `Chunk` to delete. Example: `corpora/my-corpus-123/documents/the-doc-abc/chunks/some-chunk`",
-            "type": "string"
           }
         },
         "type": "object"
@@ -2615,23 +2472,6 @@
         },
         "type": "object"
       },
-      "ListChunksResponse": {
-        "description": "Response from `ListChunks` containing a paginated list of `Chunk`s. The `Chunk`s are sorted by ascending `chunk.create_time`.",
-        "properties": {
-          "chunks": {
-            "description": "The returned `Chunk`s.",
-            "items": {
-              "$ref": "#/components/schemas/Chunk"
-            },
-            "type": "array"
-          },
-          "nextPageToken": {
-            "description": "A token, which can be sent as `page_token` to retrieve the next page. If this field is omitted, there are no more pages.",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "ListCorporaResponse": {
         "description": "Response from `ListCorpora` containing a paginated list of `Corpora`. The results are sorted by ascending `corpus.create_time`.",
         "properties": {
@@ -3263,76 +3103,6 @@
         },
         "type": "object"
       },
-      "QueryCorpusRequest": {
-        "description": "Request for querying a `Corpus`.",
-        "properties": {
-          "metadataFilters": {
-            "description": "Optional. Filter for `Chunk` and `Document` metadata. Each `MetadataFilter` object should correspond to a unique key. Multiple `MetadataFilter` objects are joined by logical \"AND\"s. Example query at document level: (year >= 2020 OR year < 2010) AND (genre = drama OR genre = action) `MetadataFilter` object list: metadata_filters = [ {key = \"document.custom_metadata.year\" conditions = [{int_value = 2020, operation = GREATER_EQUAL}, {int_value = 2010, operation = LESS}]}, {key = \"document.custom_metadata.year\" conditions = [{int_value = 2020, operation = GREATER_EQUAL}, {int_value = 2010, operation = LESS}]}, {key = \"document.custom_metadata.genre\" conditions = [{string_value = \"drama\", operation = EQUAL}, {string_value = \"action\", operation = EQUAL}]}] Example query at chunk level for a numeric range of values: (year > 2015 AND year <= 2020) `MetadataFilter` object list: metadata_filters = [ {key = \"chunk.custom_metadata.year\" conditions = [{int_value = 2015, operation = GREATER}]}, {key = \"chunk.custom_metadata.year\" conditions = [{int_value = 2020, operation = LESS_EQUAL}]}] Note: \"AND\"s for the same key are only supported for numeric values. String values only support \"OR\"s for the same key.",
-            "items": {
-              "$ref": "#/components/schemas/MetadataFilter"
-            },
-            "type": "array"
-          },
-          "query": {
-            "description": "Required. Query string to perform semantic search.",
-            "type": "string"
-          },
-          "resultsCount": {
-            "description": "Optional. The maximum number of `Chunk`s to return. The service may return fewer `Chunk`s. If unspecified, at most 10 `Chunk`s will be returned. The maximum specified result count is 100.",
-            "format": "int32",
-            "type": "integer"
-          }
-        },
-        "type": "object"
-      },
-      "QueryCorpusResponse": {
-        "description": "Response from `QueryCorpus` containing a list of relevant chunks.",
-        "properties": {
-          "relevantChunks": {
-            "description": "The relevant chunks.",
-            "items": {
-              "$ref": "#/components/schemas/RelevantChunk"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "QueryDocumentRequest": {
-        "description": "Request for querying a `Document`.",
-        "properties": {
-          "metadataFilters": {
-            "description": "Optional. Filter for `Chunk` metadata. Each `MetadataFilter` object should correspond to a unique key. Multiple `MetadataFilter` objects are joined by logical \"AND\"s. Note: `Document`-level filtering is not supported for this request because a `Document` name is already specified. Example query: (year >= 2020 OR year < 2010) AND (genre = drama OR genre = action) `MetadataFilter` object list: metadata_filters = [ {key = \"chunk.custom_metadata.year\" conditions = [{int_value = 2020, operation = GREATER_EQUAL}, {int_value = 2010, operation = LESS}}, {key = \"chunk.custom_metadata.genre\" conditions = [{string_value = \"drama\", operation = EQUAL}, {string_value = \"action\", operation = EQUAL}}] Example query for a numeric range of values: (year > 2015 AND year <= 2020) `MetadataFilter` object list: metadata_filters = [ {key = \"chunk.custom_metadata.year\" conditions = [{int_value = 2015, operation = GREATER}]}, {key = \"chunk.custom_metadata.year\" conditions = [{int_value = 2020, operation = LESS_EQUAL}]}] Note: \"AND\"s for the same key are only supported for numeric values. String values only support \"OR\"s for the same key.",
-            "items": {
-              "$ref": "#/components/schemas/MetadataFilter"
-            },
-            "type": "array"
-          },
-          "query": {
-            "description": "Required. Query string to perform semantic search.",
-            "type": "string"
-          },
-          "resultsCount": {
-            "description": "Optional. The maximum number of `Chunk`s to return. The service may return fewer `Chunk`s. If unspecified, at most 10 `Chunk`s will be returned. The maximum specified result count is 100.",
-            "format": "int32",
-            "type": "integer"
-          }
-        },
-        "type": "object"
-      },
-      "QueryDocumentResponse": {
-        "description": "Response from `QueryDocument` containing a list of relevant chunks.",
-        "properties": {
-          "relevantChunks": {
-            "description": "The returned relevant chunks.",
-            "items": {
-              "$ref": "#/components/schemas/RelevantChunk"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
       "RealtimeInputConfig": {
         "description": "Configures the realtime input behavior in `BidiGenerateContent`.",
         "properties": {
@@ -3357,25 +3127,6 @@
               "TURN_INCLUDES_ALL_INPUT"
             ],
             "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "RelevantChunk": {
-        "description": "The information for a chunk relevant to a query.",
-        "properties": {
-          "chunk": {
-            "$ref": "#/components/schemas/Chunk",
-            "description": "`Chunk` associated with the query."
-          },
-          "chunkRelevanceScore": {
-            "description": "`Chunk` relevance to the query.",
-            "format": "float",
-            "type": "number"
-          },
-          "document": {
-            "$ref": "#/components/schemas/Document",
-            "description": "`Document` associated with the chunk."
           }
         },
         "type": "object"
@@ -3912,7 +3663,7 @@
             "type": "integer"
           },
           "thinkingLevel": {
-            "description": "Optional. The level of thoughts tokens that the model should generate.",
+            "description": "Optional. Controls the maximum depth of the model's internal reasoning process before it produces a response. If not specified, the default is HIGH. Recommended for Gemini 3 or later models. Use with earlier models results in an error.",
             "enum": [
               "THINKING_LEVEL_UNSPECIFIED",
               "LOW",
@@ -4236,21 +3987,6 @@
           "trainingData": {
             "$ref": "#/components/schemas/Dataset",
             "description": "Required. Input only. Immutable. The model training data."
-          }
-        },
-        "type": "object"
-      },
-      "UpdateChunkRequest": {
-        "description": "Request to update a `Chunk`.",
-        "properties": {
-          "chunk": {
-            "$ref": "#/components/schemas/Chunk",
-            "description": "Required. The `Chunk` to update."
-          },
-          "updateMask": {
-            "description": "Required. The list of fields to update. Currently, this only supports updating `custom_metadata` and `data`.",
-            "format": "google-fieldmask",
-            "type": "string"
           }
         },
         "type": "object"
@@ -5685,432 +5421,6 @@
         ],
         "tags": [
           "batches"
-        ]
-      },
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/_.xgafv"
-        },
-        {
-          "$ref": "#/components/parameters/access_token"
-        },
-        {
-          "$ref": "#/components/parameters/alt"
-        },
-        {
-          "$ref": "#/components/parameters/callback"
-        },
-        {
-          "$ref": "#/components/parameters/fields"
-        },
-        {
-          "$ref": "#/components/parameters/key"
-        },
-        {
-          "$ref": "#/components/parameters/oauth_token"
-        },
-        {
-          "$ref": "#/components/parameters/prettyPrint"
-        },
-        {
-          "$ref": "#/components/parameters/quotaUser"
-        },
-        {
-          "$ref": "#/components/parameters/upload_protocol"
-        },
-        {
-          "$ref": "#/components/parameters/uploadType"
-        }
-      ]
-    },
-    "/v1alpha/{name}:query": {
-      "post": {
-        "description": "Performs semantic search over a `Document`.",
-        "operationId": "generativelanguage.fileSearchStores.documents.query",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/QueryDocumentResponse"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/QueryDocumentRequest"
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "description": "Required. The name of the `Document` to query. Example: `fileSearchStores/my-file-search-store-123/documents/the-doc-abc`",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "tags": [
-          "fileSearchStores"
-        ]
-      },
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/_.xgafv"
-        },
-        {
-          "$ref": "#/components/parameters/access_token"
-        },
-        {
-          "$ref": "#/components/parameters/alt"
-        },
-        {
-          "$ref": "#/components/parameters/callback"
-        },
-        {
-          "$ref": "#/components/parameters/fields"
-        },
-        {
-          "$ref": "#/components/parameters/key"
-        },
-        {
-          "$ref": "#/components/parameters/oauth_token"
-        },
-        {
-          "$ref": "#/components/parameters/prettyPrint"
-        },
-        {
-          "$ref": "#/components/parameters/quotaUser"
-        },
-        {
-          "$ref": "#/components/parameters/upload_protocol"
-        },
-        {
-          "$ref": "#/components/parameters/uploadType"
-        }
-      ]
-    },
-    "/v1alpha/{parent}/chunks:batchCreate": {
-      "post": {
-        "description": "Batch create `Chunk`s.",
-        "operationId": "generativelanguage.corpora.documents.chunks.batchCreate",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BatchCreateChunksResponse"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BatchCreateChunksRequest"
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parent",
-            "in": "path",
-            "description": "Optional. The name of the `Document` where this batch of `Chunk`s will be created. The parent field in every `CreateChunkRequest` must match this value. Example: `corpora/my-corpus-123/documents/the-doc-abc`",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "tags": [
-          "corpora"
-        ]
-      },
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/_.xgafv"
-        },
-        {
-          "$ref": "#/components/parameters/access_token"
-        },
-        {
-          "$ref": "#/components/parameters/alt"
-        },
-        {
-          "$ref": "#/components/parameters/callback"
-        },
-        {
-          "$ref": "#/components/parameters/fields"
-        },
-        {
-          "$ref": "#/components/parameters/key"
-        },
-        {
-          "$ref": "#/components/parameters/oauth_token"
-        },
-        {
-          "$ref": "#/components/parameters/prettyPrint"
-        },
-        {
-          "$ref": "#/components/parameters/quotaUser"
-        },
-        {
-          "$ref": "#/components/parameters/upload_protocol"
-        },
-        {
-          "$ref": "#/components/parameters/uploadType"
-        }
-      ]
-    },
-    "/v1alpha/{parent}/chunks:batchDelete": {
-      "post": {
-        "description": "Batch delete `Chunk`s.",
-        "operationId": "generativelanguage.corpora.documents.chunks.batchDelete",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Empty"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BatchDeleteChunksRequest"
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parent",
-            "in": "path",
-            "description": "Optional. The name of the `Document` containing the `Chunk`s to delete. The parent field in every `DeleteChunkRequest` must match this value. Example: `corpora/my-corpus-123/documents/the-doc-abc`",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "tags": [
-          "corpora"
-        ]
-      },
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/_.xgafv"
-        },
-        {
-          "$ref": "#/components/parameters/access_token"
-        },
-        {
-          "$ref": "#/components/parameters/alt"
-        },
-        {
-          "$ref": "#/components/parameters/callback"
-        },
-        {
-          "$ref": "#/components/parameters/fields"
-        },
-        {
-          "$ref": "#/components/parameters/key"
-        },
-        {
-          "$ref": "#/components/parameters/oauth_token"
-        },
-        {
-          "$ref": "#/components/parameters/prettyPrint"
-        },
-        {
-          "$ref": "#/components/parameters/quotaUser"
-        },
-        {
-          "$ref": "#/components/parameters/upload_protocol"
-        },
-        {
-          "$ref": "#/components/parameters/uploadType"
-        }
-      ]
-    },
-    "/v1alpha/{parent}/chunks:batchUpdate": {
-      "post": {
-        "description": "Batch update `Chunk`s.",
-        "operationId": "generativelanguage.corpora.documents.chunks.batchUpdate",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BatchUpdateChunksResponse"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BatchUpdateChunksRequest"
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parent",
-            "in": "path",
-            "description": "Optional. The name of the `Document` containing the `Chunk`s to update. The parent field in every `UpdateChunkRequest` must match this value. Example: `corpora/my-corpus-123/documents/the-doc-abc`",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "tags": [
-          "corpora"
-        ]
-      },
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/_.xgafv"
-        },
-        {
-          "$ref": "#/components/parameters/access_token"
-        },
-        {
-          "$ref": "#/components/parameters/alt"
-        },
-        {
-          "$ref": "#/components/parameters/callback"
-        },
-        {
-          "$ref": "#/components/parameters/fields"
-        },
-        {
-          "$ref": "#/components/parameters/key"
-        },
-        {
-          "$ref": "#/components/parameters/oauth_token"
-        },
-        {
-          "$ref": "#/components/parameters/prettyPrint"
-        },
-        {
-          "$ref": "#/components/parameters/quotaUser"
-        },
-        {
-          "$ref": "#/components/parameters/upload_protocol"
-        },
-        {
-          "$ref": "#/components/parameters/uploadType"
-        }
-      ]
-    },
-    "/v1alpha/{parent}/chunks": {
-      "post": {
-        "description": "Creates a `Chunk`.",
-        "operationId": "generativelanguage.corpora.documents.chunks.create",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Chunk"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Chunk"
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parent",
-            "in": "path",
-            "description": "Required. The name of the `Document` where this `Chunk` will be created. Example: `corpora/my-corpus-123/documents/the-doc-abc`",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "tags": [
-          "corpora"
-        ]
-      },
-      "get": {
-        "description": "Lists all `Chunk`s in a `Document`.",
-        "operationId": "generativelanguage.corpora.documents.chunks.list",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListChunksResponse"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parent",
-            "in": "path",
-            "description": "Required. The name of the `Document` containing `Chunk`s. Example: `corpora/my-corpus-123/documents/the-doc-abc`",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "pageSize",
-            "in": "query",
-            "description": "Optional. The maximum number of `Chunk`s to return (per page). The service may return fewer `Chunk`s. If unspecified, at most 10 `Chunk`s will be returned. The maximum size limit is 100 `Chunk`s per page.",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "pageToken",
-            "in": "query",
-            "description": "Optional. A page token, received from a previous `ListChunks` call. Provide the `next_page_token` returned in the response as an argument to the next request to retrieve the next page. When paginating, all other parameters provided to `ListChunks` must match the call that provided the page token.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "tags": [
-          "corpora"
         ]
       },
       "parameters": [
