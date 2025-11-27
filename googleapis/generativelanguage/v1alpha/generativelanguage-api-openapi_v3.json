@@ -605,8 +605,16 @@
       "ContentEmbedding": {
         "description": "A list of floats representing an embedding.",
         "properties": {
+          "shape": {
+            "description": "This field stores the soft tokens tensor frame shape (e.g. [1, 1, 256, 2048]).",
+            "items": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "type": "array"
+          },
           "values": {
-            "description": "The embedding values.",
+            "description": "The embedding values. This is for 3P users only and will not be populated for 1P calls.",
             "items": {
               "format": "float",
               "type": "number"
