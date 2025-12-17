@@ -3450,7 +3450,9 @@
             "description": "Optional. Controls the maximum depth of the model's internal reasoning process before it produces a response. If not specified, the default is HIGH. Recommended for Gemini 3 or later models. Use with earlier models results in an error.",
             "enum": [
               "THINKING_LEVEL_UNSPECIFIED",
+              "MINIMAL",
               "LOW",
+              "MEDIUM",
               "HIGH"
             ],
             "type": "string"
@@ -3459,7 +3461,7 @@
         "type": "object"
       },
       "Tool": {
-        "description": "Tool details that the model may use to generate response. A `Tool` is a piece of code that enables the system to interact with external systems to perform an action, or set of actions, outside of knowledge and scope of the model. Next ID: 13",
+        "description": "Tool details that the model may use to generate response. A `Tool` is a piece of code that enables the system to interact with external systems to perform an action, or set of actions, outside of knowledge and scope of the model. Next ID: 14",
         "properties": {
           "codeExecution": {
             "$ref": "#/components/schemas/CodeExecution",
