@@ -2594,6 +2594,22 @@
         },
         "type": "object"
       },
+      "MediaResolution": {
+        "description": "Media resolution for the input media.",
+        "properties": {
+          "level": {
+            "enum": [
+              "MEDIA_RESOLUTION_UNSPECIFIED",
+              "MEDIA_RESOLUTION_LOW",
+              "MEDIA_RESOLUTION_MEDIUM",
+              "MEDIA_RESOLUTION_HIGH",
+              "MEDIA_RESOLUTION_ULTRA_HIGH"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "Message": {
         "description": "The base unit of structured text. A `Message` includes an `author` and the `content` of the `Message`. The `author` is used to tag messages when they are fed to the model as text.",
         "properties": {
@@ -2815,6 +2831,10 @@
           "inlineData": {
             "$ref": "#/components/schemas/Blob",
             "description": "Inline media bytes."
+          },
+          "mediaResolution": {
+            "$ref": "#/components/schemas/MediaResolution",
+            "description": "Optional. Media resolution for the input media."
           },
           "partMetadata": {
             "additionalProperties": {
