@@ -2594,6 +2594,20 @@
         },
         "type": "object"
       },
+      "McpServer": {
+        "description": "A MCPServer is a server that can be called by the model to perform actions. It is a server that implements the MCP protocol. Next ID: 5",
+        "properties": {
+          "name": {
+            "description": "The name of the MCPServer.",
+            "type": "string"
+          },
+          "streamableHttpTransport": {
+            "$ref": "#/components/schemas/StreamableHttpTransport",
+            "description": "A transport that can stream HTTP requests and responses."
+          }
+        },
+        "type": "object"
+      },
       "MediaResolution": {
         "description": "Media resolution for the input media.",
         "properties": {
@@ -3408,6 +3422,37 @@
         },
         "type": "object"
       },
+      "StreamableHttpTransport": {
+        "description": "A transport that can stream HTTP requests and responses. Next ID: 6",
+        "properties": {
+          "headers": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Optional: Fields for authentication headers, timeouts, etc., if needed.",
+            "type": "object"
+          },
+          "sseReadTimeout": {
+            "description": "Timeout for SSE read operations.",
+            "format": "google-duration",
+            "type": "string"
+          },
+          "terminateOnClose": {
+            "description": "Whether to close the client session when the transport closes.",
+            "type": "boolean"
+          },
+          "timeout": {
+            "description": "HTTP timeout for regular operations.",
+            "format": "google-duration",
+            "type": "string"
+          },
+          "url": {
+            "description": "The full URL for the MCPServer endpoint. Example: \"https://api.example.com/mcp\"",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "StringList": {
         "description": "User provided string values assigned to a single metadata key.",
         "properties": {
@@ -3513,6 +3558,13 @@
           "googleSearchRetrieval": {
             "$ref": "#/components/schemas/GoogleSearchRetrieval",
             "description": "Optional. Retrieval tool that is powered by Google search."
+          },
+          "mcpServers": {
+            "description": "Optional. MCP Servers to connect to.",
+            "items": {
+              "$ref": "#/components/schemas/McpServer"
+            },
+            "type": "array"
           },
           "urlContext": {
             "$ref": "#/components/schemas/UrlContext",
