@@ -1571,6 +1571,11 @@
             },
             "type": "array"
           },
+          "modelStatus": {
+            "$ref": "#/components/schemas/ModelStatus",
+            "description": "Output only. The current model status of this model.",
+            "readOnly": true
+          },
           "modelVersion": {
             "description": "Output only. The model version used to generate the response.",
             "readOnly": true,
@@ -1882,7 +1887,7 @@
             "type": "array"
           },
           "groundingChunkIndices": {
-            "description": "Optional. A list of indices (into 'grounding_chunk') specifying the citations associated with the claim. For instance [1,3,4] means that grounding_chunk[1], grounding_chunk[3], grounding_chunk[4] are the retrieved content attributed to the claim.",
+            "description": "Optional. A list of indices (into 'grounding_chunk' in `response.candidate.grounding_metadata`) specifying the citations associated with the claim. For instance [1,3,4] means that grounding_chunk[1], grounding_chunk[3], grounding_chunk[4] are the retrieved content attributed to the claim. If the response is streaming, the grounding_chunk_indices refer to the indices across all responses. It is the client's responsibility to accumulate the grounding chunks from all responses (while maintaining the same order).",
             "items": {
               "format": "int32",
               "type": "integer"
@@ -1992,7 +1997,7 @@
             "type": "string"
           },
           "groundingChunks": {
-            "description": "List of supporting references retrieved from specified grounding source.",
+            "description": "List of supporting references retrieved from specified grounding source. When streaming, this only contains the grounding chunks that have not been included in the grounding metadata of previous responses.",
             "items": {
               "$ref": "#/components/schemas/GroundingChunk"
             },
@@ -2769,6 +2774,45 @@
           },
           "version": {
             "description": "Required. The version number of the model. This represents the major version (`1.0` or `1.5`)",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ModelStatus": {
+        "description": "The status of the underlying model. This is used to indicate the stage of the underlying model and the retirement time if applicable.",
+        "properties": {
+          "message": {
+            "description": "A message explaining the model status.",
+            "type": "string"
+          },
+          "modelStage": {
+            "description": "The stage of the underlying model.",
+            "enum": [
+              "MODEL_STAGE_UNSPECIFIED",
+              "UNSTABLE_EXPERIMENTAL",
+              "EXPERIMENTAL",
+              "PREVIEW",
+              "STABLE",
+              "LEGACY",
+              "DEPRECATED",
+              "RETIRED"
+            ],
+            "enumDeprecated": [
+              false,
+              true,
+              false,
+              false,
+              false,
+              false,
+              true,
+              false
+            ],
+            "type": "string"
+          },
+          "retirementTime": {
+            "description": "The time at which the model will be retired.",
+            "format": "google-datetime",
             "type": "string"
           }
         },
