@@ -285,7 +285,8 @@
               "IMAGE_RECITATION",
               "UNEXPECTED_TOOL_CALL",
               "TOO_MANY_TOOL_CALLS",
-              "MISSING_THOUGHT_SIGNATURE"
+              "MISSING_THOUGHT_SIGNATURE",
+              "MALFORMED_RESPONSE"
             ],
             "readOnly": true,
             "type": "string"
@@ -2102,7 +2103,7 @@
         "description": "Config for image generation features.",
         "properties": {
           "aspectRatio": {
-            "description": "Optional. The aspect ratio of the image to generate. Supported aspect ratios: 1:1, 2:3, 3:2, 3:4, 4:3, 9:16, 16:9, 21:9. If not specified, the model will choose a default aspect ratio based on any reference images provided.",
+            "description": "Optional. The aspect ratio of the image to generate. Supported aspect ratios: `1:1`, `2:3`, `3:2`, `3:4`, `4:3`, `4:5`, `5:4`, `9:16`, `16:9`, or `21:9`. If not specified, the model will choose a default aspect ratio based on any reference images provided.",
             "type": "string"
           },
           "imageSize": {
@@ -3596,7 +3597,7 @@
         "type": "object"
       },
       "Tool": {
-        "description": "Tool details that the model may use to generate response. A `Tool` is a piece of code that enables the system to interact with external systems to perform an action, or set of actions, outside of knowledge and scope of the model. Next ID: 14",
+        "description": "Tool details that the model may use to generate response. A `Tool` is a piece of code that enables the system to interact with external systems to perform an action, or set of actions, outside of knowledge and scope of the model. Next ID: 15",
         "properties": {
           "codeExecution": {
             "$ref": "#/components/schemas/CodeExecution",
