@@ -233,7 +233,7 @@
           },
           "generationConfig": {
             "$ref": "#/components/schemas/GenerationConfig",
-            "description": "Optional. Generation config. The following fields are not supported: - `response_logprobs` - `response_mime_type` - `logprobs` - `response_schema` - `response_json_schema` - `stop_sequence` - `routing_config` - `audio_timestamp`"
+            "description": "Optional. Generation config. The following fields are not supported: - `response_logprobs` - `response_mime_type` - `logprobs` - `response_schema` - `response_json_schema` - `stop_sequence` - `skip_response_cache` - `routing_config` - `audio_timestamp`"
           },
           "inputAudioTranscription": {
             "$ref": "#/components/schemas/AudioTranscriptionConfig",
