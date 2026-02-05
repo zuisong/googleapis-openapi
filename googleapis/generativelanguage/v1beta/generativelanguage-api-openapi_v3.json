@@ -1227,7 +1227,7 @@
             "type": "object"
           },
           "id": {
-            "description": "Optional. The unique id of the function call. If populated, the client to execute the `function_call` and return the response with the matching `id`.",
+            "description": "Optional. The unique identifier of the function call. If populated, the client to execute the `function_call` and return the response with the matching `id`.",
             "type": "string"
           },
           "name": {
@@ -1302,7 +1302,7 @@
         "description": "The result output from a `FunctionCall` that contains a string representing the `FunctionDeclaration.name` and a structured JSON object containing any output from the function is used as context to the model. This should contain the result of a`FunctionCall` made based on model prediction.",
         "properties": {
           "id": {
-            "description": "Optional. The id of the function call this response is for. Populated by the client to match the corresponding function call `id`.",
+            "description": "Optional. The identifier of the function call this response is for. Populated by the client to match the corresponding function call `id`.",
             "type": "string"
           },
           "name": {
