@@ -1227,7 +1227,7 @@
             "type": "object"
           },
           "id": {
-            "description": "Optional. The unique identifier of the function call. If populated, the client to execute the `function_call` and return the response with the matching `id`.",
+            "description": "Optional. Unique identifier of the function call. If populated, the client to execute the `function_call` and return the response with the matching `id`.",
             "type": "string"
           },
           "name": {
@@ -2610,22 +2610,6 @@
           "streamableHttpTransport": {
             "$ref": "#/components/schemas/StreamableHttpTransport",
             "description": "A transport that can stream HTTP requests and responses."
-          }
-        },
-        "type": "object"
-      },
-      "MediaResolution": {
-        "description": "Media resolution for the input media.",
-        "properties": {
-          "level": {
-            "enum": [
-              "MEDIA_RESOLUTION_UNSPECIFIED",
-              "MEDIA_RESOLUTION_LOW",
-              "MEDIA_RESOLUTION_MEDIUM",
-              "MEDIA_RESOLUTION_HIGH",
-              "MEDIA_RESOLUTION_ULTRA_HIGH"
-            ],
-            "type": "string"
           }
         },
         "type": "object"
