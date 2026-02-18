@@ -3999,7 +3999,8 @@
         "type": "object"
       },
       "VideoMetadata": {
-        "description": "Metadata describes the input video content.",
+        "deprecated": true,
+        "description": "Deprecated: Use `GenerateContentRequest.processing_options` instead. Metadata describes the input video content.",
         "properties": {
           "endOffset": {
             "description": "Optional. The end offset of the video.",
