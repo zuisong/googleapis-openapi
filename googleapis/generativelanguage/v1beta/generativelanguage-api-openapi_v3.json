@@ -2011,6 +2011,13 @@
             },
             "type": "array"
           },
+          "imageSearchQueries": {
+            "description": "Image search queries used for grounding.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "retrievalMetadata": {
             "$ref": "#/components/schemas/RetrievalMetadata",
             "description": "Metadata related to retrieval in the grounding flow."
@@ -4034,11 +4041,13 @@
         "description": "Chunk from the web.",
         "properties": {
           "title": {
-            "description": "Title of the chunk.",
+            "description": "Output only. Title of the chunk.",
+            "readOnly": true,
             "type": "string"
           },
           "uri": {
-            "description": "URI reference of the chunk.",
+            "description": "Output only. URI reference of the chunk.",
+            "readOnly": true,
             "type": "string"
           }
         },
