@@ -1940,6 +1940,10 @@
       "GoogleSearch": {
         "description": "GoogleSearch tool type. Tool to support Google Search in Model. Powered by Google.",
         "properties": {
+          "searchTypes": {
+            "$ref": "#/components/schemas/SearchTypes",
+            "description": "Optional. The set of search types to enable. If not set, web search is enabled by default."
+          },
           "timeRangeFilter": {
             "$ref": "#/components/schemas/Interval",
             "description": "Optional. Filter search results to a specific time range. If customers set a start time, they must set an end time (and vice versa)."
@@ -1975,6 +1979,10 @@
       "GroundingChunk": {
         "description": "Grounding chunk.",
         "properties": {
+          "image": {
+            "$ref": "#/components/schemas/Image",
+            "description": "Optional. Grounding chunk from image search."
+          },
           "maps": {
             "$ref": "#/components/schemas/Maps",
             "description": "Optional. Grounding chunk from Google Maps."
@@ -2106,6 +2114,28 @@
         },
         "type": "object"
       },
+      "Image": {
+        "description": "Chunk from image search.",
+        "properties": {
+          "domain": {
+            "description": "The root domain of the web page that the image is from, e.g. \"example.com\".",
+            "type": "string"
+          },
+          "imageUri": {
+            "description": "The image asset URL.",
+            "type": "string"
+          },
+          "sourceUri": {
+            "description": "The web page URI for attribution.",
+            "type": "string"
+          },
+          "title": {
+            "description": "The title of the web page that the image is from.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "ImageConfig": {
         "description": "Config for image generation features.",
         "properties": {
@@ -2118,6 +2148,11 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "ImageSearch": {
+        "description": "Image search for grounding and related configurations.",
+        "properties": {},
         "type": "object"
       },
       "ImportFileRequest": {
@@ -3380,6 +3415,20 @@
         },
         "type": "object"
       },
+      "SearchTypes": {
+        "description": "Different types of search that can be enabled on the GoogleSearch tool.",
+        "properties": {
+          "imageSearch": {
+            "$ref": "#/components/schemas/ImageSearch",
+            "description": "Optional. Setting this field enables image search. Image bytes are returned."
+          },
+          "webSearch": {
+            "$ref": "#/components/schemas/WebSearch",
+            "description": "Optional. Setting this field enables web search. Only text results are returned."
+          }
+        },
+        "type": "object"
+      },
       "SemanticRetrieverChunk": {
         "description": "Identifier for a `Chunk` retrieved via Semantic Retriever specified in the `GenerateAnswerRequest` using `SemanticRetrieverConfig`.",
         "properties": {
@@ -4051,6 +4100,11 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "WebSearch": {
+        "description": "Standard web search for grounding and related configurations.",
+        "properties": {},
         "type": "object"
       },
       "WhiteSpaceConfig": {
