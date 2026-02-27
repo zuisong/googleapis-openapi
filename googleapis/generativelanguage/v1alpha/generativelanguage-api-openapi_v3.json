@@ -516,7 +516,7 @@
         "type": "object"
       },
       "CodeExecutionResult": {
-        "description": "Result of executing the `ExecutableCode`. Only generated when using the `CodeExecution`, and always follows a `part` containing the `ExecutableCode`.",
+        "description": "Result of executing the `ExecutableCode`. Generated only when the `CodeExecution` tool is used.",
         "properties": {
           "outcome": {
             "description": "Required. Outcome of the code execution.",
@@ -2123,7 +2123,7 @@
         "type": "object"
       },
       "GroundingChunk": {
-        "description": "Grounding chunk.",
+        "description": "A `GroundingChunk` represents a segment of supporting evidence that grounds the model's response. It can be a chunk from the web, a retrieved context from a file, or information from Google Maps.",
         "properties": {
           "image": {
             "$ref": "#/components/schemas/Image",
@@ -2290,7 +2290,7 @@
             "type": "string"
           },
           "imageSize": {
-            "description": "Optional. Specifies the size of generated images. Supported values are `512PX`, `1K`, `2K`, `4K`. If not specified, the model will use default value `1K`.",
+            "description": "Optional. Specifies the size of generated images. Supported values are `512`, `1K`, `2K`, `4K`. If not specified, the model will use default value `1K`.",
             "type": "string"
           }
         },
@@ -2770,7 +2770,7 @@
             "description": "Sources that provide answers about the features of a given place in Google Maps."
           },
           "placeId": {
-            "description": "This ID of the place, in `places/{place_id}` format. A user can use this ID to look up that place.",
+            "description": "The ID of the place, in `places/{place_id}` format. A user can use this ID to look up that place.",
             "type": "string"
           },
           "text": {
