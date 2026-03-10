@@ -2041,15 +2041,6 @@
             },
             "type": "array"
           },
-          "renderedParts": {
-            "description": "Output only. Indices into the `parts` field of the candidate's content. These indices specify which rendered parts are associated with this support source.",
-            "items": {
-              "format": "int32",
-              "type": "integer"
-            },
-            "readOnly": true,
-            "type": "array"
-          },
           "segment": {
             "$ref": "#/components/schemas/GoogleAiGenerativelanguageV1alphaSegment",
             "description": "Segment of the content this support belongs to."
@@ -2149,42 +2140,6 @@
           "web": {
             "$ref": "#/components/schemas/Web",
             "description": "Grounding chunk from the web."
-          }
-        },
-        "type": "object"
-      },
-      "GroundingChunkCustomMetadata": {
-        "description": "User provided metadata about the GroundingFact.",
-        "properties": {
-          "key": {
-            "description": "The key of the metadata.",
-            "type": "string"
-          },
-          "numericValue": {
-            "description": "Optional. The numeric value of the metadata. The expected range for this value depends on the specific `key` used.",
-            "format": "float",
-            "type": "number"
-          },
-          "stringListValue": {
-            "$ref": "#/components/schemas/GroundingChunkStringList",
-            "description": "Optional. A list of string values for the metadata."
-          },
-          "stringValue": {
-            "description": "Optional. The string value of the metadata.",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "GroundingChunkStringList": {
-        "description": "A list of string values.",
-        "properties": {
-          "values": {
-            "description": "The string values of the list.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
           }
         },
         "type": "object"
@@ -3353,13 +3308,6 @@
       "RetrievedContext": {
         "description": "Chunk from context retrieved by the file search tool.",
         "properties": {
-          "customMetadata": {
-            "description": "Optional. User-provided metadata about the retrieved context.",
-            "items": {
-              "$ref": "#/components/schemas/GroundingChunkCustomMetadata"
-            },
-            "type": "array"
-          },
           "fileSearchStore": {
             "description": "Optional. Name of the `FileSearchStore` containing the document. Example: `fileSearchStores/123`",
             "type": "string"
