@@ -3660,11 +3660,11 @@
         "properties": {
           "imageSearch": {
             "$ref": "#/components/schemas/ImageSearch",
-            "description": "Optional. Setting this field enables image search. Image bytes are returned."
+            "description": "Optional. Enables image search. Image bytes are returned."
           },
           "webSearch": {
             "$ref": "#/components/schemas/WebSearch",
-            "description": "Optional. Setting this field enables web search. Only text results are returned."
+            "description": "Optional. Enables web search. Only text results are returned."
           }
         },
         "type": "object"
