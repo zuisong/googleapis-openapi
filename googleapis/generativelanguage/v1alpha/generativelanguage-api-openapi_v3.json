@@ -235,6 +235,10 @@
             "$ref": "#/components/schemas/GenerationConfig",
             "description": "Optional. Generation config. The following fields are not supported: - `response_logprobs` - `response_mime_type` - `logprobs` - `response_schema` - `response_json_schema` - `stop_sequence` - `skip_response_cache` - `routing_config` - `audio_timestamp`"
           },
+          "historyConfig": {
+            "$ref": "#/components/schemas/HistoryConfig",
+            "description": "Optional. Configures the exchange of history between the client and the server."
+          },
           "inputAudioTranscription": {
             "$ref": "#/components/schemas/AudioTranscriptionConfig",
             "description": "Optional. If set, enables transcription of voice input. The transcription aligns with the input audio language, if configured."
@@ -518,6 +522,10 @@
       "CodeExecutionResult": {
         "description": "Result of executing the `ExecutableCode`. Generated only when the `CodeExecution` tool is used.",
         "properties": {
+          "id": {
+            "description": "Optional. The identifier of the `ExecutableCode` part this result is for. Only populated if the corresponding `ExecutableCode` has an id.",
+            "type": "string"
+          },
           "outcome": {
             "description": "Required. Outcome of the code execution.",
             "enum": [
@@ -1168,6 +1176,10 @@
         "properties": {
           "code": {
             "description": "Required. The code to be executed.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Optional. Unique identifier of the `ExecutableCode` part. The server returns the `CodeExecutionResult` with the matching `id`.",
             "type": "string"
           },
           "language": {
@@ -2283,6 +2295,16 @@
         },
         "type": "object"
       },
+      "HistoryConfig": {
+        "description": "History configuration. This message is included in the session configuration as `BidiGenerateContentSetup.history_config`. Configures the exchange of history messages.",
+        "properties": {
+          "initialHistoryInClientContent": {
+            "description": "Optional. If true, after sending `setup_complete`, the server will wait and at first process `client_content` messages until `turn_complete` is `true`. This initial history will not trigger a model call and may end with role `MODEL`. After `turn_complete` is `true`, the client can start the realtime conversation via `realtime_input`.",
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
       "Hyperparameters": {
         "description": "Hyperparameters controlling the tuning process. Read more at https://ai.google.dev/docs/model_tuning_guidance",
         "properties": {
@@ -3136,6 +3158,14 @@
             "format": "byte",
             "type": "string"
           },
+          "toolCall": {
+            "$ref": "#/components/schemas/ToolCall",
+            "description": "Server-side tool call. This field is populated when the model predicts a tool invocation that should be executed on the server. The client is expected to echo this message back to the API."
+          },
+          "toolResponse": {
+            "$ref": "#/components/schemas/ToolResponse",
+            "description": "The output from a server-side `ToolCall` execution. This field is populated by the client with the results of executing the corresponding `ToolCall`."
+          },
           "videoMetadata": {
             "$ref": "#/components/schemas/VideoMetadata",
             "description": "Optional. Video metadata. The metadata should only be specified while the video data is presented in inline_data or file_data."
@@ -3296,7 +3326,8 @@
             "enum": [
               "TURN_COVERAGE_UNSPECIFIED",
               "TURN_INCLUDES_ONLY_ACTIVITY",
-              "TURN_INCLUDES_ALL_INPUT"
+              "TURN_INCLUDES_ALL_INPUT",
+              "TURN_INCLUDES_AUDIO_ACTIVITY_AND_ALL_VIDEO"
             ],
             "type": "string"
           }
@@ -3945,6 +3976,35 @@
         },
         "type": "object"
       },
+      "ToolCall": {
+        "description": "A predicted server-side `ToolCall` returned from the model. This message contains information about a tool that the model wants to invoke. The client is NOT expected to execute this `ToolCall`. Instead, the client should pass this `ToolCall` back to the API in a subsequent turn within a `Content` message, along with the corresponding `ToolResponse`.",
+        "properties": {
+          "args": {
+            "additionalProperties": {
+              "description": "Properties of the object."
+            },
+            "description": "Optional. The tool call arguments. Example: {\"arg1\" : \"value1\", \"arg2\" : \"value2\" , ...}",
+            "type": "object"
+          },
+          "id": {
+            "description": "Optional. Unique identifier of the tool call. The server returns the tool response with the matching `id`.",
+            "type": "string"
+          },
+          "toolType": {
+            "description": "Required. The type of tool that was called.",
+            "enum": [
+              "TOOL_TYPE_UNSPECIFIED",
+              "GOOGLE_SEARCH_WEB",
+              "GOOGLE_SEARCH_IMAGE",
+              "URL_CONTEXT",
+              "GOOGLE_MAPS",
+              "FILE_SEARCH"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "ToolConfig": {
         "description": "The Tool configuration containing parameters for specifying `Tool` use in the request.",
         "properties": {
@@ -3952,9 +4012,42 @@
             "$ref": "#/components/schemas/FunctionCallingConfig",
             "description": "Optional. Function calling config."
           },
+          "includeServerSideToolInvocations": {
+            "description": "Optional. If true, the API response will include the server-side tool calls and responses within the `Content` message. This allows clients to observe the server's tool interactions.",
+            "type": "boolean"
+          },
           "retrievalConfig": {
             "$ref": "#/components/schemas/RetrievalConfig",
             "description": "Optional. Retrieval config."
+          }
+        },
+        "type": "object"
+      },
+      "ToolResponse": {
+        "description": "The output from a server-side `ToolCall` execution. This message contains the results of a tool invocation that was initiated by a `ToolCall` from the model. The client should pass this `ToolResponse` back to the API in a subsequent turn within a `Content` message, along with the corresponding `ToolCall`.",
+        "properties": {
+          "id": {
+            "description": "Optional. The identifier of the tool call this response is for.",
+            "type": "string"
+          },
+          "response": {
+            "additionalProperties": {
+              "description": "Properties of the object."
+            },
+            "description": "Optional. The tool response.",
+            "type": "object"
+          },
+          "toolType": {
+            "description": "Required. The type of tool that was called, matching the `tool_type` in the corresponding `ToolCall`.",
+            "enum": [
+              "TOOL_TYPE_UNSPECIFIED",
+              "GOOGLE_SEARCH_WEB",
+              "GOOGLE_SEARCH_IMAGE",
+              "URL_CONTEXT",
+              "GOOGLE_MAPS",
+              "FILE_SEARCH"
+            ],
+            "type": "string"
           }
         },
         "type": "object"

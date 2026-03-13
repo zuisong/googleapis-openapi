@@ -391,6 +391,10 @@
       "CodeExecutionResult": {
         "description": "Result of executing the `ExecutableCode`. Generated only when the `CodeExecution` tool is used.",
         "properties": {
+          "id": {
+            "description": "Optional. The identifier of the `ExecutableCode` part this result is for. Only populated if the corresponding `ExecutableCode` has an id.",
+            "type": "string"
+          },
           "outcome": {
             "description": "Required. Outcome of the code execution.",
             "enum": [
@@ -1026,6 +1030,10 @@
         "properties": {
           "code": {
             "description": "Required. The code to be executed.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Optional. Unique identifier of the `ExecutableCode` part. The server returns the `CodeExecutionResult` with the matching `id`.",
             "type": "string"
           },
           "language": {
@@ -2990,6 +2998,14 @@
             "format": "byte",
             "type": "string"
           },
+          "toolCall": {
+            "$ref": "#/components/schemas/ToolCall",
+            "description": "Server-side tool call. This field is populated when the model predicts a tool invocation that should be executed on the server. The client is expected to echo this message back to the API."
+          },
+          "toolResponse": {
+            "$ref": "#/components/schemas/ToolResponse",
+            "description": "The output from a server-side `ToolCall` execution. This field is populated by the client with the results of executing the corresponding `ToolCall`."
+          },
           "videoMetadata": {
             "$ref": "#/components/schemas/VideoMetadata",
             "description": "Optional. Video metadata. The metadata should only be specified while the video data is presented in inline_data or file_data."
@@ -3740,6 +3756,35 @@
         },
         "type": "object"
       },
+      "ToolCall": {
+        "description": "A predicted server-side `ToolCall` returned from the model. This message contains information about a tool that the model wants to invoke. The client is NOT expected to execute this `ToolCall`. Instead, the client should pass this `ToolCall` back to the API in a subsequent turn within a `Content` message, along with the corresponding `ToolResponse`.",
+        "properties": {
+          "args": {
+            "additionalProperties": {
+              "description": "Properties of the object."
+            },
+            "description": "Optional. The tool call arguments. Example: {\"arg1\" : \"value1\", \"arg2\" : \"value2\" , ...}",
+            "type": "object"
+          },
+          "id": {
+            "description": "Optional. Unique identifier of the tool call. The server returns the tool response with the matching `id`.",
+            "type": "string"
+          },
+          "toolType": {
+            "description": "Required. The type of tool that was called.",
+            "enum": [
+              "TOOL_TYPE_UNSPECIFIED",
+              "GOOGLE_SEARCH_WEB",
+              "GOOGLE_SEARCH_IMAGE",
+              "URL_CONTEXT",
+              "GOOGLE_MAPS",
+              "FILE_SEARCH"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "ToolConfig": {
         "description": "The Tool configuration containing parameters for specifying `Tool` use in the request.",
         "properties": {
@@ -3747,9 +3792,42 @@
             "$ref": "#/components/schemas/FunctionCallingConfig",
             "description": "Optional. Function calling config."
           },
+          "includeServerSideToolInvocations": {
+            "description": "Optional. If true, the API response will include the server-side tool calls and responses within the `Content` message. This allows clients to observe the server's tool interactions.",
+            "type": "boolean"
+          },
           "retrievalConfig": {
             "$ref": "#/components/schemas/RetrievalConfig",
             "description": "Optional. Retrieval config."
+          }
+        },
+        "type": "object"
+      },
+      "ToolResponse": {
+        "description": "The output from a server-side `ToolCall` execution. This message contains the results of a tool invocation that was initiated by a `ToolCall` from the model. The client should pass this `ToolResponse` back to the API in a subsequent turn within a `Content` message, along with the corresponding `ToolCall`.",
+        "properties": {
+          "id": {
+            "description": "Optional. The identifier of the tool call this response is for.",
+            "type": "string"
+          },
+          "response": {
+            "additionalProperties": {
+              "description": "Properties of the object."
+            },
+            "description": "Optional. The tool response.",
+            "type": "object"
+          },
+          "toolType": {
+            "description": "Required. The type of tool that was called, matching the `tool_type` in the corresponding `ToolCall`.",
+            "enum": [
+              "TOOL_TYPE_UNSPECIFIED",
+              "GOOGLE_SEARCH_WEB",
+              "GOOGLE_SEARCH_IMAGE",
+              "URL_CONTEXT",
+              "GOOGLE_MAPS",
+              "FILE_SEARCH"
+            ],
+            "type": "string"
           }
         },
         "type": "object"
