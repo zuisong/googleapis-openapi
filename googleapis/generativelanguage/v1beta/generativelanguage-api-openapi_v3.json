@@ -1555,10 +1555,10 @@
           "serviceTier": {
             "description": "Optional. The service tier of the request.",
             "enum": [
-              "unspecified",
-              "standard",
-              "flex",
-              "priority"
+              "SERVICE_TIER_UNSPECIFIED",
+              "SERVICE_TIER_STANDARD",
+              "SERVICE_TIER_FLEX",
+              "SERVICE_TIER_PRIORITY"
             ],
             "type": "string"
           },
@@ -2223,7 +2223,7 @@
         "type": "object"
       },
       "ImportFileRequest": {
-        "description": "Request for `ImportFile` to import a File API file with a `FileSearchStore`. LINT.IfChange(ImportFileRequest)",
+        "description": "Request for `ImportFile` to import a File API file with a `FileSearchStore`.",
         "properties": {
           "chunkingConfig": {
             "$ref": "#/components/schemas/ChunkingConfig",
