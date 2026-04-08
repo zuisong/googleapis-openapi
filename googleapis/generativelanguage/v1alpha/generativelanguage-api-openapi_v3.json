@@ -146,6 +146,11 @@
             },
             "readOnly": true,
             "type": "array"
+          },
+          "usageMetadata": {
+            "$ref": "#/components/schemas/EmbeddingUsageMetadata",
+            "description": "Output only. The usage metadata for the request.",
+            "readOnly": true
           }
         },
         "type": "object"
@@ -1109,6 +1114,11 @@
             "$ref": "#/components/schemas/ContentEmbedding",
             "description": "Output only. The embedding generated from the input content.",
             "readOnly": true
+          },
+          "usageMetadata": {
+            "$ref": "#/components/schemas/EmbeddingUsageMetadata",
+            "description": "Output only. The usage metadata for the request.",
+            "readOnly": true
           }
         },
         "type": "object"
@@ -1122,6 +1132,26 @@
               "format": "float",
               "type": "number"
             },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "EmbeddingUsageMetadata": {
+        "description": "Metadata on the usage of the embedding request.",
+        "properties": {
+          "promptTokenCount": {
+            "description": "Output only. Number of tokens in the prompt.",
+            "format": "int32",
+            "readOnly": true,
+            "type": "integer"
+          },
+          "promptTokenDetails": {
+            "description": "Output only. List of modalities that were processed in the request input.",
+            "items": {
+              "$ref": "#/components/schemas/ModalityTokenCount"
+            },
+            "readOnly": true,
             "type": "array"
           }
         },
@@ -4757,6 +4787,16 @@
             }
           }
         },
+        "security": [
+          {
+            "Oauth2": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ],
+            "Oauth2c": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ]
+          }
+        ],
         "tags": [
           "cachedContents"
         ]
@@ -4792,6 +4832,16 @@
             "schema": {
               "type": "string"
             }
+          }
+        ],
+        "security": [
+          {
+            "Oauth2": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ],
+            "Oauth2c": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ]
           }
         ],
         "tags": [
@@ -4970,6 +5020,16 @@
             }
           }
         ],
+        "security": [
+          {
+            "Oauth2": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ],
+            "Oauth2c": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ]
+          }
+        ],
         "tags": [
           "files"
         ]
@@ -4998,6 +5058,16 @@
             }
           }
         },
+        "security": [
+          {
+            "Oauth2": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ],
+            "Oauth2c": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ]
+          }
+        ],
         "tags": [
           "media"
         ]
@@ -5247,6 +5317,16 @@
             "schema": {
               "type": "string"
             }
+          }
+        ],
+        "security": [
+          {
+            "Oauth2": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ],
+            "Oauth2c": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ]
           }
         ],
         "tags": [
@@ -5587,6 +5667,16 @@
         ],
         "tags": [
           "tunedModels"
+        ],
+        "security": [
+          {
+            "Oauth2": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ],
+            "Oauth2c": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ]
+          }
         ]
       },
       "get": {
@@ -5649,6 +5739,16 @@
         ],
         "tags": [
           "tunedModels"
+        ],
+        "security": [
+          {
+            "Oauth2": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ],
+            "Oauth2c": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ]
+          }
         ]
       },
       "patch": {
@@ -5692,6 +5792,16 @@
             "schema": {
               "type": "string"
             }
+          }
+        ],
+        "security": [
+          {
+            "Oauth2": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ],
+            "Oauth2c": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ]
           }
         ],
         "tags": [
@@ -6212,6 +6322,16 @@
             }
           }
         ],
+        "security": [
+          {
+            "Oauth2": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ],
+            "Oauth2c": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ]
+          }
+        ],
         "tags": [
           "fileSearchStores"
         ]
@@ -6369,6 +6489,16 @@
             "schema": {
               "type": "string"
             }
+          }
+        ],
+        "security": [
+          {
+            "Oauth2": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ],
+            "Oauth2c": [
+              "https://www.googleapis.com/auth/devstorage.read_only"
+            ]
           }
         ],
         "tags": [
