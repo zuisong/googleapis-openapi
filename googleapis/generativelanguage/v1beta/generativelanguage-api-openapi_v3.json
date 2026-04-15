@@ -3240,6 +3240,11 @@
             "description": "Optional. Name of the `FileSearchStore` containing the document. Example: `fileSearchStores/123`",
             "type": "string"
           },
+          "pageNumber": {
+            "description": "Optional. Page number of the retrieved context, if applicable.",
+            "format": "int32",
+            "type": "integer"
+          },
           "text": {
             "description": "Optional. Text of the chunk.",
             "type": "string"
