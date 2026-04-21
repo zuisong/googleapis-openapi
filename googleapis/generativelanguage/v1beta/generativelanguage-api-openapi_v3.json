@@ -923,24 +923,28 @@
         },
         "type": "object"
       },
-      "EmbedContentRequest": {
-        "description": "Request containing the `Content` for the model to embed.",
+      "EmbedContentConfig": {
+        "description": "Configurations for the EmbedContent request.",
         "properties": {
-          "content": {
-            "$ref": "#/components/schemas/Content",
-            "description": "Required. The content to embed. Only the `parts.text` fields will be counted."
+          "audioTrackExtraction": {
+            "description": "Optional. Whether to extract audio from video content.",
+            "type": "boolean"
           },
-          "model": {
-            "description": "Required. The model's resource name. This serves as an ID for the Model to use. This name should match a model name returned by the `ListModels` method. Format: `models/{model}`",
-            "type": "string"
+          "autoTruncate": {
+            "description": "Optional. Whether to silently truncate the input content if it's longer than the maximum sequence length.",
+            "type": "boolean"
+          },
+          "documentOcr": {
+            "description": "Optional. Whether to enable OCR for document content.",
+            "type": "boolean"
           },
           "outputDimensionality": {
-            "description": "Optional. Optional reduced dimension for the output embedding. If set, excessive values in the output embedding are truncated from the end. Supported by newer models since 2024 only. You cannot set this value if using the earlier model (`models/embedding-001`).",
+            "description": "Optional. Reduced dimension for the output embedding. If set, excessive values in the output embedding are truncated from the end.",
             "format": "int32",
             "type": "integer"
           },
           "taskType": {
-            "description": "Optional. Optional task type for which the embeddings will be used. Not supported on earlier models (`models/embedding-001`).",
+            "description": "Optional. The task type of the embedding.",
             "enum": [
               "TASK_TYPE_UNSPECIFIED",
               "RETRIEVAL_QUERY",
@@ -955,7 +959,52 @@
             "type": "string"
           },
           "title": {
-            "description": "Optional. An optional title for the text. Only applicable when TaskType is `RETRIEVAL_DOCUMENT`. Note: Specifying a `title` for `RETRIEVAL_DOCUMENT` provides better quality embeddings for retrieval.",
+            "description": "Optional. The title for the text.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "EmbedContentRequest": {
+        "description": "Request containing the `Content` for the model to embed.",
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/Content",
+            "description": "Required. The content to embed. Only the `parts.text` fields will be counted."
+          },
+          "embedContentConfig": {
+            "$ref": "#/components/schemas/EmbedContentConfig",
+            "description": "Optional. Configuration for the EmbedContent request."
+          },
+          "model": {
+            "description": "Required. The model's resource name. This serves as an ID for the Model to use. This name should match a model name returned by the `ListModels` method. Format: `models/{model}`",
+            "type": "string"
+          },
+          "outputDimensionality": {
+            "deprecated": true,
+            "description": "Optional. Deprecated: Please use EmbedContentConfig.output_dimensionality instead. Optional reduced dimension for the output embedding. If set, excessive values in the output embedding are truncated from the end. Supported by newer models since 2024 only. You cannot set this value if using the earlier model (`models/embedding-001`).",
+            "format": "int32",
+            "type": "integer"
+          },
+          "taskType": {
+            "deprecated": true,
+            "description": "Optional. Deprecated: Please use EmbedContentConfig.task_type instead. Optional task type for which the embeddings will be used. Not supported on earlier models (`models/embedding-001`).",
+            "enum": [
+              "TASK_TYPE_UNSPECIFIED",
+              "RETRIEVAL_QUERY",
+              "RETRIEVAL_DOCUMENT",
+              "SEMANTIC_SIMILARITY",
+              "CLASSIFICATION",
+              "CLUSTERING",
+              "QUESTION_ANSWERING",
+              "FACT_VERIFICATION",
+              "CODE_RETRIEVAL_QUERY"
+            ],
+            "type": "string"
+          },
+          "title": {
+            "deprecated": true,
+            "description": "Optional. Deprecated: Please use EmbedContentConfig.title instead. An optional title for the text. Only applicable when TaskType is `RETRIEVAL_DOCUMENT`. Note: Specifying a `title` for `RETRIEVAL_DOCUMENT` provides better quality embeddings for retrieval.",
             "type": "string"
           }
         },
