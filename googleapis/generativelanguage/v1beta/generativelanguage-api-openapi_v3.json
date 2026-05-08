@@ -1852,11 +1852,6 @@
             "format": "byte",
             "type": "string"
           },
-          "sha512Hash": {
-            "description": "Scotty-provided SHA512 hash for an upload.",
-            "format": "byte",
-            "type": "string"
-          },
           "timestamp": {
             "description": "Time at which the media data was last updated, in milliseconds since UNIX epoch",
             "format": "uint64",
