@@ -45,44 +45,6 @@
         },
         "type": "object"
       },
-      "AudioResponseFormat": {
-        "description": "Configuration for audio output format.",
-        "properties": {
-          "bitRate": {
-            "description": "Optional. Bit rate in bits per second (bps). Only applicable for compressed formats (MP3, Opus).",
-            "format": "int32",
-            "type": "integer"
-          },
-          "delivery": {
-            "description": "Optional. The delivery mode for the audio output.",
-            "enum": [
-              "DELIVERY_UNSPECIFIED",
-              "INLINE",
-              "URI"
-            ],
-            "type": "string"
-          },
-          "mimeType": {
-            "description": "Optional. The MIME type of the audio output.",
-            "enum": [
-              "MIME_TYPE_UNSPECIFIED",
-              "AUDIO_MP3",
-              "AUDIO_OGG_OPUS",
-              "AUDIO_L16",
-              "AUDIO_WAV",
-              "AUDIO_ALAW",
-              "AUDIO_MULAW"
-            ],
-            "type": "string"
-          },
-          "sampleRate": {
-            "description": "Optional. Sample rate in Hz.",
-            "format": "int32",
-            "type": "integer"
-          }
-        },
-        "type": "object"
-      },
       "AudioTranscriptionConfig": {
         "description": "The audio transcription configuration.",
         "properties": {},
@@ -2516,10 +2478,6 @@
             "format": "float",
             "type": "number"
           },
-          "responseFormat": {
-            "$ref": "#/components/schemas/ResponseFormatConfig",
-            "description": "Optional. Configuration for the response output format. Allows specifying output configuration per modality (text, audio, image) in a flat structure."
-          },
           "responseJsonSchema": {
             "description": "Optional. An internal detail. Use `responseJsonSchema` rather than this field."
           },
@@ -2910,61 +2868,6 @@
           },
           "imageSize": {
             "description": "Optional. Specifies the size of generated images. Supported values are `512`, `1K`, `2K`, `4K`. If not specified, the model will use default value `1K`.",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "ImageResponseFormat": {
-        "description": "Configuration for image output format.",
-        "properties": {
-          "aspectRatio": {
-            "description": "Optional. The aspect ratio for the image output.",
-            "enum": [
-              "ASPECT_RATIO_UNSPECIFIED",
-              "ASPECT_RATIO_ONE_BY_ONE",
-              "ASPECT_RATIO_TWO_BY_THREE",
-              "ASPECT_RATIO_THREE_BY_TWO",
-              "ASPECT_RATIO_THREE_BY_FOUR",
-              "ASPECT_RATIO_FOUR_BY_THREE",
-              "ASPECT_RATIO_FOUR_BY_FIVE",
-              "ASPECT_RATIO_FIVE_BY_FOUR",
-              "ASPECT_RATIO_NINE_BY_SIXTEEN",
-              "ASPECT_RATIO_SIXTEEN_BY_NINE",
-              "ASPECT_RATIO_TWENTY_ONE_BY_NINE",
-              "ASPECT_RATIO_ONE_BY_EIGHT",
-              "ASPECT_RATIO_EIGHT_BY_ONE",
-              "ASPECT_RATIO_ONE_BY_FOUR",
-              "ASPECT_RATIO_FOUR_BY_ONE"
-            ],
-            "type": "string"
-          },
-          "delivery": {
-            "description": "Optional. The delivery mode for the image output.",
-            "enum": [
-              "DELIVERY_UNSPECIFIED",
-              "INLINE",
-              "URI"
-            ],
-            "type": "string"
-          },
-          "imageSize": {
-            "description": "Optional. The size of the image output.",
-            "enum": [
-              "IMAGE_SIZE_UNSPECIFIED",
-              "IMAGE_SIZE_FIVE_TWELVE",
-              "IMAGE_SIZE_ONE_K",
-              "IMAGE_SIZE_TWO_K",
-              "IMAGE_SIZE_FOUR_K"
-            ],
-            "type": "string"
-          },
-          "mimeType": {
-            "description": "Optional. The MIME type of the image output.",
-            "enum": [
-              "MIME_TYPE_UNSPECIFIED",
-              "IMAGE_JPEG"
-            ],
             "type": "string"
           }
         },
@@ -3982,24 +3885,6 @@
         },
         "type": "object"
       },
-      "ResponseFormatConfig": {
-        "description": "Configuration for the response output format. This is a flat object where each optional sub-field configures a specific output modality.",
-        "properties": {
-          "audio": {
-            "$ref": "#/components/schemas/AudioResponseFormat",
-            "description": "Optional. Audio output format configuration."
-          },
-          "image": {
-            "$ref": "#/components/schemas/ImageResponseFormat",
-            "description": "Optional. Image output format configuration."
-          },
-          "text": {
-            "$ref": "#/components/schemas/TextResponseFormat",
-            "description": "Optional. Text output format configuration."
-          }
-        },
-        "type": "object"
-      },
       "RetrievalConfig": {
         "description": "Retrieval config.",
         "properties": {
@@ -4547,24 +4432,6 @@
           "text": {
             "description": "Required. The prompt text.",
             "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "TextResponseFormat": {
-        "description": "Configuration for text output format.",
-        "properties": {
-          "mimeType": {
-            "description": "Optional. The MIME type of the text output.",
-            "enum": [
-              "MIME_TYPE_UNSPECIFIED",
-              "APPLICATION_JSON",
-              "TEXT_PLAIN"
-            ],
-            "type": "string"
-          },
-          "schema": {
-            "description": "Optional. The JSON schema that the output should conform to. Only applicable when mime_type is APPLICATION_JSON."
           }
         },
         "type": "object"
