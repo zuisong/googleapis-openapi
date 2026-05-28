@@ -508,7 +508,8 @@
               "UNEXPECTED_TOOL_CALL",
               "TOO_MANY_TOOL_CALLS",
               "MISSING_THOUGHT_SIGNATURE",
-              "MALFORMED_RESPONSE"
+              "MALFORMED_RESPONSE",
+              "ESCALATION"
             ],
             "readOnly": true,
             "type": "string"
