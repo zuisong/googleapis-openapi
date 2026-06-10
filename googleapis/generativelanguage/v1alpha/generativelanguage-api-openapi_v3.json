@@ -2592,6 +2592,10 @@
             "description": "Optional. The maximum cumulative probability of tokens to consider when sampling. The model uses combined Top-k and Top-p (nucleus) sampling. Tokens are sorted based on their assigned probabilities so that only the most likely tokens are considered. Top-k sampling directly limits the maximum number of tokens to consider, while Nucleus sampling limits the number of tokens based on the cumulative probability. Note: The default value varies by `Model` and is specified by the`Model.top_p` attribute returned from the `getModel` function. An empty `top_k` attribute indicates that the model doesn't apply top-k sampling and doesn't allow setting `top_k` on requests.",
             "format": "float",
             "type": "number"
+          },
+          "translationConfig": {
+            "$ref": "#/components/schemas/TranslationConfig",
+            "description": "Optional. Config for translation."
           }
         },
         "type": "object"
@@ -4773,6 +4777,20 @@
       "TransferOwnershipResponse": {
         "description": "Response from `TransferOwnership`.",
         "properties": {},
+        "type": "object"
+      },
+      "TranslationConfig": {
+        "description": "Config for translation features.",
+        "properties": {
+          "echoTargetLanguage": {
+            "description": "Optional. If true, the model will generate audio when the target language is spoken, essentially it will parrot the input. If false, we will not produce audio for the target language.",
+            "type": "boolean"
+          },
+          "targetLanguageCode": {
+            "description": "Required. The target language for translation. Supported values are BCP-47 language codes (e.g. \"en\", \"es\", \"fr\").",
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "TunedModel": {
