@@ -86,6 +86,13 @@
       "AudioTranscriptionConfig": {
         "description": "The audio transcription configuration.",
         "properties": {
+          "adaptationPhrases": {
+            "description": "Optional. A list of phrases used for speech adaptation, which biases the ASR model to improve recognition of these specific terms.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "languageAuto": {
             "$ref": "#/components/schemas/LanguageAuto",
             "description": "Optional. The model will detect the language automatically."
