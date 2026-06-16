@@ -710,11 +710,17 @@
       "ComputerUse": {
         "description": "Computer Use tool type.",
         "properties": {
+          "enablePromptInjectionDetection": {
+            "description": "Optional. Whether enable the prompt injection detection check on computer-use request.",
+            "type": "boolean"
+          },
           "environment": {
             "description": "Required. The environment being operated.",
             "enum": [
               "ENVIRONMENT_UNSPECIFIED",
-              "ENVIRONMENT_BROWSER"
+              "ENVIRONMENT_BROWSER",
+              "ENVIRONMENT_MOBILE",
+              "ENVIRONMENT_DESKTOP"
             ],
             "type": "string"
           },
