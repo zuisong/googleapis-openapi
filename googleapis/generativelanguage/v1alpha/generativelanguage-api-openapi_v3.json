@@ -710,6 +710,23 @@
       "ComputerUse": {
         "description": "Computer Use tool type.",
         "properties": {
+          "disabledSafetyPolicies": {
+            "description": "Optional. Disabled safety policies for computer use.",
+            "items": {
+              "enum": [
+                "SAFETY_POLICY_UNSPECIFIED",
+                "FINANCIAL_TRANSACTIONS",
+                "SENSITIVE_DATA_MODIFICATION",
+                "COMMUNICATION_TOOL",
+                "ACCOUNT_CREATION",
+                "DATA_MODIFICATION",
+                "USER_CONSENT_MANAGEMENT",
+                "LEGAL_TERMS_AND_AGREEMENTS"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
           "enablePromptInjectionDetection": {
             "description": "Optional. Whether enable the prompt injection detection check on computer-use request.",
             "type": "boolean"
