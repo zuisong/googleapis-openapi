@@ -2510,6 +2510,10 @@
             "format": "int32",
             "type": "integer"
           },
+          "enableAffectiveDialog": {
+            "description": "Optional. If enabled, the model will detect emotions and adapt its responses accordingly.",
+            "type": "boolean"
+          },
           "enableEnhancedCivicAnswers": {
             "description": "Optional. Enables enhanced civic answers. It may not be available for all models.",
             "type": "boolean"
