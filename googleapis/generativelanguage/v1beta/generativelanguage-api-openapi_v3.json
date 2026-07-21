@@ -87,7 +87,15 @@
         "description": "The audio transcription configuration.",
         "properties": {
           "adaptationPhrases": {
+            "deprecated": true,
             "description": "Optional. A list of phrases used for speech adaptation, which biases the ASR model to improve recognition of these specific terms.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "customVocabulary": {
+            "description": "Optional. A list of custom vocabulary phrases to bias the speech recognition model toward recognizing specific terms (product names, proper nouns, jargon).",
             "items": {
               "type": "string"
             },
@@ -2503,6 +2511,7 @@
         "description": "Configuration options for model generation and outputs. Not all parameters are configurable for every model.",
         "properties": {
           "_responseJsonSchema": {
+            "deprecated": true,
             "description": "Optional. Output schema of the generated response. This is an alternative to `response_schema` that accepts [JSON Schema](https://json-schema.org/). If set, `response_schema` must be omitted, but `response_mime_type` is required. While the full JSON Schema may be sent, not all features are supported. Specifically, only the following properties are supported: - `$id` - `$defs` - `$ref` - `$anchor` - `type` - `format` - `title` - `description` - `enum` (for strings and numbers) - `items` - `prefixItems` - `minItems` - `maxItems` - `minimum` - `maximum` - `anyOf` - `oneOf` (interpreted the same as `anyOf`) - `properties` - `additionalProperties` - `required` The non-standard `propertyOrdering` property may also be set. Cyclic references are unrolled to a limited degree and, as such, may only be used within non-required properties. (Nullable properties are not sufficient.) If `$ref` is set on a sub-schema, no other properties, except for than those starting as a `$`, may be set."
           },
           "candidateCount": {
@@ -2582,6 +2591,7 @@
           },
           "responseSchema": {
             "$ref": "#/components/schemas/Schema",
+            "deprecated": true,
             "description": "Optional. Output schema of the generated candidate text. Schemas must be a subset of the [OpenAPI schema](https://spec.openapis.org/oas/v3.0.3#schema) and can be objects, primitives or arrays. If set, a compatible `response_mime_type` must also be set. Compatible MIME types: `application/json`: Schema for JSON response. Refer to the [JSON text generation guide](https://ai.google.dev/gemini-api/docs/json-mode) for more details."
           },
           "seed": {
@@ -3815,7 +3825,7 @@
             "description": "Inline media bytes."
           },
           "mediaResolution": {
-            "$ref": "#/components/schemas/MediaResolution",
+            "$ref": "#/components/schemas/V1mainMediaResolution",
             "description": "Optional. Media resolution for the input media."
           },
           "partMetadata": {
@@ -5136,6 +5146,85 @@
           "totalTokenCount": {
             "description": "Total token count for the generation request (prompt + thoughts + response candidates).",
             "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "V1mainCreateTunedModelMetadata": {
+        "description": "Metadata about the state and progress of creating a tuned model returned from the long-running operation",
+        "properties": {
+          "completedPercent": {
+            "description": "The completed percentage for the tuning operation.",
+            "format": "float",
+            "type": "number"
+          },
+          "completedSteps": {
+            "description": "The number of steps completed.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "snapshots": {
+            "description": "Metrics collected during tuning.",
+            "items": {
+              "$ref": "#/components/schemas/V1mainTuningSnapshot"
+            },
+            "type": "array"
+          },
+          "totalSteps": {
+            "description": "The total number of tuning steps.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "tunedModel": {
+            "description": "Name of the tuned model associated with the tuning operation.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "V1mainMediaResolution": {
+        "description": "Media resolution for tokenization.",
+        "properties": {
+          "level": {
+            "description": "The tokenization quality used for given media. for Gemini API support .",
+            "enum": [
+              "MEDIA_RESOLUTION_UNSPECIFIED",
+              "MEDIA_RESOLUTION_LOW",
+              "MEDIA_RESOLUTION_MEDIUM",
+              "MEDIA_RESOLUTION_HIGH",
+              "MEDIA_RESOLUTION_ULTRA_HIGH"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "V1mainTuningSnapshot": {
+        "description": "Record for a single tuning step.",
+        "properties": {
+          "computeTime": {
+            "description": "Output only. The timestamp when this metric was computed.",
+            "format": "google-datetime",
+            "readOnly": true,
+            "type": "string"
+          },
+          "epoch": {
+            "description": "Output only. The epoch this step was part of.",
+            "format": "int32",
+            "readOnly": true,
+            "type": "integer"
+          },
+          "meanLoss": {
+            "description": "Output only. The mean loss of the training examples for this step.",
+            "format": "float",
+            "readOnly": true,
+            "type": "number"
+          },
+          "step": {
+            "description": "Output only. The tuning step.",
+            "format": "int32",
+            "readOnly": true,
             "type": "integer"
           }
         },
