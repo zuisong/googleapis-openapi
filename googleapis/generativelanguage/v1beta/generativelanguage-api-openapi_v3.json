@@ -107,10 +107,19 @@
           },
           "languageAuto": {
             "$ref": "#/components/schemas/LanguageAuto",
+            "deprecated": true,
             "description": "Optional. The model will detect the language automatically."
+          },
+          "languageCodes": {
+            "description": "Optional. BCP-47 language codes providing hints about the languages present in the audio. If omitted or empty, defaults to automatic language detection.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "languageHints": {
             "$ref": "#/components/schemas/LanguageHints",
+            "deprecated": true,
             "description": "Optional. Specifies one or more languages in the audio."
           },
           "wordTimestamp": {
@@ -1023,6 +1032,31 @@
         },
         "type": "object"
       },
+      "CreateEnvironmentRequest": {
+        "description": "Request for `CreateEnvironment`.",
+        "properties": {
+          "networkAllowlist": {
+            "$ref": "#/components/schemas/EnvironmentNetworkEgressAllowlist",
+            "description": "Allow only specific domains."
+          },
+          "networkMode": {
+            "description": "Network egress mode.",
+            "enum": [
+              "NETWORK_MODE_UNSPECIFIED",
+              "DISABLED"
+            ],
+            "type": "string"
+          },
+          "sources": {
+            "description": "Sources to be mounted into the environment.",
+            "items": {
+              "$ref": "#/components/schemas/Source"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "CreateFileRequest": {
         "description": "Request for `CreateFile`.",
         "properties": {
@@ -1292,6 +1326,23 @@
               "MODE_DYNAMIC"
             ],
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "EgressRule": {
+        "description": "A network egress rule that controls which external domains the environment is allowed to reach. Each rule identifies a target domain and, optionally, a set of HTTP headers to inject into every matching outbound request.",
+        "properties": {
+          "domain": {
+            "description": "The domain pattern to match for this rule. Use an exact hostname (e.g., `github.com`), a wildcard prefix (e.g., `*.googleapis.com`), or `*` to match all domains.",
+            "type": "string"
+          },
+          "transform": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Headers to inject into requests matching this rule. Key: header name (e.g., \"Authorization\"). Value: header value (e.g., \"Bearer your-token\").",
+            "type": "object"
           }
         },
         "type": "object"
@@ -1577,6 +1628,86 @@
       "Empty": {
         "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }",
         "properties": {},
+        "type": "object"
+      },
+      "Environment": {
+        "description": "An execution environment for an agent.",
+        "properties": {
+          "created": {
+            "description": "Output only. The time at which the environment was created in ISO 8601 format (YYYY-MM-DDThh:mm:ssZ).",
+            "readOnly": true,
+            "type": "string"
+          },
+          "fileCount": {
+            "description": "Output only. The number of files in the environment, output only.",
+            "format": "int64",
+            "readOnly": true,
+            "type": "string"
+          },
+          "id": {
+            "description": "Required. Output only. The ID of the environment.",
+            "readOnly": true,
+            "type": "string"
+          },
+          "lastAccessed": {
+            "description": "Output only. The time at which the environment was last accessed in ISO 8601 format (YYYY-MM-DDThh:mm:ssZ).",
+            "readOnly": true,
+            "type": "string"
+          },
+          "network_allowlist": {
+            "$ref": "#/components/schemas/EnvironmentNetworkEgressAllowlist",
+            "description": "Allow only specific domains."
+          },
+          "network_mode": {
+            "description": "Network egress mode.",
+            "enum": [
+              "NETWORK_MODE_UNSPECIFIED",
+              "DISABLED"
+            ],
+            "type": "string"
+          },
+          "sizeBytes": {
+            "description": "Output only. The total size of the environment files in bytes, output only.",
+            "format": "int64",
+            "readOnly": true,
+            "type": "string"
+          },
+          "sources": {
+            "description": "Sources to be mounted into the environment.",
+            "items": {
+              "$ref": "#/components/schemas/Source"
+            },
+            "type": "array"
+          },
+          "status": {
+            "description": "Output only. The status of the environment container.",
+            "enum": [
+              "STATUS_UNSPECIFIED",
+              "ACTIVE",
+              "EXPIRED"
+            ],
+            "readOnly": true,
+            "type": "string"
+          },
+          "updated": {
+            "description": "Output only. The time at which the environment was last updated in ISO 8601 format (YYYY-MM-DDThh:mm:ssZ).",
+            "readOnly": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "EnvironmentNetworkEgressAllowlist": {
+        "description": "Network egress configuration for the environment.",
+        "properties": {
+          "allowlist": {
+            "description": "List of allowed domains and their configurations.",
+            "items": {
+              "$ref": "#/components/schemas/EgressRule"
+            },
+            "type": "array"
+          }
+        },
         "type": "object"
       },
       "Example": {
@@ -2919,6 +3050,31 @@
         },
         "type": "object"
       },
+      "HttpBody": {
+        "description": "Message that represents an arbitrary HTTP body. It should only be used for payload formats that can't be represented as JSON, such as raw binary or an HTML page. This message can be used both in streaming and non-streaming API methods in the request as well as the response. It can be used as a top-level request field, which is convenient if one wants to extract parameters from either the URL or HTTP template into the request fields and also want access to the raw HTTP body. Example: message GetResourceRequest { // A unique request id. string request_id = 1; // The raw HTTP body is bound to this field. google.api.HttpBody http_body = 2; } service ResourceService { rpc GetResource(GetResourceRequest) returns (google.api.HttpBody); rpc UpdateResource(google.api.HttpBody) returns (google.protobuf.Empty); } Example with streaming methods: service CaldavService { rpc GetCalendar(stream google.api.HttpBody) returns (stream google.api.HttpBody); rpc UpdateCalendar(stream google.api.HttpBody) returns (stream google.api.HttpBody); } Use of this type only changes how the request and response bodies are handled, all other features will continue to work unchanged.",
+        "properties": {
+          "contentType": {
+            "description": "The HTTP Content-Type header value specifying the content type of the body.",
+            "type": "string"
+          },
+          "data": {
+            "description": "The HTTP request/response body as raw binary.",
+            "format": "byte",
+            "type": "string"
+          },
+          "extensions": {
+            "description": "Application specific response metadata. Must be set in the first response for streaming APIs.",
+            "items": {
+              "additionalProperties": {
+                "description": "Properties of the object. Contains field @type with type URL."
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "Hyperparameters": {
         "description": "Hyperparameters controlling the tuning process. Read more at https://ai.google.dev/docs/model_tuning_guidance",
         "properties": {
@@ -3265,14 +3421,17 @@
         "type": "object"
       },
       "LanguageAuto": {
+        "deprecated": true,
         "description": "Indicates the language of the audio should be automatically detected.",
         "properties": {},
         "type": "object"
       },
       "LanguageHints": {
+        "deprecated": true,
         "description": "Provides hints to the model about possible languages present in the audio.",
         "properties": {
           "languageCodes": {
+            "deprecated": true,
             "description": "Required. BCP-47 language codes.",
             "items": {
               "type": "string"
@@ -3344,6 +3503,23 @@
           },
           "nextPageToken": {
             "description": "A token, which can be sent as `page_token` to retrieve the next page. If this field is omitted, there are no more pages.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ListEnvironmentsResponse": {
+        "description": "Response for `ListEnvironments`.",
+        "properties": {
+          "environments": {
+            "description": "Environments belonging to the provided project.",
+            "items": {
+              "$ref": "#/components/schemas/Environment"
+            },
+            "type": "array"
+          },
+          "nextPageToken": {
+            "description": "Pagination token.",
             "type": "string"
           }
         },
@@ -4495,6 +4671,37 @@
         },
         "type": "object"
       },
+      "Source": {
+        "description": "A source to be mounted into the environment.",
+        "properties": {
+          "content": {
+            "description": "The inline content if `type` is `INLINE`.",
+            "type": "string"
+          },
+          "encoding": {
+            "description": "Optional encoding for inline content (e.g. `base64`).",
+            "type": "string"
+          },
+          "source": {
+            "description": "The source of the environment. For GCS, this is the GCS path. For GitHub, this is the GitHub path.",
+            "type": "string"
+          },
+          "target": {
+            "description": "Where the source should appear in the environment.",
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "TYPE_UNSPECIFIED",
+              "GCS",
+              "INLINE",
+              "REPOSITORY"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "SpeakerVoiceConfig": {
         "description": "The configuration for a single speaker in a multi speaker setup.",
         "properties": {
@@ -4733,6 +4940,10 @@
           },
           "id": {
             "description": "Optional. Unique identifier of the tool call. The server returns the tool response with the matching `id`.",
+            "type": "string"
+          },
+          "toolName": {
+            "description": "Optional. The name of the tool that was called.",
             "type": "string"
           },
           "toolType": {
@@ -5706,6 +5917,279 @@
         ],
         "tags": [
           "corpora"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/_.xgafv"
+        },
+        {
+          "$ref": "#/components/parameters/access_token"
+        },
+        {
+          "$ref": "#/components/parameters/alt"
+        },
+        {
+          "$ref": "#/components/parameters/callback"
+        },
+        {
+          "$ref": "#/components/parameters/fields"
+        },
+        {
+          "$ref": "#/components/parameters/key"
+        },
+        {
+          "$ref": "#/components/parameters/oauth_token"
+        },
+        {
+          "$ref": "#/components/parameters/prettyPrint"
+        },
+        {
+          "$ref": "#/components/parameters/quotaUser"
+        },
+        {
+          "$ref": "#/components/parameters/upload_protocol"
+        },
+        {
+          "$ref": "#/components/parameters/uploadType"
+        }
+      ]
+    },
+    "/v1beta/environments:create": {
+      "post": {
+        "description": "Creates an environment.",
+        "operationId": "generativelanguage.environments.create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Environment"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEnvironmentRequest"
+              }
+            }
+          }
+        },
+        "tags": [
+          "environments"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/_.xgafv"
+        },
+        {
+          "$ref": "#/components/parameters/access_token"
+        },
+        {
+          "$ref": "#/components/parameters/alt"
+        },
+        {
+          "$ref": "#/components/parameters/callback"
+        },
+        {
+          "$ref": "#/components/parameters/fields"
+        },
+        {
+          "$ref": "#/components/parameters/key"
+        },
+        {
+          "$ref": "#/components/parameters/oauth_token"
+        },
+        {
+          "$ref": "#/components/parameters/prettyPrint"
+        },
+        {
+          "$ref": "#/components/parameters/quotaUser"
+        },
+        {
+          "$ref": "#/components/parameters/upload_protocol"
+        },
+        {
+          "$ref": "#/components/parameters/uploadType"
+        }
+      ]
+    },
+    "/v1beta/environments/{id}:delete": {
+      "delete": {
+        "description": "Deletes an environment.",
+        "operationId": "generativelanguage.environments.delete",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Empty"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Required. The identifier of the environment to delete.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "environments"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/_.xgafv"
+        },
+        {
+          "$ref": "#/components/parameters/access_token"
+        },
+        {
+          "$ref": "#/components/parameters/alt"
+        },
+        {
+          "$ref": "#/components/parameters/callback"
+        },
+        {
+          "$ref": "#/components/parameters/fields"
+        },
+        {
+          "$ref": "#/components/parameters/key"
+        },
+        {
+          "$ref": "#/components/parameters/oauth_token"
+        },
+        {
+          "$ref": "#/components/parameters/prettyPrint"
+        },
+        {
+          "$ref": "#/components/parameters/quotaUser"
+        },
+        {
+          "$ref": "#/components/parameters/upload_protocol"
+        },
+        {
+          "$ref": "#/components/parameters/uploadType"
+        }
+      ]
+    },
+    "/v1beta/environments/{id}:get": {
+      "get": {
+        "description": "Gets an environment.",
+        "operationId": "generativelanguage.environments.get",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Environment"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Required. The identifier of the environment to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "environments"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/_.xgafv"
+        },
+        {
+          "$ref": "#/components/parameters/access_token"
+        },
+        {
+          "$ref": "#/components/parameters/alt"
+        },
+        {
+          "$ref": "#/components/parameters/callback"
+        },
+        {
+          "$ref": "#/components/parameters/fields"
+        },
+        {
+          "$ref": "#/components/parameters/key"
+        },
+        {
+          "$ref": "#/components/parameters/oauth_token"
+        },
+        {
+          "$ref": "#/components/parameters/prettyPrint"
+        },
+        {
+          "$ref": "#/components/parameters/quotaUser"
+        },
+        {
+          "$ref": "#/components/parameters/upload_protocol"
+        },
+        {
+          "$ref": "#/components/parameters/uploadType"
+        }
+      ]
+    },
+    "/v1beta/environments:list": {
+      "get": {
+        "description": "Lists environments.",
+        "operationId": "generativelanguage.environments.list",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListEnvironmentsResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Optional. Maximum number of environments to return. If unspecified, defaults to 50. Maximum is 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pageToken",
+            "in": "query",
+            "description": "Optional. Pagination token.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "environments"
         ]
       },
       "parameters": [
@@ -8554,6 +9038,9 @@
     },
     {
       "name": "dynamic"
+    },
+    {
+      "name": "environments"
     },
     {
       "name": "files"
