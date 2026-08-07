@@ -1679,11 +1679,11 @@
             "readOnly": true,
             "type": "string"
           },
-          "network_allowlist": {
+          "networkAllowlist": {
             "$ref": "#/components/schemas/EnvironmentNetworkEgressAllowlist",
             "description": "Allow only specific domains."
           },
-          "network_mode": {
+          "networkMode": {
             "description": "Network egress mode.",
             "enum": [
               "NETWORK_MODE_UNSPECIFIED",
