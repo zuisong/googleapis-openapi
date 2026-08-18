@@ -122,6 +122,15 @@
             "deprecated": true,
             "description": "Optional. Specifies one or more languages in the audio."
           },
+          "mode": {
+            "description": "Optional. Configures transcription mode. Supported values: `VERBATIM`, `SMART`. If unspecified, defaults to `VERBATIM` transcription. In `SMART` mode, the model performs disfluency removal (eliminating filler words, repetitions, and false starts), light grammatical cleanup, automatic formatting (paragraphs, bullet points, numbered lists), and minor user edits (inline self-corrections). Timestamps and diarization are incompatible with mode `SMART`.",
+            "enum": [
+              "MODE_UNSPECIFIED",
+              "VERBATIM",
+              "SMART"
+            ],
+            "type": "string"
+          },
           "wordTimestamp": {
             "description": "Optional. Configures word-level timestamp generation.",
             "type": "boolean"
@@ -144,10 +153,6 @@
           "fieldMask": {
             "description": "Optional. Input only. Immutable. If field_mask is empty, and `bidi_generate_content_setup` is not present, then the effective `BidiGenerateContentSetup` message is taken from the Live API connection. If field_mask is empty, and `bidi_generate_content_setup` _is_ present, then the effective `BidiGenerateContentSetup` message is taken entirely from `bidi_generate_content_setup` in this request. The setup message from the Live API connection is ignored. If field_mask is not empty, then the corresponding fields from `bidi_generate_content_setup` will overwrite the fields from the setup message in the Live API connection.",
             "format": "google-fieldmask",
-            "type": "string"
-          },
-          "interactionId": {
-            "description": "Optional. Input only. Immutable. The interaction ID that this token is scoped to. Specific to the Live Interactions API.",
             "type": "string"
           },
           "name": {
@@ -4692,7 +4697,7 @@
             "type": "string"
           },
           "source": {
-            "description": "The source of the environment. For GCS, this is the GCS path. For GitHub, this is the GitHub path.",
+            "description": "The source of the environment. For Cloud Storage, this is the Cloud Storage path. For GitHub, this is the GitHub path.",
             "type": "string"
           },
           "target": {
@@ -4890,7 +4895,7 @@
         "type": "object"
       },
       "Tool": {
-        "description": "Tool details that the model may use to generate response. A `Tool` is a piece of code that enables the system to interact with external systems to perform an action, or set of actions, outside of knowledge and scope of the model. Next ID: 16",
+        "description": "Tool details that the model may use to generate response. A `Tool` is a piece of code that enables the system to interact with external systems to perform an action, or set of actions, outside of knowledge and scope of the model. Next ID: 17",
         "properties": {
           "codeExecution": {
             "$ref": "#/components/schemas/CodeExecution",
@@ -6183,7 +6188,7 @@
           {
             "name": "pageSize",
             "in": "query",
-            "description": "Optional. Maximum number of environments to return. If unspecified, defaults to 50. Maximum is 1000.",
+            "description": "Maximum number of environments to return. If unspecified, defaults to 50. Maximum is 1000.",
             "schema": {
               "type": "integer"
             }
@@ -6191,7 +6196,7 @@
           {
             "name": "pageToken",
             "in": "query",
-            "description": "Optional. Pagination token.",
+            "description": "Pagination token.",
             "schema": {
               "type": "string"
             }
