@@ -122,6 +122,15 @@
             "deprecated": true,
             "description": "Optional. Specifies one or more languages in the audio."
           },
+          "mode": {
+            "description": "Optional. Configures transcription mode. Supported values: `VERBATIM`, `SMART`. If unspecified, defaults to `VERBATIM` transcription. In `SMART` mode, the model performs disfluency removal (eliminating filler words, repetitions, and false starts), light grammatical cleanup, automatic formatting (paragraphs, bullet points, numbered lists), and minor user edits (inline self-corrections). Timestamps and diarization are incompatible with mode `SMART`.",
+            "enum": [
+              "MODE_UNSPECIFIED",
+              "VERBATIM",
+              "SMART"
+            ],
+            "type": "string"
+          },
           "wordTimestamp": {
             "description": "Optional. Configures word-level timestamp generation.",
             "type": "boolean"
