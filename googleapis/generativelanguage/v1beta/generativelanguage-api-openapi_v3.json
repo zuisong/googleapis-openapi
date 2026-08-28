@@ -1702,6 +1702,55 @@
         },
         "type": "object"
       },
+      "EnvironmentFile": {
+        "description": "Metadata for a file or directory within an environment.",
+        "properties": {
+          "created": {
+            "description": "Output only. The creation time of the file/directory.",
+            "format": "google-datetime",
+            "readOnly": true,
+            "type": "string"
+          },
+          "mime_type": {
+            "description": "Output only. The MIME type of the file (e.g., \"text/python\", \"image/png\"). Empty for directories. NOLINT",
+            "readOnly": true,
+            "type": "string"
+          },
+          "modified": {
+            "description": "Output only. The modification time of the file/directory.",
+            "format": "google-datetime",
+            "readOnly": true,
+            "type": "string"
+          },
+          "name": {
+            "description": "Output only. The name of the file or directory (e.g., \"main.py\" or \"src\").",
+            "readOnly": true,
+            "type": "string"
+          },
+          "path": {
+            "description": "Output only. The full relative path within the environment (e.g., \"workspace/src/main.py\").",
+            "readOnly": true,
+            "type": "string"
+          },
+          "size_bytes": {
+            "description": "Output only. The size of the file/directory in bytes. NOLINT",
+            "format": "int64",
+            "readOnly": true,
+            "type": "string"
+          },
+          "type": {
+            "description": "Output only. The type of the entry.",
+            "enum": [
+              "TYPE_UNSPECIFIED",
+              "FILE",
+              "DIRECTORY"
+            ],
+            "readOnly": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "EnvironmentNetworkEgressAllowlist": {
         "description": "Network egress configuration for the environment.",
         "properties": {
@@ -2784,6 +2833,23 @@
           "translationConfig": {
             "$ref": "#/components/schemas/TranslationConfig",
             "description": "Optional. Config for translation."
+          }
+        },
+        "type": "object"
+      },
+      "GetEnvironmentFilesResponse": {
+        "description": "Response for `GetEnvironmentFiles`.",
+        "properties": {
+          "files": {
+            "description": "If the requested path is a directory, this contains its contents. If the requested path is a file, this contains a single entry with the file's metadata. If alt=media was specified, this is empty (content is served via `blob`).",
+            "items": {
+              "$ref": "#/components/schemas/EnvironmentFile"
+            },
+            "type": "array"
+          },
+          "next_page_token": {
+            "description": "Pagination token for directory listing. NOLINT",
+            "type": "string"
           }
         },
         "type": "object"
@@ -7504,6 +7570,106 @@
         ],
         "tags": [
           "tunedModels"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/_.xgafv"
+        },
+        {
+          "$ref": "#/components/parameters/access_token"
+        },
+        {
+          "$ref": "#/components/parameters/alt"
+        },
+        {
+          "$ref": "#/components/parameters/callback"
+        },
+        {
+          "$ref": "#/components/parameters/fields"
+        },
+        {
+          "$ref": "#/components/parameters/key"
+        },
+        {
+          "$ref": "#/components/parameters/oauth_token"
+        },
+        {
+          "$ref": "#/components/parameters/prettyPrint"
+        },
+        {
+          "$ref": "#/components/parameters/quotaUser"
+        },
+        {
+          "$ref": "#/components/parameters/upload_protocol"
+        },
+        {
+          "$ref": "#/components/parameters/uploadType"
+        }
+      ]
+    },
+    "/v1beta/{parent}/files/{path}": {
+      "get": {
+        "description": "Retrieves a file or directory from an environment's snapshot (HTTP endpoint).",
+        "operationId": "generativelanguage.environments.files.media.download",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetEnvironmentFilesResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent",
+            "in": "path",
+            "description": "Required. The resource name of the environment. Format: `environments/{environment_id}`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "path",
+            "description": "Optional. The path of the file or directory within the environment. If empty, defaults to the root of the workspace. Example: \"workspace/src/main.py\"",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Optional. Maximum number of entries to return per page (for directory listing). If unspecified, defaults to 100. Maximum is 1000. NOLINT",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_token",
+            "in": "query",
+            "description": "Optional. Pagination token for directory listing. NOLINT",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recursive",
+            "in": "query",
+            "description": "Optional. If true and the path is a directory, recursively lists all files and subdirectories. Defaults to false (immediate children only).",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "tags": [
+          "environments"
         ]
       },
       "parameters": [
