@@ -83,6 +83,27 @@
         },
         "type": "object"
       },
+      "AudioTranscription": {
+        "description": "The transcription of an audio part. For multi-speaker audio, each speaker segment is a separate Part with its own AudioTranscription carrying the speaker_label.",
+        "properties": {
+          "speakerLabel": {
+            "description": "Optional. A label identifying the speaker of this audio segment (e.g. \"spk_1\", \"spk_2\"). Present when diarization is set.",
+            "type": "string"
+          },
+          "text": {
+            "description": "Required. The transcription text of this audio segment.",
+            "type": "string"
+          },
+          "words": {
+            "description": "Optional. Detailed word-level transcriptions and timing details. Present when word_timestamp is set.",
+            "items": {
+              "$ref": "#/components/schemas/WordInfo"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "AudioTranscriptionConfig": {
         "description": "The audio transcription configuration.",
         "properties": {
@@ -372,6 +393,10 @@
           "data": {
             "description": "Raw bytes for media formats.",
             "format": "byte",
+            "type": "string"
+          },
+          "displayName": {
+            "description": "Optional. Specifies the name used to refer to this blob to the model (e.g. \"my_blob.png\"). Used as the blob reference identifier when `verbalization_mode` is set to `REFERENCE_ONLY`.",
             "type": "string"
           },
           "mimeType": {
@@ -1893,6 +1918,10 @@
       "FileData": {
         "description": "URI based data.",
         "properties": {
+          "displayName": {
+            "description": "Optional. Specifies the name used to refer to this file to the model (e.g. \"my_file.pdf\"). Used as the file reference identifier when `verbalization_mode` is set to `REFERENCE_ONLY`.",
+            "type": "string"
+          },
           "fileUri": {
             "description": "Required. URI.",
             "type": "string"
@@ -4063,6 +4092,10 @@
       "Part": {
         "description": "A datatype containing media that is part of a multi-part `Content` message. A `Part` consists of data which has an associated datatype. A `Part` can only contain one of the accepted types in `Part.data`. A `Part` must have a fixed IANA MIME type identifying the type and subtype of the media if the `inline_data` field is filled with raw bytes.",
         "properties": {
+          "audioTranscription": {
+            "$ref": "#/components/schemas/AudioTranscription",
+            "description": "Optional. Audio (input or output) transcription. This is only set when this Part contains audio data."
+          },
           "codeExecutionResult": {
             "$ref": "#/components/schemas/CodeExecutionResult",
             "description": "Result of executing the `ExecutableCode`."
@@ -5613,6 +5646,26 @@
             "description": "Maximum number of tokens per chunk. Tokens are defined as words for this chunking algorithm. Note: we are defining tokens as words split by whitespace as opposed to the output of a tokenizer. The context window of the latest gemini embedding model as of 2025-04-17 is currently 8192 tokens. We assume that the average word is 5 characters. Therefore, we set the upper limit to 2**9, which is 512 words, or 2560 tokens, assuming worst case a character per token. This is a conservative estimate meant to prevent context window overflow.",
             "format": "int32",
             "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "WordInfo": {
+        "description": "Information about a single recognized word.",
+        "properties": {
+          "endOffset": {
+            "description": "Optional. End offset in time of the word relative to the start of the audio.",
+            "format": "google-duration",
+            "type": "string"
+          },
+          "startOffset": {
+            "description": "Optional. Start offset in time of the word relative to the start of the audio.",
+            "format": "google-duration",
+            "type": "string"
+          },
+          "word": {
+            "description": "Required. Transcript of the word.",
+            "type": "string"
           }
         },
         "type": "object"

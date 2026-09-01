@@ -399,6 +399,10 @@
             "format": "byte",
             "type": "string"
           },
+          "displayName": {
+            "description": "Optional. Specifies the name used to refer to this blob to the model (e.g. \"my_blob.png\"). Used as the blob reference identifier when `verbalization_mode` is set to `REFERENCE_ONLY`.",
+            "type": "string"
+          },
           "mimeType": {
             "description": "The IANA standard MIME type of the source data. Examples of supported types: - Images: image/png, image/jpeg, image/jpg, image/webp, image/heic, image/heif, image/gif, image/avif - Audio: audio/*, video/audio/s16le, video/audio/wav - Video: video/* - Text: text/plain, text/html, text/css, text/javascript, text/x-typescript, text/csv, text/markdown, text/x-python, text/xml, text/rtf, video/text/timestamp - Applications: application/x-javascript, application/x-typescript, application/x-python-code, application/json, application/x-ipynb+json, application/rtf, application/pdf For additional context, see [Supported file formats](https://ai.google.dev/gemini-api/docs/file-input-methods#supported-content-types). //",
             "type": "string"
@@ -1918,6 +1922,10 @@
       "FileData": {
         "description": "URI based data.",
         "properties": {
+          "displayName": {
+            "description": "Optional. Specifies the name used to refer to this file to the model (e.g. \"my_file.pdf\"). Used as the file reference identifier when `verbalization_mode` is set to `REFERENCE_ONLY`.",
+            "type": "string"
+          },
           "fileUri": {
             "description": "Required. URI.",
             "type": "string"
