@@ -575,7 +575,8 @@
               "TOO_MANY_TOOL_CALLS",
               "MISSING_THOUGHT_SIGNATURE",
               "MALFORMED_RESPONSE",
-              "ESCALATION"
+              "ESCALATION",
+              "PUP_LIMITED_DISABLED"
             ],
             "readOnly": true,
             "type": "string"
