@@ -357,6 +357,13 @@
             "$ref": "#/components/schemas/AudioTranscriptionConfig",
             "description": "Optional. If set, enables transcription of voice input. The transcription aligns with the input audio language, if configured."
           },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Optional. Labels with user-defined metadata for the request. Optional. Labels must follow standard unified Cloud label requirements: - Label keys must start with a letter. - Label keys and values can be no longer than 63 characters (Unicode codepoints) and can only contain lowercase letters, numeric characters, underscores, and dashes. - International characters are allowed. Usage: - Safety identifiers from aggregators: Use the key `safety_identifier` (e.g. `{\"safety_identifier\": \"user_session_123\"}`)",
+            "type": "object"
+          },
           "model": {
             "description": "Required. The model's resource name. This serves as an ID for the Model to use. Format: `models/{model}`",
             "type": "string"
@@ -1366,10 +1373,10 @@
         "type": "object"
       },
       "EgressRule": {
-        "description": "A network egress rule that controls which external domains the environment is allowed to reach. Each rule identifies a target domain and, optionally, a set of HTTP headers to inject into every matching outbound request.",
+        "description": "A single domain allowlist rule with optional header injection.",
         "properties": {
           "domain": {
-            "description": "The domain pattern to match for this rule. Use an exact hostname (e.g., `github.com`), a wildcard prefix (e.g., `*.googleapis.com`), or `*` to match all domains.",
+            "description": "Domain to allow outbound requests to. Supports wildcards (e.g. '*.googleapis.com'). Use '*' to allow all domains.",
             "type": "string"
           },
           "transform": {
@@ -2495,6 +2502,13 @@
           "generationConfig": {
             "$ref": "#/components/schemas/GenerationConfig",
             "description": "Optional. Configuration options for model generation and outputs."
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Optional. Labels with user-defined metadata for the request. Optional. Labels must follow standard unified Cloud label requirements: - Label keys must start with a letter. - Label keys and values can be no longer than 63 characters (Unicode codepoints) and can only contain lowercase letters, numeric characters, underscores, and dashes. - International characters are allowed. Usage: - Safety identifiers from aggregators: Use the key `safety_identifier` (e.g. `{\"safety_identifier\": \"user_session_123\"}`)",
+            "type": "object"
           },
           "model": {
             "description": "Required. The name of the `Model` to use for generating the completion. Format: `models/{model}`.",
@@ -4239,6 +4253,13 @@
             "items": {},
             "type": "array"
           },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Optional. Labels with user-defined metadata for the request. Optional. Labels must follow standard unified Cloud label requirements: - Label keys must start with a letter. - Label keys and values can be no longer than 63 characters (Unicode codepoints) and can only contain lowercase letters, numeric characters, underscores, and dashes. - International characters are allowed. Usage: - Safety identifiers from aggregators: Use the key `safety_identifier` (e.g. `{\"safety_identifier\": \"user_session_123\"}`)",
+            "type": "object"
+          },
           "parameters": {
             "description": "Optional. The parameters that govern the prediction call."
           }
@@ -4252,6 +4273,13 @@
             "description": "Required. The instances that are the input to the prediction call.",
             "items": {},
             "type": "array"
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Optional. Labels with user-defined metadata for the request. Optional. Labels must follow standard unified Cloud label requirements: - Label keys must start with a letter. - Label keys and values can be no longer than 63 characters (Unicode codepoints) and can only contain lowercase letters, numeric characters, underscores, and dashes. - International characters are allowed. Usage: - Safety identifiers from aggregators: Use the key `safety_identifier` (e.g. `{\"safety_identifier\": \"user_session_123\"}`)",
+            "type": "object"
           },
           "parameters": {
             "description": "Optional. The parameters that govern the prediction call."
@@ -6178,7 +6206,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "Required. The identifier of the environment to delete.",
+            "description": "Required. Resource ID segment making up resource `name`. It identifies the resource within its parent collection as described in https://google.aip.dev/122.",
             "required": true,
             "schema": {
               "type": "string"
@@ -6245,7 +6273,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "Required. The identifier of the environment to retrieve.",
+            "description": "Required. Resource ID segment making up resource `name`. It identifies the resource within its parent collection as described in https://google.aip.dev/122.",
             "required": true,
             "schema": {
               "type": "string"
@@ -6312,7 +6340,7 @@
           {
             "name": "pageSize",
             "in": "query",
-            "description": "Maximum number of environments to return. If unspecified, defaults to 50. Maximum is 1000.",
+            "description": "Optional. Maximum number of environments to return. If unspecified, defaults to 50. Maximum is 1000.",
             "schema": {
               "type": "integer"
             }
@@ -6320,7 +6348,7 @@
           {
             "name": "pageToken",
             "in": "query",
-            "description": "Pagination token.",
+            "description": "Optional. Pagination token.",
             "schema": {
               "type": "string"
             }
@@ -7668,7 +7696,7 @@
     },
     "/v1beta/{parent}/files/{path}": {
       "get": {
-        "description": "Retrieves a file or directory from an environment's snapshot (HTTP endpoint).",
+        "description": "Retrieves file metadata or directory contents from an environment's snapshot. To download file contents directly, pass ?alt=media or use the files.download helper.",
         "operationId": "generativelanguage.environments.files.media.download",
         "responses": {
           "200": {
