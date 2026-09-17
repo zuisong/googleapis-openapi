@@ -1379,6 +1379,10 @@
       "EgressRule": {
         "description": "A single domain allowlist rule with optional header injection.",
         "properties": {
+          "credential": {
+            "description": "Optional. Reference to a server-managed Credential resource by ID.",
+            "type": "string"
+          },
           "domain": {
             "description": "Domain to allow outbound requests to. Supports wildcards (e.g. '*.googleapis.com'). Use '*' to allow all domains.",
             "type": "string"
@@ -5444,6 +5448,33 @@
         },
         "type": "object"
       },
+      "UploadEnvironmentFileRequest": {
+        "description": "Request for `UploadEnvironmentFile`.",
+        "properties": {
+          "extract": {
+            "description": "Optional. If true, treats the uploaded file as a tar/tar.gz archive and unpacks it into `path`.",
+            "type": "boolean"
+          },
+          "overwrite": {
+            "description": "Optional. Whether to overwrite the destination file if it already exists.",
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "UploadEnvironmentFileResponse": {
+        "description": "Response for `UploadEnvironmentFile`.",
+        "properties": {
+          "files": {
+            "description": "List of files created or extracted in the environment.",
+            "items": {
+              "$ref": "#/components/schemas/EnvironmentFile"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "UploadToFileSearchStoreRequest": {
         "description": "Request for `UploadToFileSearchStore`.",
         "properties": {
@@ -7816,6 +7847,54 @@
             "description": "Optional. If true and the path is a directory, recursively lists all files and subdirectories. Defaults to false (immediate children only).",
             "schema": {
               "type": "boolean"
+            }
+          }
+        ],
+        "tags": [
+          "environments"
+        ]
+      },
+      "put": {
+        "description": "Uploads (creates or updates) a file in an environment's workspace.",
+        "operationId": "generativelanguage.environments.files.media.upload",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadEnvironmentFileResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadEnvironmentFileRequest"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent",
+            "in": "path",
+            "description": "Required. The resource name of the target environment. Format: `environments/{environment_id}`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "path",
+            "description": "Required. The destination relative path of the file within the environment. Example: \"workspace/src/main.py\"",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
         ],
