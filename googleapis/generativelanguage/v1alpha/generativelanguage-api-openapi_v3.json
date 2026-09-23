@@ -4167,6 +4167,10 @@
             "description": "Custom metadata associated with the Part. Agents using genai.Part as content representation may need to keep track of the additional information. For example it can be name of a file/source from which the Part originates or a way to multiplex multiple Part streams.",
             "type": "object"
           },
+          "speechMetadata": {
+            "$ref": "#/components/schemas/SpeechMetadata",
+            "description": "Optional. Metadata applied to text parts to customize how they should be spoken or synthesized, such as specifying speaker identity or speaking style."
+          },
           "text": {
             "description": "Inline text.",
             "type": "string"
@@ -4894,6 +4898,20 @@
           "voiceConfig": {
             "$ref": "#/components/schemas/VoiceConfig",
             "description": "The configuration in case of single-voice output."
+          }
+        },
+        "type": "object"
+      },
+      "SpeechMetadata": {
+        "description": "Speech metadata for `text` parts.",
+        "properties": {
+          "speaker": {
+            "description": "Optional. Optional speaker name for multi-speaker synthesis.",
+            "type": "string"
+          },
+          "style": {
+            "description": "Optional. Optional style instruction for the speech synthesis.",
+            "type": "string"
           }
         },
         "type": "object"
@@ -5738,6 +5756,10 @@
           "prebuiltVoiceConfig": {
             "$ref": "#/components/schemas/PrebuiltVoiceConfig",
             "description": "The configuration for the prebuilt voice to use."
+          },
+          "voice": {
+            "description": "Optional. The speaker identifier for synthesis. Supported formats: * Speaker name for prebuilt voices (for example, `Orus` or `Kore`). * Voice ID for stored voices (for example, `voice_xxx`). * Voice replication key (for example, `voicekey_xxx`).",
+            "type": "string"
           }
         },
         "type": "object"
