@@ -1387,6 +1387,14 @@
             "description": "Domain to allow outbound requests to. Supports wildcards (e.g. '*.googleapis.com'). Use '*' to allow all domains.",
             "type": "string"
           },
+          "mode": {
+            "description": "Network egress mode. Set via the `\"allowlist\": \"disabled\"` short form; must be the only rule in the allowlist and cannot be combined with `domain`, `transform` or `credential`.",
+            "enum": [
+              "NETWORK_MODE_UNSPECIFIED",
+              "DISABLED"
+            ],
+            "type": "string"
+          },
           "transform": {
             "additionalProperties": {
               "type": "string"
@@ -1800,7 +1808,7 @@
         "description": "Network egress configuration for the environment.",
         "properties": {
           "allowlist": {
-            "description": "List of allowed domains and their configurations.",
+            "description": "List of allowed domains and their configurations. Set to `\"disabled\"` to block all network egress.",
             "items": {
               "$ref": "#/components/schemas/EgressRule"
             },
@@ -4360,6 +4368,10 @@
           "automaticActivityDetection": {
             "$ref": "#/components/schemas/AutomaticActivityDetection",
             "description": "Optional. If not set, automatic activity detection is enabled by default. If automatic voice detection is disabled, the client must send activity signals."
+          },
+          "interimTranscriptTimestampEnabled": {
+            "description": "Optional. Configures interim transcript timestamps.",
+            "type": "boolean"
           },
           "turnCoverage": {
             "description": "Optional. Defines which input is included in the user's turn.",
