@@ -554,6 +554,11 @@
             "description": "Output only. Generated content returned from the model.",
             "readOnly": true
           },
+          "continuationToken": {
+            "description": "An optional opaque continuation token returned when `finish_reason` is `CONTINUATION`. Clients can pass this token in a subsequent `GenerateContentRequest` to continue generation.",
+            "format": "byte",
+            "type": "string"
+          },
           "finishMessage": {
             "description": "Optional. Output only. Details the reason why the model stopped generating tokens. This is populated only when `finish_reason` is set.",
             "readOnly": true,
@@ -583,7 +588,8 @@
               "MISSING_THOUGHT_SIGNATURE",
               "MALFORMED_RESPONSE",
               "ESCALATION",
-              "PUP_LIMITED_DISABLED"
+              "PUP_LIMITED_DISABLED",
+              "CONTINUATION"
             ],
             "readOnly": true,
             "type": "string"
@@ -2514,6 +2520,11 @@
               "$ref": "#/components/schemas/Content"
             },
             "type": "array"
+          },
+          "continuationToken": {
+            "description": "Optional. An opaque continuation token used to resume generation from a previous `GenerateContent` or `StreamGenerateContent` response that stopped with `finish_reason` set to `CONTINUATION`.",
+            "format": "byte",
+            "type": "string"
           },
           "generationConfig": {
             "$ref": "#/components/schemas/GenerationConfig",
