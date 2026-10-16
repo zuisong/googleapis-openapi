@@ -2518,7 +2518,7 @@
             "type": "array"
           },
           "continuationToken": {
-            "description": "Optional. An opaque continuation token used to resume generation from a previous `GenerateContent` or `StreamGenerateContent` response that stopped with `finish_reason` set to `CONTINUATION`.",
+            "description": "Optional. An opaque continuation token used to resume generation from a previous `GenerateContent` or `StreamGenerateContent` response that stopped with `finish_reason` set to `CONTINUATION`. Note that `contents` is mandatory and must identically replicate the prompt and conversation history from the initial request when continuation token is provided in a request.",
             "format": "byte",
             "type": "string"
           },
