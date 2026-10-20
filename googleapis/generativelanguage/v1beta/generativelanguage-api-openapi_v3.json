@@ -5687,8 +5687,7 @@
         "type": "object"
       },
       "VideoMetadata": {
-        "deprecated": true,
-        "description": "Deprecated: Use `GenerateContentRequest.processing_options` instead. Metadata describes the input video content.",
+        "description": "Metadata describes the input video content. Set this in `Part.video_metadata` or `FunctionResponsePart.video_metadata` when `inline_data` or `file_data` contains video to configure static video preprocessing (such as time clipping, frame rate, maximum frame count, or extracted content layers).",
         "properties": {
           "endOffset": {
             "description": "Optional. The end offset of the video.",
