@@ -411,7 +411,7 @@
             "type": "string"
           },
           "mimeType": {
-            "description": "The IANA standard MIME type of the source data. Examples of supported types: - Images: image/png, image/jpeg, image/jpg, image/webp, image/heic, image/heif, image/gif, image/avif - Audio: audio/*, video/audio/s16le, video/audio/wav - Video: video/* - Text: text/plain, text/html, text/css, text/javascript, text/x-typescript, text/csv, text/markdown, text/x-python, text/xml, text/rtf, video/text/timestamp - Applications: application/x-javascript, application/x-typescript, application/x-python-code, application/json, application/x-ipynb+json, application/rtf, application/pdf For additional context, see [Supported file formats](https://ai.google.dev/gemini-api/docs/file-input-methods#supported-content-types). //",
+            "description": "The IANA standard MIME type of the source data. Examples of supported types: - Images: image/png, image/jpeg, image/jpg, image/webp, image/heic, image/heif, image/gif, image/avif - Audio: audio/*, video/audio/s16le, video/audio/wav - Video: video/* - Text: text/plain, text/html, text/css, text/javascript, text/x-typescript, text/csv, text/markdown, text/x-python, text/xml, text/rtf, video/text/timestamp - Applications: application/x-javascript, application/x-typescript, application/x-python-code, application/json, application/x-ipynb+json, application/rtf, application/pdf For additional context, see [Supported file formats](https://ai.google.dev/gemini-api/docs/file-input-methods#supported-content-types).",
             "type": "string"
           }
         },
@@ -2176,8 +2176,30 @@
             "format": "byte",
             "type": "string"
           },
+          "displayName": {
+            "description": "Optional. Display name of the blob. Used to provide a label or filename to distinguish blobs.",
+            "type": "string"
+          },
           "mimeType": {
             "description": "The IANA standard MIME type of the source data. Examples: - image/png - image/jpeg If an unsupported MIME type is provided, an error will be returned. For a complete list of supported types, see [Supported file formats](https://ai.google.dev/gemini-api/docs/prompting_with_media#supported_file_formats).",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "FunctionResponseFileData": {
+        "description": "URI based data for function response.",
+        "properties": {
+          "displayName": {
+            "description": "Optional. Display name of the file. Used to provide a label or filename to distinguish file data.",
+            "type": "string"
+          },
+          "fileUri": {
+            "description": "Required. URI.",
+            "type": "string"
+          },
+          "mimeType": {
+            "description": "The IANA standard MIME type of the source data.",
             "type": "string"
           }
         },
@@ -2186,9 +2208,22 @@
       "FunctionResponsePart": {
         "description": "A datatype containing media that is part of a `FunctionResponse` message. A `FunctionResponsePart` consists of data which has an associated datatype. A `FunctionResponsePart` can only contain one of the accepted types in `FunctionResponsePart.data`. A `FunctionResponsePart` must have a fixed IANA MIME type identifying the type and subtype of the media if the `inline_data` field is filled with raw bytes.",
         "properties": {
+          "fileData": {
+            "$ref": "#/components/schemas/FunctionResponseFileData",
+            "description": "URI based data."
+          },
           "inlineData": {
             "$ref": "#/components/schemas/FunctionResponseBlob",
             "description": "Inline media bytes."
+          },
+          "mediaProcessing": {
+            "description": "Optional. How the model processes this part's media for understanding. Only meaningful for video parts (`inline_data` or `file_data` with video mime). Non-video parts ignore this field.",
+            "enum": [
+              "MEDIA_PROCESSING_UNSPECIFIED",
+              "STATIC",
+              "AGENTIC"
+            ],
+            "type": "string"
           }
         },
         "type": "object"
@@ -5159,7 +5194,8 @@
               "GOOGLE_SEARCH_IMAGE",
               "URL_CONTEXT",
               "GOOGLE_MAPS",
-              "FILE_SEARCH"
+              "FILE_SEARCH",
+              "MEDIA_PROCESSING"
             ],
             "type": "string"
           }
@@ -5206,7 +5242,8 @@
               "GOOGLE_SEARCH_IMAGE",
               "URL_CONTEXT",
               "GOOGLE_MAPS",
-              "FILE_SEARCH"
+              "FILE_SEARCH",
+              "MEDIA_PROCESSING"
             ],
             "type": "string"
           }
