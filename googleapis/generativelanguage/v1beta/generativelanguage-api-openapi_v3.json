@@ -372,6 +372,10 @@
             "$ref": "#/components/schemas/AudioTranscriptionConfig",
             "description": "Optional. If set, enables transcription of the model's audio output. The transcription aligns with the language code specified for the output audio, if configured."
           },
+          "proactivity": {
+            "$ref": "#/components/schemas/ProactivityConfig",
+            "description": "Optional. Configures the proactivity of the model. This allows the model to respond proactively to the input and to ignore irrelevant input."
+          },
           "realtimeInputConfig": {
             "$ref": "#/components/schemas/RealtimeInputConfig",
             "description": "Optional. Configures the handling of realtime input."
@@ -4356,6 +4360,16 @@
             "description": "The outputs of the prediction call.",
             "items": {},
             "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "ProactivityConfig": {
+        "description": "Config for proactivity features.",
+        "properties": {
+          "proactiveAudio": {
+            "description": "Optional. If enabled, the model can reject responding to the last prompt. For example, this allows the model to ignore out of context speech or to stay silent if the user did not make a request, yet.",
+            "type": "boolean"
           }
         },
         "type": "object"
