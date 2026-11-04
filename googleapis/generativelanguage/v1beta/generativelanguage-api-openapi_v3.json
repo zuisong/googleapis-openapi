@@ -9173,7 +9173,7 @@
     },
     "/v1beta/{model}:predict": {
       "post": {
-        "description": "Performs a prediction request.",
+        "description": "Deprecated: Performs a prediction request. Use `GenerativeService.GenerateContent` instead.",
         "operationId": "generativelanguage.models.predict",
         "responses": {
           "200": {
@@ -9249,7 +9249,7 @@
     },
     "/v1beta/{model}:predictLongRunning": {
       "post": {
-        "description": "Same as Predict but returns an LRO.",
+        "description": "Deprecated: Same as Predict but returns an LRO. Use the Interactions API instead.",
         "operationId": "generativelanguage.models.predictLongRunning",
         "responses": {
           "200": {
