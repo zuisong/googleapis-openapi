@@ -1087,8 +1087,24 @@
       "CreateEnvironmentRequest": {
         "description": "Request for `CreateEnvironment`.",
         "properties": {
+          "customConfig": {
+            "additionalProperties": {
+              "description": "Properties of the object."
+            },
+            "description": "Optional. Arbitrary customer-defined JSON configuration passed through to the self-hosted environment poller. Only supported when `mode` is `SELF_HOSTED`.",
+            "type": "object"
+          },
           "fromEnvironment": {
             "description": "Optional. The source environment to copy/fork from. Format: `environments/{environment_id}` or `{environment_id}`. When specified, `sources` and `env` must be empty.",
+            "type": "string"
+          },
+          "mode": {
+            "description": "The compute lifecycle mode for this environment.",
+            "enum": [
+              "ENVIRONMENT_MODE_UNSPECIFIED",
+              "ON_DEMAND",
+              "SELF_HOSTED"
+            ],
             "type": "string"
           },
           "networkAllowlist": {
@@ -1109,6 +1125,10 @@
               "$ref": "#/components/schemas/Source"
             },
             "type": "array"
+          },
+          "systemInstruction": {
+            "description": "Optional. System instruction applied to interactions running in this environment. Only supported for `SELF_HOSTED` environments, where it is recommended.",
+            "type": "string"
           }
         },
         "type": "object"
@@ -1706,6 +1726,19 @@
             "readOnly": true,
             "type": "string"
           },
+          "customConfig": {
+            "additionalProperties": {
+              "description": "Properties of the object."
+            },
+            "description": "Output only. Arbitrary customer-defined JSON configuration passed through to the self-hosted environment poller. Only populated for `self_hosted` environments when configured.",
+            "readOnly": true,
+            "type": "object"
+          },
+          "environmentKey": {
+            "description": "Output only. Secret token generated upon environment creation for self_hosted environments. Used by the self-hosted sandbox daemon to authenticate polling and streaming requests. Only returned in the CreateEnvironment response; omitted from subsequent GetEnvironment and ListEnvironments calls.",
+            "readOnly": true,
+            "type": "string"
+          },
           "fileCount": {
             "description": "Output only. The number of files in the environment, output only.",
             "format": "int64",
@@ -1719,6 +1752,16 @@
           },
           "lastAccessed": {
             "description": "Output only. The time at which the environment was last accessed in ISO 8601 format (YYYY-MM-DDThh:mm:ssZ).",
+            "readOnly": true,
+            "type": "string"
+          },
+          "mode": {
+            "description": "Output only. The compute lifecycle mode for this environment.",
+            "enum": [
+              "ENVIRONMENT_MODE_UNSPECIFIED",
+              "ON_DEMAND",
+              "SELF_HOSTED"
+            ],
             "readOnly": true,
             "type": "string"
           },
@@ -2152,7 +2195,7 @@
             "additionalProperties": {
               "description": "Properties of the object."
             },
-            "description": "Required. The function response in JSON object format. Callers can use any keys of their choice that fit the function's syntax to return the function output, e.g. \"output\", \"result\", etc. In particular, if the function call failed to execute, the response can have an \"error\" key to return error details to the model. Multimedia can be included by using a subobject containing a single \"$ref\" key whose value is the `inline_data.display_name` of a `FunctionResponsePart` holding the multimedia. See https://aistudio.google.com/docs/function-calling#multimodal.",
+            "description": "Required. The function response in JSON object format. Callers can use any keys of their choice that fit the function's syntax to return the function output, e.g. \"output\", \"result\", etc. In particular, if the function call failed to execute, the response can have an \"error\" key to return error details to the model. Multimedia can be included by using a subobject containing a single \"$ref\" key whose value is the `inline_data.display_name` or `file_data.display_name` of a `FunctionResponsePart` holding the multimedia. See [Multimodal function responses](https://aistudio.google.com/docs/function-calling#multimodal).",
             "type": "object"
           },
           "scheduling": {
@@ -2181,7 +2224,7 @@
             "type": "string"
           },
           "displayName": {
-            "description": "Optional. Display name of the blob. Used to provide a label or filename to distinguish blobs.",
+            "description": "Optional. Display name of the blob. Used to provide a label or filename to distinguish blobs, and to reference the blob from `FunctionResponse.response` (for example, via `{\"$ref\": \"DISPLAY_NAME\"}`).",
             "type": "string"
           },
           "mimeType": {
@@ -2195,7 +2238,7 @@
         "description": "URI based data for function response.",
         "properties": {
           "displayName": {
-            "description": "Optional. Display name of the file. Used to provide a label or filename to distinguish file data.",
+            "description": "Optional. Display name of the file. Used to provide a label or filename to distinguish file data, and to reference the file from `FunctionResponse.response` (for example, via `{\"$ref\": \"DISPLAY_NAME\"}`).",
             "type": "string"
           },
           "fileUri": {
@@ -2203,14 +2246,14 @@
             "type": "string"
           },
           "mimeType": {
-            "description": "The IANA standard MIME type of the source data.",
+            "description": "The IANA standard MIME type of the source data. If an unsupported MIME type is provided, an error will be returned. For a complete list of supported types, see [Multimodal function responses](https://aistudio.google.com/docs/function-calling#multimodal) and [Supported file formats](https://aistudio.google.com/docs/file-input-methods#supported-content-types).",
             "type": "string"
           }
         },
         "type": "object"
       },
       "FunctionResponsePart": {
-        "description": "A datatype containing media that is part of a `FunctionResponse` message. A `FunctionResponsePart` consists of data which has an associated datatype. A `FunctionResponsePart` can only contain one of the accepted types in `FunctionResponsePart.data`. A `FunctionResponsePart` must have a fixed IANA MIME type identifying the type and subtype of the media if the `inline_data` field is filled with raw bytes.",
+        "description": "A datatype containing media that is part of a `FunctionResponse` message. A `FunctionResponsePart` consists of data which has an associated datatype. A `FunctionResponsePart` can only contain one of the accepted types in `FunctionResponsePart.data`. Media can be passed as raw bytes (`inline_data`) or by URI (`file_data`) with an IANA MIME type identifying the type and subtype of the media.",
         "properties": {
           "fileData": {
             "$ref": "#/components/schemas/FunctionResponseFileData",
@@ -6522,6 +6565,19 @@
           }
         },
         "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "description": "Optional. Filter environments by compute lifecycle mode.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ENVIRONMENT_MODE_UNSPECIFIED",
+                "ON_DEMAND",
+                "SELF_HOSTED"
+              ]
+            }
+          },
           {
             "name": "pageSize",
             "in": "query",
