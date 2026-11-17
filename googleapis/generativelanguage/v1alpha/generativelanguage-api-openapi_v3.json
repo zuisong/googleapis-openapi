@@ -45,6 +45,22 @@
         },
         "type": "object"
       },
+      "AudioMetadata": {
+        "description": "Metadata describes the input audio content. Set this in `Part.audio_metadata` or `FunctionResponsePart.audio_metadata` when `inline_data` or `file_data` contains audio to configure static audio preprocessing.",
+        "properties": {
+          "endOffset": {
+            "description": "Optional. The end offset of the audio, relative to the start of the audio stream.",
+            "format": "google-duration",
+            "type": "string"
+          },
+          "startOffset": {
+            "description": "Optional. The start offset of the audio, relative to the start of the audio stream.",
+            "format": "google-duration",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "AudioResponseFormat": {
         "description": "Configuration for audio output format.",
         "properties": {
@@ -1357,6 +1373,34 @@
         },
         "type": "object"
       },
+      "DocumentMetadata": {
+        "description": "Metadata describes the input document content. Set this in `Part.document_metadata` or `FunctionResponsePart.document_metadata` when `inline_data` or `file_data` contains a document to configure static document preprocessing.",
+        "properties": {
+          "contentLayers": {
+            "description": "Optional. Content layers to return. If empty, defaults to [PAGE_IMAGE] when DocumentMetadata is set. When DocumentMetadata is not set, default document processing is used (for example, page images for PDFs).",
+            "items": {
+              "enum": [
+                "CONTENT_LAYER_UNSPECIFIED",
+                "PAGE_IMAGE",
+                "PAGE_TEXT"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "endPage": {
+            "description": "Optional. 1-indexed inclusive end page.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "startPage": {
+            "description": "Optional. 1-indexed inclusive start page.",
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
       "DownloadFileResponse": {
         "description": "Response for `DownloadFile`.",
         "properties": {},
@@ -2255,6 +2299,14 @@
       "FunctionResponsePart": {
         "description": "A datatype containing media that is part of a `FunctionResponse` message. A `FunctionResponsePart` consists of data which has an associated datatype. A `FunctionResponsePart` can only contain one of the accepted types in `FunctionResponsePart.data`. Media can be passed as raw bytes (`inline_data`) or by URI (`file_data`) with an IANA MIME type identifying the type and subtype of the media.",
         "properties": {
+          "audioMetadata": {
+            "$ref": "#/components/schemas/AudioMetadata",
+            "description": "Optional. Audio metadata. The metadata should only be specified while the audio data is presented in inline_data or file_data."
+          },
+          "documentMetadata": {
+            "$ref": "#/components/schemas/DocumentMetadata",
+            "description": "Optional. Document metadata. The metadata should only be specified while the document data is presented in inline_data or file_data."
+          },
           "fileData": {
             "$ref": "#/components/schemas/FunctionResponseFileData",
             "description": "URI based data."
@@ -2271,6 +2323,18 @@
               "AGENTIC"
             ],
             "type": "string"
+          },
+          "mediaResolution": {
+            "$ref": "#/components/schemas/V1mainMediaResolution",
+            "description": "Optional. Media resolution for the input media."
+          },
+          "spreadsheetMetadata": {
+            "$ref": "#/components/schemas/SpreadsheetMetadata",
+            "description": "Optional. Spreadsheet metadata. The metadata should only be specified while the spreadsheet data is presented in inline_data or file_data."
+          },
+          "videoMetadata": {
+            "$ref": "#/components/schemas/VideoMetadata",
+            "description": "Optional. Video metadata. The metadata should only be specified while the video data is presented in inline_data or file_data."
           }
         },
         "type": "object"
@@ -4220,6 +4284,10 @@
       "Part": {
         "description": "A datatype containing media that is part of a multi-part `Content` message. A `Part` consists of data which has an associated datatype. A `Part` can only contain one of the accepted types in `Part.data`. A `Part` must have a fixed IANA MIME type identifying the type and subtype of the media if the `inline_data` field is filled with raw bytes.",
         "properties": {
+          "audioMetadata": {
+            "$ref": "#/components/schemas/AudioMetadata",
+            "description": "Optional. Audio metadata. The metadata should only be specified while the audio data is presented in inline_data or file_data."
+          },
           "audioTranscription": {
             "$ref": "#/components/schemas/AudioTranscription",
             "description": "Optional. Audio (input or output) transcription. This is only set when this Part contains audio data."
@@ -4227,6 +4295,10 @@
           "codeExecutionResult": {
             "$ref": "#/components/schemas/CodeExecutionResult",
             "description": "Result of executing the `ExecutableCode`."
+          },
+          "documentMetadata": {
+            "$ref": "#/components/schemas/DocumentMetadata",
+            "description": "Optional. Document metadata. The metadata should only be specified while the document data is presented in inline_data or file_data."
           },
           "executableCode": {
             "$ref": "#/components/schemas/ExecutableCode",
@@ -4271,6 +4343,10 @@
           "speechMetadata": {
             "$ref": "#/components/schemas/SpeechMetadata",
             "description": "Optional. Metadata applied to text parts to customize how they should be spoken or synthesized, such as specifying speaker identity or speaking style."
+          },
+          "spreadsheetMetadata": {
+            "$ref": "#/components/schemas/SpreadsheetMetadata",
+            "description": "Optional. Spreadsheet metadata. The metadata should only be specified while the spreadsheet data is presented in inline_data or file_data."
           },
           "text": {
             "description": "Inline text.",
@@ -5020,6 +5096,34 @@
           },
           "style": {
             "description": "Optional. Optional style instruction for the speech synthesis.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "SpreadsheetMetadata": {
+        "description": "Metadata describes the input spreadsheet content. Set this in `Part.spreadsheet_metadata` or `FunctionResponsePart.spreadsheet_metadata` when `inline_data` or `file_data` contains a spreadsheet to configure static spreadsheet preprocessing.",
+        "properties": {
+          "contentLayers": {
+            "description": "Optional. Content layers to return. If empty, defaults to [DATA, FORMULAS] when SpreadsheetMetadata is set.",
+            "items": {
+              "enum": [
+                "CONTENT_LAYER_UNSPECIFIED",
+                "DATA",
+                "FORMULAS",
+                "VISUAL"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "sheetIndex": {
+            "description": "Optional. The 1-indexed index of the sheet to extract, in workbook order. If not set, all sheets are extracted.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "visibleCells": {
+            "description": "Optional. The range of cells to extract, in A1 notation (e.g. \"A1:D10\"). If not set, the full occupied area of the sheet is used.",
             "type": "string"
           }
         },
@@ -5843,6 +5947,19 @@
       "VideoMetadata": {
         "description": "Metadata describes the input video content. Set this in `Part.video_metadata` or `FunctionResponsePart.video_metadata` when `inline_data` or `file_data` contains video to configure static video preprocessing (such as time clipping, frame rate, maximum frame count, or extracted content layers).",
         "properties": {
+          "contentLayers": {
+            "description": "Optional. Content layers to return. If empty, defaults to [FRAMES, AUDIO].",
+            "items": {
+              "enum": [
+                "CONTENT_LAYER_UNSPECIFIED",
+                "FRAMES",
+                "AUDIO",
+                "TRANSCRIPT"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
           "endOffset": {
             "description": "Optional. The end offset of the video.",
             "format": "google-duration",
