@@ -8406,6 +8406,82 @@
         }
       ]
     },
+    "/v1alpha/{name}/auth_tokens": {
+      "post": {
+        "description": "Creates a short-lived auth token for client-side authentication (HTTP).",
+        "operationId": "generativelanguage.interactions.auth_tokens.create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpBody"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HttpBody"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Required. interaction_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "interactions"
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/_.xgafv"
+        },
+        {
+          "$ref": "#/components/parameters/access_token"
+        },
+        {
+          "$ref": "#/components/parameters/alt"
+        },
+        {
+          "$ref": "#/components/parameters/callback"
+        },
+        {
+          "$ref": "#/components/parameters/fields"
+        },
+        {
+          "$ref": "#/components/parameters/key"
+        },
+        {
+          "$ref": "#/components/parameters/oauth_token"
+        },
+        {
+          "$ref": "#/components/parameters/prettyPrint"
+        },
+        {
+          "$ref": "#/components/parameters/quotaUser"
+        },
+        {
+          "$ref": "#/components/parameters/upload_protocol"
+        },
+        {
+          "$ref": "#/components/parameters/uploadType"
+        }
+      ]
+    },
     "/v1alpha/{fileSearchStoreName}:uploadToFileSearchStore": {
       "post": {
         "description": "Uploads data to a FileSearchStore, preprocesses and chunks before storing it in a FileSearchStore Document.",
@@ -9759,6 +9835,9 @@
     },
     {
       "name": "generatedFiles"
+    },
+    {
+      "name": "interactions"
     },
     {
       "name": "media"
