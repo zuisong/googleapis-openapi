@@ -1110,6 +1110,13 @@
             "description": "Optional. Arbitrary customer-defined JSON configuration passed through to the self-hosted environment poller. Only supported when `mode` is `SELF_HOSTED`.",
             "type": "object"
           },
+          "env": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/EnvVar"
+            },
+            "description": "Environment variables to set in the sandbox environment.",
+            "type": "object"
+          },
           "fromEnvironment": {
             "description": "Optional. The source environment to copy/fork from. Format: `environments/{environment_id}` or `{environment_id}`. When specified, `sources` and `env` must be empty.",
             "type": "string"
@@ -1910,6 +1917,20 @@
               "$ref": "#/components/schemas/EgressRule"
             },
             "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "EnvVar": {
+        "description": "An environment variable to set in the execution environment.",
+        "properties": {
+          "credential": {
+            "description": "Optional reference to a server-managed Credential resource by ID.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Direct string value for plain environment variables.",
+            "type": "string"
           }
         },
         "type": "object"
@@ -5079,6 +5100,16 @@
           "multiSpeakerVoiceConfig": {
             "$ref": "#/components/schemas/MultiSpeakerVoiceConfig",
             "description": "Optional. The configuration for the multi-speaker setup. It is mutually exclusive with the voice_config field."
+          },
+          "textNormalization": {
+            "description": "Optional. Controls text normalization before speech synthesis.",
+            "enum": [
+              "TEXT_NORMALIZATION_UNSPECIFIED",
+              "AUTO",
+              "ENABLED",
+              "DISABLED"
+            ],
+            "type": "string"
           },
           "voiceConfig": {
             "$ref": "#/components/schemas/VoiceConfig",
