@@ -1101,7 +1101,7 @@
         "type": "object"
       },
       "CreateEnvironmentRequest": {
-        "description": "Request for `CreateEnvironment`.",
+        "description": "Request for creating an environment.",
         "properties": {
           "customConfig": {
             "additionalProperties": {
@@ -1786,7 +1786,7 @@
             "type": "object"
           },
           "environmentKey": {
-            "description": "Output only. Secret token generated upon environment creation for self_hosted environments. Used by the self-hosted sandbox daemon to authenticate polling and streaming requests. Only returned in the CreateEnvironment response; omitted from subsequent GetEnvironment and ListEnvironments calls.",
+            "description": "Output only. Secret token generated upon environment creation for self_hosted environments. Used by the self-hosted sandbox daemon to authenticate polling and streaming requests. Only returned when the environment is created; omitted when getting or listing environments later.",
             "readOnly": true,
             "type": "string"
           },
@@ -3080,7 +3080,7 @@
         "type": "object"
       },
       "GetEnvironmentFilesResponse": {
-        "description": "Response for `GetEnvironmentFiles`.",
+        "description": "Response for getting an environment's files.",
         "properties": {
           "files": {
             "description": "If the requested path is a directory, this contains its contents. If the requested path is a file, this contains a single entry with the file's metadata. If alt=media was specified, this is empty (content is served via `blob`).",
@@ -3822,7 +3822,7 @@
         "type": "object"
       },
       "ListEnvironmentsResponse": {
-        "description": "Response for `ListEnvironments`.",
+        "description": "Response for listing environments.",
         "properties": {
           "environments": {
             "description": "Environments belonging to the provided project.",
